@@ -9,7 +9,11 @@ class Header extends Component {
             <div className="col-2 headerColContainer">
               <a href="/">
                 <div className="headerCol">
-                  <img id="swasthifyIcon" src="/images/swasthifyLogo.webp" alt="Swasthify" />
+                  <img
+                    id="swasthifyIcon"
+                    src="/images/swasthifyLogo.webp"
+                    alt="Swasthify"
+                  />
                 </div>
               </a>
             </div>
