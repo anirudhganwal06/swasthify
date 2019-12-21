@@ -7,16 +7,10 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
-      <h1 class="text-center">Landing</h1>
+      <main>
+        <h1 className="text-center">abcd</h1>
+        <h1 className="text-center">ABCD</h1>
+      </main>
       <Footer />
     </div>
   );
