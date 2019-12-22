@@ -14,6 +14,12 @@ main {
   width: 100vw;
 }
 
+@media screen and (max-width: 1199px) {
+  main {
+    padding-top: 60px;
+  }
+}
+
 @media screen and (max-width: 991px) {
   main {
     padding-top: 120px;
@@ -73,7 +79,7 @@ header a:hover {
 }
 
 .headerItem:hover {
-  background-color: #102020f5;
+  background-color: #233;
 }
 
 .headerMenuItem {
@@ -105,7 +111,7 @@ header a:hover {
   display: none;
 }
 
-header #searchInput {
+header .searchInput {
   height: 40px;
   font-size: 20px;
 }
@@ -155,7 +161,7 @@ header #searchInput {
     padding: 15px 40px;
   }
 
-  header #searchInput {
+  header .searchInput {
     height: 30px;
     font-size: 18px;
   }
@@ -189,7 +195,7 @@ header #searchInput {
     padding: 15px 40px;
   }
 
-  header #searchInput {
+  header .searchInput {
     height: 30px;
     font-size: 18px;
     width: 90vw;

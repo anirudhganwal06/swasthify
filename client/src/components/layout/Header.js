@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   constructor() {
@@ -48,7 +49,7 @@ class Header extends Component {
         >
           <i className="fas fa-bars fa-2x"></i>
         </div>
-        <a href="/">
+        <Link to="/">
           <div className="headerItem headerLeft vCenterContents hCenterContents">
             <img
               className="swasthifyLogo vCenter"
@@ -56,33 +57,31 @@ class Header extends Component {
               alt="Swasthify"
             />
           </div>
-        </a>
+        </Link>
         <div className="headerItem headerSearchItemBig ">
           <form>
             <input
-              className="form-control"
-              id="searchInput"
+              className="form-control searchInput"
               type="text"
               name="search"
               placeholder="Search for products"
             />
           </form>
         </div>
-        <a href="/login">
+        <Link to="/login">
           <div className="headerItem headerRight vCenterContents hCenterContents">
             <p>Login</p>
           </div>
-        </a>
-        <a href="/signup">
+        </Link>
+        <Link to="/signup">
           <div className="headerItem headerRight vCenterContents hCenterContents">
             <p>Signup</p>
           </div>
-        </a>
+        </Link>
         <div className="headerItem headerSearchItemSmall vCenterContents hCenterContents">
           <form>
             <input
-              className="form-control"
-              id="searchInput"
+              className="form-control searchInput"
               type="text"
               name="search"
               placeholder="Search for products"

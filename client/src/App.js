@@ -1,19 +1,40 @@
-import React from "react";
-import "./App.css";
-import Footer from "./components/layout/Footer";
-import Header from "./components/layout/Header";
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <Header />
-      <main>
-        <h1 className="text-center">abcd</h1>
-        <h1 className="text-center">ABCD</h1>
-      </main>
-      <Footer />
-    </div>
-  );
+// For connecting react app with redux store
+import { Provider } from "react-redux";
+import store from "./store";
+
+// a common css file for entire website
+import "./App.css";
+
+// Layout Components
+import Header from "./components/layout/Header";
+import Landing from "./components/layout/Landing";
+import Footer from "./components/layout/Footer";
+
+// Auth Components
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <Header />
+            <main>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={Signup} />
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </Provider>
+    );
+  }
 }
 
 export default App;
