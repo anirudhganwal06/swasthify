@@ -9,13 +9,13 @@ class Header extends Component {
     };
   }
 
-  openLeftNavbar = e => {
+  openLeftNavbar = () => {
     this.setState({
       leftNavbarOpen: true
     });
   };
 
-  closeLeftNavbar = e => {
+  closeLeftNavbar = () => {
     this.setState({
       leftNavbarOpen: false
     });
