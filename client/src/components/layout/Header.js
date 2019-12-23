@@ -1,51 +1,35 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firebaseConnect } from "react-redux-firebase";
+
+import SignedInLinks from "./SignedInLinks";
+import SignedOutLinks from "./SignedOutLinks";
+import SideNav from "./SideNav";
+import Search from "./Search";
 
 class Header extends Component {
   constructor() {
     super();
     this.state = {
-      leftNavbarOpen: false
+      sideNavOpen: false
     };
   }
 
-  openLeftNavbar = () => {
-    this.setState({
-      leftNavbarOpen: true
-    });
-  };
+  openSideNav = () =>
+    this.setState({ sideNavOpen: true });
 
-  closeLeftNavbar = () => {
-    this.setState({
-      leftNavbarOpen: false
-    });
-  };
-
+  closeSideNav = () =>
+    this.setState({ sideNavOpen: false });
+  
   render() {
-    const leftNavbar = (
-      <div className="leftNavbarContainer">
-        <div className="leftNavbar">
-          <div className="row">
-            <div className="col-12">
-              <p>Login</p>
-            </div>
-            <div className="col-12">
-              <p>Signup</p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="leftNavbarEmptySpace"
-          onClick={this.closeLeftNavbar}
-        ></div>
-      </div>
-    );
     return (
       <header className="text-center">
-        {this.state.leftNavbarOpen === true ? leftNavbar : ""}
+        {this.state.sideNavOpen === true ? <SideNav closeSideNav={this.closeSideNav} /> : ""}
         <div
           className="headerItem headerMenuItem vCenterContents hCenterContents"
-          onClick={this.openLeftNavbar}
+          onClick={this.openSideNav}
         >
           <i className="fas fa-bars fa-2x"></i>
         </div>
@@ -58,39 +42,18 @@ class Header extends Component {
             />
           </div>
         </Link>
-        <div className="headerItem headerSearchItemBig ">
-          <form>
-            <input
-              className="form-control searchInput"
-              type="text"
-              name="search"
-              placeholder="Search for products"
-            />
-          </form>
-        </div>
-        <Link to="/login">
-          <div className="headerItem headerRight vCenterContents hCenterContents">
-            <p>Login</p>
-          </div>
-        </Link>
-        <Link to="/signup">
-          <div className="headerItem headerRight vCenterContents hCenterContents">
-            <p>Signup</p>
-          </div>
-        </Link>
-        <div className="headerItem headerSearchItemSmall vCenterContents hCenterContents">
-          <form>
-            <input
-              className="form-control searchInput"
-              type="text"
-              name="search"
-              placeholder="Search for products"
-            />
-          </form>
-        </div>
+        <Search classes="headerSearchItemBig"/>
+        {this.props.isSignedIn ? <SignedInLinks logout="" /> : <SignedOutLinks />}
+        <Search classes="headerSearchItemSmall vCenterContents hCenterContents" />
       </header>
     );
   }
 }
 
-export default Header;
+const mapStateToProps = state => {
+  return {
+    isSignedIn: !state.firebase.auth.isEmpty
+  };
+};
+
+export default compose(firebaseConnect(), connect(mapStateToProps))(Header);

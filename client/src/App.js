@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-// For connecting react app with redux store
-import { Provider } from "react-redux";
-import store from "./store";
-
 // a common css file for entire website
 import "./App.css";
 
@@ -26,20 +22,18 @@ import Dashboard from "./components/dashboard/Dashboard";
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-            <Header />
-            <main>
-              <Route exact path="/" component={Landing} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            </main>
-            <Footer />
-          </div>
-        </Router>
-      </Provider>
+      <Router>
+        <div className="App">
+          <Header />
+          <main>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </main>
+          <Footer />
+        </div>
+      </Router>
     );
   }
 }
