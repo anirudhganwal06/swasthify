@@ -362,3 +362,137 @@ footer a:hover {
     height: 120px;
   }
 }
+
+/********************* features container ***********************/
+
+.featuresContainer {
+  background-color: #fff;
+  padding: 20px;
+}
+
+.featuresContainer p {
+  font-size: 14px;
+  color: #555;
+}
+
+.featuresContainer span {
+  color: #122;
+  font-size: 35px;
+}
+
+.featuresContainer b {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 992px) {
+  .featuresContainer p {
+    font-size: 13px;
+  }
+
+  .featuresContainer span {
+    font-size: 30px;
+  }
+
+  .featuresContainer b {
+    font-size: 13px;
+  }
+}
+
+/****************** features with banners container ***************/
+
+.featureswbContainer {
+  padding: 30px;
+  background-color: #fff;
+}
+
+.featureswbContainer .colOfRow {
+  padding: 0;
+}
+
+.featureswbContainer .bannerContainer {
+  padding: 20px;
+  height: 100%;
+}
+
+.featureswbContainer .bannerImage {
+  width: 100%;
+}
+
+.featureswbContainer .bannerHeading {
+  margin: 30px 0;
+  font-size: 24px;
+}
+
+.featureswbContainer .banner p {
+  font-size: 16px;
+}
+
+.featureswbContainer .banner {
+  padding-bottom: 20px;
+  height: 100%;
+}
+
+.featureswbContainer .banner:hover {
+  box-shadow: 0 0 40px -15px #000;
+}
+
+@media screen and (max-width: 991px) {
+  .featureswbContainer .bannerContainer {
+    padding: 10px;
+  }
+
+  .featureswbContainer .bannerHeading {
+    margin: 10px 0;
+    font-size: 18px;
+  }
+
+  .featureswbContainer .banner p {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .featureswbContainer {
+    padding: 20px;
+  }
+
+  .featureswbContainer .bannerContainer {
+    padding: 5px;
+  }
+
+  .featureswbContainer .bannerHeading {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+
+  .featureswbContainer .banner p {
+    font-size: 12px;
+  }
+
+  .featureswbContainer .banner {
+    padding-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .featureswbContainer {
+    padding: 20px;
+  }
+
+  .featureswbContainer .bannerContainer {
+    padding: 10px 0;
+  }
+
+  .featureswbContainer .bannerHeading {
+    margin: 10px 0;
+    font-size: 4vw;
+  }
+
+  .featureswbContainer .banner p {
+    font-size: 3.5vw;
+  }
+
+  .featureswbContainer .banner {
+    padding-bottom: 3vw;
+  }
+}
