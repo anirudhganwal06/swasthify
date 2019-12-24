@@ -1,76 +1,11 @@
 import React, { Component } from "react";
+import CategoryNav from "../common/CategoryNav";
 
 class Landing extends Component {
   render() {
     return (
       <section id="landingSec">
-        <div className="container">
-          {/*********************** Category container ***************************/}
-          <div className="categoriesContainer">
-            <div className="row text-center justify-content-center">
-              <div className="col-2">
-                <a href="/products?category=flour">
-                  <div className="categoryContainer">
-                    <img
-                      className="categoryIcon"
-                      src="/images/floursIcon.jpeg"
-                      alt="Flours"
-                    />
-                    <p>Flours</p>
-                  </div>
-                </a>
-              </div>
-              <div className="col-2">
-                <a href="/products?category=rice">
-                  <div className="categoryContainer">
-                    <img
-                      className="categoryIcon"
-                      src="/images/riceIcon.png"
-                      alt="Rice"
-                    />
-                    <p>Rice</p>
-                  </div>
-                </a>
-              </div>
-              <div className="col-2">
-                <a href="/products?category=pulse">
-                  <div className="categoryContainer">
-                    <img
-                      className="categoryIcon"
-                      src="/images/pulsesIcon.jpg"
-                      alt="Pulses"
-                    />
-                    <p>Pulses</p>
-                  </div>
-                </a>
-              </div>
-              <div className="col-2">
-                <a href="/products?category=spice">
-                  <div className="categoryContainer">
-                    <img
-                      className="categoryIcon"
-                      src="/images/spicesIcon.png"
-                      alt="Spices"
-                    />
-                    <p>Spices</p>
-                  </div>
-                </a>
-              </div>
-              <div className="col-2">
-                <a href="/products?category=oil">
-                  <div className="categoryContainer">
-                    <img
-                      className="categoryIcon"
-                      src="/images/oilsIcon.jpeg"
-                      alt="Oils"
-                    />
-                    <p>Oils</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CategoryNav />
         {/*********************** Carousel ***************************/}
         <div className="container">
           <div className="carouselContainer">

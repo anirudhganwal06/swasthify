@@ -283,10 +283,6 @@ footer a:hover {
 }
 
 @media screen and (max-width: 1199px) {
-  #landingSec {
-    padding: 50px 0;
-  }
-
   .categoriesContainer {
     padding: 5px;
   }
@@ -495,4 +491,65 @@ footer a:hover {
   .featureswbContainer .banner {
     padding-bottom: 3vw;
   }
+}
+
+/****************** products list ***************/
+
+#productListSec {
+  padding: 50px 0;
+}
+
+.productListContainer {
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 0 2px -1px #000;
+  padding: 30px;
+}
+
+.productCard {
+  cursor: pointer;
+  padding: 10px;
+  box-shadow: 0 0 2px -1px #000;
+}
+
+.productCard:hover {
+  box-shadow: 0 0 3px -1px #000;
+}
+
+.productCard .imageContainer {
+  margin: 0 auto;
+  height: 180px;
+  width: 80%;
+}
+
+.productCard .imageContainer img {
+  margin-top: 5%;
+  height: 95%;
+  width: 100%;
+  transition: 500ms;
+}
+
+.productCard:hover .imageContainer img {
+  margin-top: 0%;
+  /* margin-bottom: 10%; */
+}
+
+.productCard .productName {
+  color: #555;
+  font-size: 15px;
+}
+
+.productCard .productPrice {
+  color: #555;
+  font-size: 18px;
+  font-weight: bold;
+  float: left;
+}
+
+.productCard .productQty {
+  float: right;
+}
+
+.productCard .productQty .custom-select {
+  box-shadow: none;
 }

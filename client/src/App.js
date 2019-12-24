@@ -19,6 +19,9 @@ import Signup from "./components/auth/Signup";
 // User based components
 import Dashboard from "./components/dashboard/Dashboard";
 
+// Products
+import ProductList from "./components/products/ProductList";
+
 class App extends Component {
   render() {
     return (
@@ -29,6 +32,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/products" component={ProductList} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </main>
           <Footer />
