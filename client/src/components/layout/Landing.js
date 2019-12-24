@@ -11,48 +11,48 @@ class Landing extends Component {
           <div className="carouselContainer">
             <div
               id="carouselExampleControls"
-              class="carousel slide"
+              className="carousel slide"
               data-ride="carousel"
             >
-              <div class="carousel-inner">
-                <div class="carousel-item">
+              <div className="carousel-inner">
+                <div className="carousel-item">
                   <img
-                    class="d-block w-100"
+                    className="d-block w-100"
                     src="/images/carouselBanner1.jpg"
                     alt="First slide"
                   />
                 </div>
-                <div class="carousel-item active">
+                <div className="carousel-item active">
                   <img
-                    class="d-block w-100"
+                    className="d-block w-100"
                     src="/images/carouselBanner2.jpg"
                     alt="Second slide"
                   />
                 </div>
               </div>
               <a
-                class="carousel-control-prev"
+                className="carousel-control-prev"
                 href="#carouselExampleControls"
                 role="button"
                 data-slide="prev"
               >
                 <span
-                  class="carousel-control-prev-icon"
+                  className="carousel-control-prev-icon"
                   aria-hidden="true"
                 ></span>
-                <span class="sr-only"></span>
+                <span className="sr-only"></span>
               </a>
               <a
-                class="carousel-control-next"
+                className="carousel-control-next"
                 href="#carouselExampleControls"
                 role="button"
                 data-slide="next"
               >
                 <span
-                  class="carousel-control-next-icon"
+                  className="carousel-control-next-icon"
                   aria-hidden="true"
                 ></span>
-                <span class="sr-only"></span>
+                <span className="sr-only"></span>
               </a>
             </div>
           </div>
@@ -112,7 +112,7 @@ class Landing extends Component {
                       src="/images/featureBanner1.webp"
                       alt="Banner1"
                     />
-                    <h1 class="bannerHeading">PREMIUM QUALITY</h1>
+                    <h1 className="bannerHeading">PREMIUM QUALITY</h1>
                     <p>
                       Our policy is to provide only the premium quality items to
                       our customers.
@@ -128,7 +128,7 @@ class Landing extends Component {
                       src="/images/featureBanner2.webp"
                       alt="Banner1"
                     />
-                    <h1 class="bannerHeading">CHEMICAL FREE</h1>
+                    <h1 className="bannerHeading">CHEMICAL FREE</h1>
                     <p>
                       All our items are 100% free from any and all kind
                       chemicals with
@@ -145,7 +145,7 @@ class Landing extends Component {
                       src="/images/featureBanner3.webp"
                       alt="Banner1"
                     />
-                    <h1 class="bannerHeading">FRESHLY DELIVERED</h1>
+                    <h1 className="bannerHeading">FRESHLY DELIVERED</h1>
                     <p>
                       All items are Freshly Delivered at your Doorstep in click
                       of a button.

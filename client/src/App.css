@@ -15,6 +15,10 @@ main {
   background-color: #f5f5f5;
 }
 
+section {
+  padding: 50px 0;
+}
+
 @media screen and (max-width: 1199px) {
   main {
     padding-top: 60px;
@@ -24,6 +28,22 @@ main {
 @media screen and (max-width: 991px) {
   main {
     padding-top: 120px;
+  }
+
+  section {
+    padding: 30px 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  section {
+    padding: 20px 0;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  section {
+    padding: 15px 0;
   }
 }
 
@@ -40,6 +60,21 @@ h6 {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.btn:focus,
+.btn:active,
+.btn:hover,
+.btn {
+  box-shadow: none;
+}
+
 .vCenterContents {
   display: flex;
   align-items: center;
@@ -48,6 +83,21 @@ h6 {
 .hCenterContents {
   display: flex;
   justify-content: center;
+}
+
+.themeColorHoverBtn {
+  background-color: #fff;
+  color: #122;
+  border: 1px solid #122;
+}
+
+.themeColorHoverBtn:hover {
+  background-color: #122;
+  color: #fff;
+}
+
+.themeColorHoverBtn:focus {
+  box-shadow: none;
 }
 
 /********************* header ***********************/
@@ -252,10 +302,6 @@ footer a:hover {
 
 /********************* landing ***********************/
 
-#landingSec {
-  padding: 50px 0;
-}
-
 /************** categories container *****************/
 
 .categoriesContainer {
@@ -294,10 +340,6 @@ footer a:hover {
 }
 
 @media screen and (max-width: 991px) {
-  #landingSec {
-    padding: 30px 0;
-  }
-
   .categoryIcon {
     width: 50px;
     height: 50px;
@@ -305,10 +347,6 @@ footer a:hover {
 }
 
 @media screen and (max-width: 767px) {
-  #landingSec {
-    padding: 20px 0;
-  }
-
   .categoryIcon {
     width: 35px;
     height: 35px;
@@ -316,10 +354,6 @@ footer a:hover {
 }
 
 @media screen and (max-width: 575px) {
-  #landingSec {
-    padding: 15px 0;
-  }
-
   .categoryContainer {
     font-size: 12px;
   }
@@ -495,15 +529,21 @@ footer a:hover {
 
 /****************** products list ***************/
 
-#productListSec {
-  padding: 50px 0;
-}
-
 .productListContainer {
   margin: 10px 0;
   background-color: #fff;
   box-shadow: 0 0 2px -1px #000;
   padding: 30px;
+}
+
+@media screen and (max-width: 575px) {
+  .productListContainer {
+    padding: 10px;
+  }
+}
+
+.categoryName {
+  font-size: 30px;
 }
 
 .productCard {
@@ -552,4 +592,108 @@ footer a:hover {
 
 .productCard .productQty .custom-select {
   box-shadow: none;
+}
+
+.productCard .fas {
+  color: rgb(202, 48, 189);
+}
+
+.productCard .fa-heart {
+  font-size: 20px;
+}
+
+.productCard .fa-heart:active {
+  font-size: 30px;
+  transition: 1s;
+}
+
+.productCard button {
+  font-size: 12px;
+}
+
+/******************** product details *********************/
+
+.productDetailsContainer {
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 0 2px -1px #000;
+  padding: 30px;
+}
+
+@media screen and (max-width: 575px) {
+  .productDetailsContainer {
+    padding: 10px;
+  }
+}
+
+.productDetailsContainer .productImage {
+  width: 60%;
+}
+
+.productDetailsContainer .productName {
+  font-size: 26px;
+}
+
+.productDetailsContainer .productName .fa-heart {
+  float: right;
+  font-size: 40px;
+  margin: 5px;
+  color: rgb(202, 48, 189);
+}
+.productDetailsContainer .productPrice {
+  font-size: 30px;
+  font-weight: bold;
+  color: #122;
+}
+
+.productDetailsContainer .qtySelectionBtn {
+  color: #122;
+  background-color: #fff;
+  border: 1px solid #122;
+  margin: 2px 5px 30px 0;
+}
+
+.productDetailsContainer .qtySelectedBtn {
+  background-color: #122;
+  color: #fff;
+}
+
+.productDetailsContainer .qtySelectionBtn:focus,
+.productDetailsContainer .qtySelectionBtn {
+  box-shadow: none;
+}
+
+.productDetailsContainer .btn-group {
+  margin-right: 20px;
+}
+
+.productDetailsContainer .productDetail {
+  min-height: 10rem;
+}
+
+.productDetailsContainer .productDetail b {
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+.productDetailsContainer .productDetail b.showingDetail {
+  border-bottom: 2px solid #122;
+}
+
+.productDetailsContainer .specificDetail {
+  margin: 20px 0;
+}
+
+@media screen and (max-width: 575px) {
+  .productDetailsContainer .productDetail b {
+    padding: 3vw;
+    font-size: 3vw;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .productDetailsContainer .productDetail b {
+    padding: 2vw;
+    font-size: 3.5vw;
+  }
 }

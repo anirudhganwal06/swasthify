@@ -21,6 +21,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 
 // Products
 import ProductList from "./components/products/ProductList";
+import ProductDetails from "./components/products/ProductDetails";
 
 class App extends Component {
   render() {
@@ -33,6 +34,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/products" component={ProductList} />
+            <Route exact path="/product/:prodId" component={ProductDetails} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </main>
           <Footer />

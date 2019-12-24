@@ -9,20 +9,8 @@ class ProductList extends Component {
         <CategoryNav />
         <div className="container">
           <div className="productListContainer">
-            <b>Flour</b>
-            <div className="row justify-content-left">
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+            <b className="categoryName">Flours</b>
+            <div className="row justify-content-center">
               <ProductCard />
               <ProductCard />
               <ProductCard />

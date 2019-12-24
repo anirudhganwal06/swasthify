@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class ProductCard extends Component {
   constructor() {
@@ -7,14 +8,15 @@ class ProductCard extends Component {
       name: "Cold Pressed Coconut Oil",
       imageUrl: "/images/demoProduct.webp",
       rate: [
-        [200, 1],
-        [300, 2],
-        [500, 5],
-        [900, 10]
+        [200, 100, "ml"],
+        [300, 200, "ml"],
+        [500, 1, "lt"],
+        [900, 2, "lt"]
       ],
-      unit: "lt",
       tag: "50% OFF",
-      selectedQty: 0
+      selectedQty: 0,
+      wishlisted: false,
+      inCart: false
     };
   }
 
@@ -24,22 +26,34 @@ class ProductCard extends Component {
     });
   };
 
+  toggleWishlist = e => {
+    this.setState({
+      wishlisted: !this.state.wishlisted
+    });
+  };
+
+  toggleCart = e => {
+    this.setState({
+      inCart: !this.state.inCart
+    });
+  };
+
   render() {
     let qtyOptions = [];
 
     for (let i = 0; i < this.state.rate.length; i++) {
       qtyOptions.push(
-        <option value={i}>
-          {this.state.rate[i][1]} {this.state.unit}
+        <option value={i} key={i}>
+          {this.state.rate[i][1] + " " + this.state.rate[i][2]}
         </option>
       );
     }
 
     return (
-      <div className="col-3 mt-3 mb-3">
+      <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
         <div className="productCard">
-          <span class="badge badge-success">{this.state.tag}</span>
-          <div class="imageContainer">
+          <span className="badge badge-success">{this.state.tag}</span>
+          <div className="imageContainer">
             <img src={this.state.imageUrl} alt="Product " />
           </div>
           <p className="productName">{this.state.name}</p>
@@ -51,10 +65,38 @@ class ProductCard extends Component {
             </div>
             <div className="col-6 align-items-center">
               <div className="productQty">
-                <select class="custom-select" onChange={this.onChange}>
+                <select className="custom-select" onChange={this.onChange}>
                   {qtyOptions}
                 </select>
               </div>
+            </div>
+            <div className="col-2 pt-3 text-center">
+              {this.state.wishlisted ? (
+                <span
+                  className="fas fa-heart"
+                  onClick={this.toggleWishlist}
+                ></span>
+              ) : (
+                <span
+                  className="far fa-heart"
+                  onClick={this.toggleWishlist}
+                ></span>
+              )}
+            </div>
+            <div className="col-3 p-1 pt-2">
+              <Link to="/product/123456">
+                <button className="btn themeColorHoverBtn btn-block">
+                  VIEW
+                </button>
+              </Link>
+            </div>
+            <div className="col-7 p-1 pt-2 pr-3">
+              <button
+                className="btn themeColorHoverBtn btn-block"
+                onClick={this.toggleCart}
+              >
+                {this.state.inCart ? "ADDED TO CART" : "ADD TO CART"}
+              </button>
             </div>
           </div>
         </div>
