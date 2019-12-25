@@ -3,9 +3,13 @@ import React from "react";
 const SignedInLinks = props => {
   return (
     <React.Fragment>
-      <div 
+      <div className="headerItem headerRight vCenterContents hCenterContents">
+        <p>Cart</p>
+      </div>
+      <div
         className="headerItem headerRight vCenterContents hCenterContents"
-        onClick="">
+        onClick=""
+      >
         <p>Logout</p>
       </div>
     </React.Fragment>
