@@ -1,6 +1,7 @@
 import React from "react";
+import { useFirebase } from "react-redux-firebase";
 
-const SignedInLinks = props => {
+const SignedInLinks = () => {
   return (
     <React.Fragment>
       <div className="headerItem headerRight vCenterContents hCenterContents">
@@ -8,7 +9,7 @@ const SignedInLinks = props => {
       </div>
       <div
         className="headerItem headerRight vCenterContents hCenterContents"
-        onClick=""
+        onClick={useFirebase().logout}
       >
         <p>Logout</p>
       </div>

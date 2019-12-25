@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { compose } from "redux";
 import { connect } from "react-redux";
-import { firebaseConnect } from "react-redux-firebase";
 
 import SignedInLinks from "./SignedInLinks";
 import SignedOutLinks from "./SignedOutLinks";
@@ -43,7 +41,7 @@ class Header extends Component {
           </div>
         </Link>
         <Search classes="headerSearchItemBig"/>
-        {this.props.isSignedIn ? <SignedInLinks logout="" /> : <SignedOutLinks />}
+        {this.props.isSignedIn ? <SignedInLinks /> : <SignedOutLinks />}
         <Search classes="headerSearchItemSmall vCenterContents hCenterContents" />
       </header>
     );
@@ -56,4 +54,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default compose(firebaseConnect(), connect(mapStateToProps))(Header);
+export default connect(mapStateToProps)(Header);
