@@ -11,16 +11,30 @@ class ProductList extends Component {
           <div className="productListContainer">
             <b className="categoryName">Flours</b>
             <div className="row justify-content-center">
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
+              <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
+                <ProductCard />
+              </div>
             </div>
           </div>
         </div>

@@ -697,3 +697,52 @@ footer a:hover {
     font-size: 3.5vw;
   }
 }
+
+/***************  ******************/
+
+.productCarouselContainer {
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 0 2px -1px #000;
+  padding: 0 10px;
+  overflow: hidden;
+}
+
+.productCarouselContainerInner {
+  width: 10000%;
+}
+
+.carouselProductCard {
+  display: inline-block;
+  margin: 12px;
+  width: 250px;
+}
+
+#productCarouselSec .carouselName {
+  display: inline-block;
+}
+
+#productCarouselSec .carouselArrow {
+  font-size: 30px;
+  font-weight: bold;
+  background-color: #1225;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  line-height: 0;
+  border-radius: 20px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+#productCarouselSec .carouselArrow:hover {
+  background-color: #122;
+}
+
+#productCarouselSec .carouselLeft {
+  float: left;
+}
+
+#productCarouselSec .carouselRight {
+  float: right;
+}

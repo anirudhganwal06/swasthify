@@ -50,7 +50,6 @@ class ProductCard extends Component {
     }
 
     return (
-      <div className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3">
         <div className="productCard">
           <span className="badge badge-success">{this.state.tag}</span>
           <div className="imageContainer">
@@ -99,7 +98,6 @@ class ProductCard extends Component {
               </button>
             </div>
           </div>
-        </div>
       </div>
     );
   }
