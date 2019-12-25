@@ -4,11 +4,8 @@ import { useFirebase } from "react-redux-firebase";
 const SignedInLinks = () => {
   return (
     <React.Fragment>
-      <div className="headerItem headerRight vCenterContents hCenterContents">
-        <p>Cart</p>
-      </div>
       <div
-        className="headerItem headerRight vCenterContents hCenterContents"
+        className="headerItem headerRight myAcc vCenterContents hCenterContents"
         onClick={useFirebase().logout}
       >
         <p>Logout</p>

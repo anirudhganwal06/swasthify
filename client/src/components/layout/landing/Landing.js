@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-import CategoryNav from "../common/CategoryNav";
+import CategoryNav from "../../common/CategoryNav";
 // import ProductCarousel from "../products/ProductCarousel";
-import BannersCarousel from "../common/BannersCarousel";
-import ShowcaseFeatures from "../common/ShowcaseFeatures";
-import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
+import BannersCarousel from "./BannersCarousel";
+import ShowcaseFeatures from "./ShowcaseFeatures";
+import ShowcaseBanneredFeatures from "./ShowcaseBanneredFeatures";
 
 class Landing extends Component {
   render() {

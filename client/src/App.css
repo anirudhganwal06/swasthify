@@ -133,6 +133,7 @@ header a:hover {
   width: 200px;
   /* font-weight: bold; */
   font-size: 25px;
+  cursor: pointer;
 }
 
 .headerSearchItemBig {
@@ -156,7 +157,7 @@ header .searchInput {
   left: 0;
   top: 0;
   height: 100vh;
-  width: 70vw;
+  width: 420px;
   color: #000;
   background-color: #fff;
   z-index: 1;
@@ -168,9 +169,148 @@ header .searchInput {
   right: 0;
   top: 0;
   height: 100vh;
-  width: 30vw;
+  width: calc(100% - 420px);
   background-color: #fff1;
   z-index: 1;
+}
+
+.cart {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 420px;
+  color: #000;
+  background-color: #eee;
+  z-index: 2;
+  box-shadow: -5px 0 10px black;
+}
+
+.cartEmptySpace {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: calc(100% - 420px);
+  background-color: #000a;
+  z-index: 2 !important;
+}
+
+.cartHeading {
+  padding: 10px;
+  background-color: #122;
+  color: white;
+  font-size: 30px;
+  height: 70px;
+}
+
+.cartBackArrow {
+  float: left;
+  font-size: 35px;
+  font-weight: bold;
+  background-color: #1225;
+  width: 50px;
+  height: 50px;
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+  display: none;
+}
+
+.cartBackArrow:hover {
+  background-color: #233;
+}
+
+.cartMain {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 70px - 78px);
+}
+
+.billContainer {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.productsInCartContainer {
+  width: 100%;
+  background-color: #fff;
+  padding: 10px 0;
+}
+
+.cartFooter {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.cartProductCard {
+  height: 130px;
+  cursor: pointer;
+  padding: 5px;
+  box-shadow: 0 0 2px -1px #000;
+}
+
+.cartProductCard:hover {
+  box-shadow: 0 0 3px -1px #000;
+}
+
+.cartProductCard .imageContainer {
+  margin: 0 auto;
+  height: 100px;
+  width: 100px;
+}
+
+.cartProductCard .colInRow {
+  padding: 10px;
+}
+
+.cartProductCard .imageContainer img {
+  margin-top: 5%;
+  height: 95%;
+  width: 100%;
+  transition: 500ms;
+}
+
+.cartProductCard:hover .imageContainer img {
+  margin-top: 0%;
+}
+
+.cartProductCard .productName {
+  color: #555;
+  font-size: 15px;
+}
+
+.cartProductCard .productPrice {
+  color: #555;
+  font-size: 18px;
+  float: left;
+  margin-right: 5px;
+}
+
+.cartProductCard .fa-times {
+  color: #555;
+  font-size: 12px;
+  padding: 0 5px;
+}
+
+.cartProductCard .btn-group {
+  margin-left: 5px;
+}
+
+.cartProductCard .btn-group button {
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+.cartFinalProductPrice {
+  float: right;
+  margin-right: 20px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 1199px) {
@@ -212,9 +352,12 @@ header .searchInput {
   }
 
   .headerRight {
-    display: none;
     width: 160px;
     font-size: 20px;
+  }
+
+  header .myAcc {
+    display: none;
   }
 
   .headerSearchItemBig {
@@ -234,6 +377,63 @@ header .searchInput {
     height: 30px;
     font-size: 18px;
     width: 90vw;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  header {
+    height: 16vw;
+  }
+
+  .swasthifyLogo {
+    width: 30vw;
+  }
+
+  .headerItem {
+    height: 12vw;
+    padding: 20px;
+  }
+
+  .headerLeft {
+    width: auto;
+  }
+
+  .headerRight {
+    width: auto;
+  }
+
+  .cart {
+    width: 100%;
+  }
+
+  .cartEmptySpace {
+    width: 0;
+  }
+
+  .leftNavbar {
+    width: 80%;
+  }
+
+  .leftNavbarEmptySpace {
+    width: 20%;
+  }
+
+  .cartBackArrow {
+    display: block;
+  }
+
+  .cartProductCard .productPrice {
+    padding-top: 0.5vw;
+    font-size: 15px;
+  }
+
+  .cartProductCard .fa-times {
+    padding: 2vw 0 0;
+  }
+
+  .cartProductCard .btn-group button {
+    padding: 0 3px;
+    font-size: 12px;
   }
 }
 
@@ -347,6 +547,7 @@ footer a:hover {
 
 .carouselContainer {
   margin: 10px 0;
+  z-index: 1;
 }
 
 .carouselContainer img {

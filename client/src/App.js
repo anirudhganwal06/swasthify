@@ -8,8 +8,8 @@ import "./App.css";
 import PrivateRoute from "./components/common/PrivateRoute";
 
 // Layout Components
-import Header from "./components/layout/Header";
-import Landing from "./components/layout/Landing";
+import Header from "./components/layout/header/Header";
+import Landing from "./components/layout/landing/Landing";
 import Footer from "./components/layout/Footer";
 
 // Auth Components
