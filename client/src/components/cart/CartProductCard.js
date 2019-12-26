@@ -2,27 +2,21 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class CartProductCard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      name: "Cold Pressed Coconut Oil",
-      imageUrl: "/images/demoProduct.webp",
-      rate: [
-        [200, 100, "ml"],
-        [300, 200, "ml"],
-        [500, 1, "lt"],
-        [900, 2, "lt"]
-      ],
-      tag: "50% OFF",
-      selectedQty: 0,
-      units: 1
+      ...props.product
     };
   }
 
   decUnits = e => {
-    this.setState({
-      units: this.state.units - 1 === -1 ? 0 : this.state.units - 1
-    });
+    if (this.state.units - 1 === 0) {
+      this.props.removeProductFromCart();
+    } else {
+      this.setState({
+        units: this.state.units - 1
+      });
+    }
   };
 
   incUnits = e => {
