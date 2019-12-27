@@ -65,12 +65,12 @@ class Signup extends Component {
     );
 
     return (
-      <div className="container p-5">
+      <div className="container p-3">
         <div className="row justify-content-center">
           <div className="col-12 text-center">
             <h1>Signup</h1>
           </div>
-          <div className="col-12 col-md-6">
+          <div className="col-12 col-md-8 col-xl-6">
             <form noValidate onSubmit={this.onSubmit}>
               <InputGroup
                 id="name"

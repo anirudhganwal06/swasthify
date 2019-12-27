@@ -31,6 +31,12 @@ section {
   }
 }
 
+@media screen and (max-width: 575px) {
+  main {
+    padding-top: 24vw;
+  }
+}
+
 p,
 span,
 i,
@@ -59,6 +65,18 @@ a:hover {
   box-shadow: none;
 }
 
+.form-control:focus,
+.form-control:active,
+.form-control:hover,
+.form-control {
+  box-shadow: none;
+  border-width: 2px;
+}
+
+.form-control:focus {
+  border-color: #122a;
+}
+
 .vCenterContents {
   display: flex;
   align-items: center;
@@ -82,6 +100,17 @@ a:hover {
 
 .themeColorHoverBtn:focus {
   box-shadow: none;
+}
+
+.themeHeadingLg {
+  font-size: 30px;
+  color: #122;
+}
+
+.themeHeadingSm {
+  font-size: 20px;
+  color: #122;
+  margin: 10px 0;
 }
 
 /********************* header ***********************/
@@ -883,7 +912,7 @@ footer a:hover {
   }
 }
 
-/***************  ******************/
+/*************** product carousel  ******************/
 
 .productCarouselContainer {
   margin: 10px 0;
@@ -929,5 +958,50 @@ footer a:hover {
 }
 
 #productCarouselSec .carouselRight {
+  float: right;
+}
+
+/*************************** checkout *******************************/
+
+.deliveryAddressCard {
+  border: 2px solid #1122;
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  overflow: hidden;
+  color: #344;
+}
+
+.deliveryAddressCard:hover {
+  border-color: #1124;
+}
+
+.selectedDeliveryAddressCard {
+  border-color: #122a !important;
+}
+
+.checkoutProductContainer {
+  width: 100%;
+  /* height: 10px; */
+  background-color: white;
+  font-size: 14px;
+  padding: 5px;
+  box-shadow: 0 0 2px -1px #000;
+}
+
+.checkoutProductContainer .imageContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.checkoutProductContainer .imageContainer img {
+  height: 70px;
+  width: 70px;
+}
+
+.checkoutProductContainer .finalProductPrice {
   float: right;
 }

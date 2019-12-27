@@ -13,10 +13,10 @@ const InputGroup = ({
   onChange
 }) => {
   return (
-    <div class="form-group">
-      <label for={id}>{label}</label>
+    <div className="form-group">
+      <label htmlFor={id}>{label}</label>
       <input
-        class={classnames("form-control", { "is-invalid": error })}
+        className={classnames("form-control", { "is-invalid": error })}
         id={id}
         type={type}
         name={name}
@@ -24,7 +24,7 @@ const InputGroup = ({
         value={value}
         onChange={onChange}
       />
-      <small class="form-text text-muted">{help}</small>
+      <small className="form-text text-muted">{help}</small>
       <div className="invalid-feedback">{error}</div>
     </div>
   );
