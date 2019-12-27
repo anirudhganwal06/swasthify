@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import CartProductCard from "./CartProductCard";
 
 class Cart extends Component {
@@ -100,9 +102,14 @@ class Cart extends Component {
             <div className="productsInCartContainer">{productsInCart}</div>
           </div>
           <div className="cartFooter">
-            <button className="btn themeColorHoverBtn btn-block">
-              Proceed to Checkout
-            </button>
+            <Link to="/checkout">
+              <button
+                className="btn themeColorHoverBtn btn-block"
+                onClick={this.props.closeCart}
+              >
+                Proceed to Checkout
+              </button>
+            </Link>
           </div>
         </div>
       </div>
