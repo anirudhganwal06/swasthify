@@ -1,16 +1,13 @@
 import React from "react";
-import { useFirebase } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 
 const SignedInLinks = () => {
   return (
-    <React.Fragment>
-      <div
-        className="headerItem headerRight myAcc vCenterContents hCenterContents"
-        onClick={useFirebase().logout}
-      >
+    <Link to="/logout">
+      <div className="headerItem headerRight myAcc vCenterContents hCenterContents">
         <p>Logout</p>
       </div>
-    </React.Fragment>
+    </Link>
   );
 };
 

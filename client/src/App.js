@@ -15,6 +15,7 @@ import Footer from "./components/layout/Footer";
 // Auth Components
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
+import Logout from "./components/auth/Logout";
 
 // User based components
 import Dashboard from "./components/dashboard/Dashboard";
@@ -33,6 +34,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/logout" component={Logout} />
             <Route exact path="/products" component={ProductList} />
             <Route exact path="/product/:prodId" component={ProductDetails} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
