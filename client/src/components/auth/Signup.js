@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { withFirebase } from "react-redux-firebase";
 
-// import { signupUser, sendOtp } from "../../actions/authActions";
 import InputGroup from "../common/InputGroup";
 
 class Signup extends Component {
@@ -11,59 +9,22 @@ class Signup extends Component {
     this.state = {
       name: "",
       email: "",
-      mobile: "",
-      otp: "",
-      otpSent: false,
       errors: {}
     };
   }
 
-  onChange = e => {
-    if (this.state.otpSent) {
-      if (e.target.name === "otp") {
-        this.setState({ [e.target.name]: e.target.value });
-      }
-    } else {
-      this.setState({ [e.target.name]: e.target.value });
-    }
-  };
+  onChange = e =>
+    this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = e => {
     e.preventDefault();
-    if (this.state.otpSent) {
-      // const newUser = {
-      //   name: this.state.name,
-      //   email: this.state.email,
-      //   mobile: this.state.mobile,
-      //   otp: this.state.otp
-      // };
-      // this.props.signupUser(newUser, this.props.history);
-    } else {
-      // const newUser = {
-      //   name: this.state.name,
-      //   email: this.state.email,
-      //   mobile: this.state.mobile
-      // };
-      this.setState({ otpSent: true });
-      // this.props.sendOtp(newUser);
-    }
+    this.props.firebase.updateProfile({
+      email: this.state.email,
+      name: this.state.name
+    });
   };
 
   render() {
-    const otpInput = (
-      <InputGroup
-        id="otp"
-        label="OTP"
-        type="text"
-        name="otp"
-        placeholder="Enter OTP"
-        help="Enter the OTP sent your mobile number."
-        value={this.state.otp}
-        onChange={this.onChange}
-        error={this.state.errors.otp}
-      />
-    );
-
     return (
       <div className="container p-3">
         <div className="row justify-content-center">
@@ -93,20 +54,8 @@ class Signup extends Component {
                 onChange={this.onChange}
                 error={this.state.errors.email}
               />
-              <InputGroup
-                id="mobile"
-                label="Mobile Number"
-                type="text"
-                name="mobile"
-                placeholder="Enter mobile number"
-                help="An OTP will be sent to your mobile number."
-                value={this.state.mobile}
-                onChange={this.onChange}
-                error={this.state.errors.mobile}
-              />
-              {this.state.otpSent ? otpInput : ""}
               <button className="btn btn-primary btn-block" type="submit">
-                {this.state.otpSent ? "Signup" : "Send OTP"}
+                Signup
               </button>
             </form>
           </div>
@@ -116,14 +65,4 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {
-  // signupUser: PropTypes.func.isRequired,
-  // sendOtp: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps, {})(Signup);
+export default withFirebase(Signup);
