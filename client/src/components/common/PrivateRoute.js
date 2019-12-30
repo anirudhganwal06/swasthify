@@ -17,11 +17,11 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
 );
 
 PrivateRoute.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: !state.firebase.auth.isEmpty
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

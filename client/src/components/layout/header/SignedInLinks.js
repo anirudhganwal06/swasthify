@@ -1,5 +1,4 @@
 import React from "react";
-import { useFirebase } from "react-redux-firebase";
 import { Link } from "react-router-dom";
 
 const SignedInLinks = () => {
@@ -21,7 +20,7 @@ const SignedInLinks = () => {
         <Link className="dropdown-item" to="/my-profile">
           My profile
         </Link>
-        <Link className="dropdown-item" onClick={useFirebase().logout}>
+        <Link className="dropdown-item" to="/logout">
           Logout
         </Link>
       </div>
