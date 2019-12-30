@@ -10,7 +10,8 @@ const InputGroup = ({
   value,
   error,
   help,
-  onChange
+  onChange,
+  required
 }) => {
   return (
     <div className="form-group">
@@ -23,6 +24,7 @@ const InputGroup = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        required={!!required}
       />
       <small className="form-text text-muted">{help}</small>
       <div className="invalid-feedback">{error}</div>

@@ -18,10 +18,24 @@ class Signup extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.props.firebase.updateProfile({
-      email: this.state.email,
-      name: this.state.name
-    });
+    const form = e.target;
+    
+    if(form.checkValidity() === true) {
+      this.props.firebase.updateProfile({
+        email: this.state.email,
+        displayName: this.state.name
+      }).then(() => this.props.history.push("/"));
+    }
+    else {
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const errors = {};
+      if(name.value === "")
+        errors.name = "Enter a username";
+      
+      if(email.checkValidity() === false)
+        errors.email = "Enter a valid email";
+    }
   };
 
   render() {
@@ -42,6 +56,7 @@ class Signup extends Component {
                 value={this.state.name}
                 onChange={this.onChange}
                 error={this.state.errors.name}
+                required
               />
               <InputGroup
                 id="email"
@@ -53,6 +68,7 @@ class Signup extends Component {
                 value={this.state.email}
                 onChange={this.onChange}
                 error={this.state.errors.email}
+                required
               />
               <button className="btn btn-primary btn-block" type="submit">
                 Signup
