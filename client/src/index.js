@@ -12,6 +12,11 @@ const rrfProps = {
   firebase,
   config: {
     userProfile: "users",
+    profileFactory: userData => ({
+      displayName: userData.displayName,
+      email: userData.email,
+      mobileNo: userData.phoneNumber
+    }),
     useFirestoreForProfile: true
   },
   dispatch: store.dispatch,

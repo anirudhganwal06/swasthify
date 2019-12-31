@@ -18,24 +18,46 @@ class Signup extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const form = e.target;
-    
-    if(form.checkValidity() === true) {
-      this.props.firebase.updateProfile({
-        email: this.state.email,
-        displayName: this.state.name
-      }).then(() => this.props.history.push("/"));
-    }
-    else {
-      const name = document.getElementById("name");
-      const email = document.getElementById("email");
-      const errors = {};
-      if(name.value === "")
+    const firebase = this.props.firebase;
+    const errors = {};
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+
+    if (e.target.checkValidity() === false) {
+      if (name.checkValidity() === false)
         errors.name = "Enter a username";
-      
-      if(email.checkValidity() === false)
+
+      else if (email.checkValidity() === false)
         errors.email = "Enter a valid email";
+
+      this.setState({
+        ...this.state,
+        errors: errors
+      });
     }
+    else
+      firebase.updateEmail(this.state.email, true)
+        .then(() => firebase.updateProfile({ displayName: name.value }))
+        .then(() => firebase.reloadAuth())
+        .then(() => this.props.history.push("/"))
+        .catch(err => {
+          switch (err.code) {
+            case "auth/email-already-in-use":
+              errors.email = "Email already in use";
+              this.setState({
+                ...this.state,
+                errors: errors
+              });
+              break;
+
+            case "auth/requires-recent-login":
+              this.props.history.push("/login");
+              break;
+
+            default:
+              console.log(err);
+          }
+        });
   };
 
   render() {

@@ -8,11 +8,14 @@ const Login = props => {
   const uiConfig = {
     callbacks: {
       signInSuccessWithAuthResult: authResult => {
-        firebase.handleRedirectResult(authResult);
-        if(authResult.additionalUserInfo.isNewUser)
-          props.history.push("/signup");
-        else
-          props.history.push("/");
+        firebase.handleRedirectResult(authResult)
+          .then(() => {
+            if (authResult.additionalUserInfo.isNewUser)
+              props.history.push("/signup");
+            else {
+              props.history.push("/");
+            }
+          });
         return false;
       },
       // uiShown: function () {
