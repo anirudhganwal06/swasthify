@@ -8,7 +8,7 @@ function CategoryNav() {
       <div className="categoriesContainer">
         <div className="row text-center justify-content-center">
           <div className="col-2">
-            <Link to="/products?category=flour">
+            <Link to="/products/flour">
               <div className="categoryContainer">
                 <img
                   className="categoryIcon"
@@ -20,7 +20,7 @@ function CategoryNav() {
             </Link>
           </div>
           <div className="col-2">
-            <Link to="/products?category=rice">
+            <Link to="/products/rice">
               <div className="categoryContainer">
                 <img
                   className="categoryIcon"
@@ -32,7 +32,7 @@ function CategoryNav() {
             </Link>
           </div>
           <div className="col-2">
-            <Link to="/products?category=pulse">
+            <Link to="/products/pulse">
               <div className="categoryContainer">
                 <img
                   className="categoryIcon"
@@ -44,7 +44,7 @@ function CategoryNav() {
             </Link>
           </div>
           <div className="col-2">
-            <Link to="/products?category=spice">
+            <Link to="/products/spice">
               <div className="categoryContainer">
                 <img
                   className="categoryIcon"
@@ -56,7 +56,7 @@ function CategoryNav() {
             </Link>
           </div>
           <div className="col-2">
-            <Link to="/products?category=oil">
+            <Link to="/products/oil">
               <div className="categoryContainer">
                 <img
                   className="categoryIcon"
