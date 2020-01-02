@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import InputGroup from "../common/InputGroup";
-import DeliveryAddressCard from "./DeliveryAddressCard";
+import DeliveryAddressCard from "../common/DeliveryAddressCard";
 import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
 
@@ -89,10 +89,9 @@ export default class Checkout extends Component {
           index={i}
           addAddress={false}
           selected={i === this.state.selectedAddress}
-          houseNo="1029"
-          colony="Vikas Colony"
+          line1="1029"
+          line2="Vikas Colony"
           city="Kosli, Rewari"
-          state="Haryana"
           pincode="123302"
           onClick={this.selectDeliveryAddress}
         />
