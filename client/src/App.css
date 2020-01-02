@@ -281,6 +281,7 @@ header .searchInput {
   height: 130px;
   cursor: pointer;
   padding: 5px;
+  background-color: #fff;
   box-shadow: 0 0 2px -1px #000;
 }
 
@@ -463,6 +464,10 @@ header .searchInput {
   .cartProductCard .btn-group button {
     padding: 0 3px;
     font-size: 12px;
+  }
+
+  .cartProductCard .colInRow {
+    padding: 5px;
   }
 }
 

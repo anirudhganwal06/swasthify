@@ -68,11 +68,9 @@ class MyProfile extends Component {
           <div className="col-12 text-center">
             <h1>My Profile</h1>
           </div>
-          <div className="col-12 col-md-8">
+          <div className="col-12 col-md-8 mt-3">
             <form>
-              <label htmlFor="name" className="mt-3">
-                Full Name
-              </label>
+              <label htmlFor="name">Full Name</label>
               <div className="input-group mb-3">
                 <input
                   className="form-control"

@@ -20,6 +20,9 @@ const SignedInLinks = () => {
         <Link className="dropdown-item" to="/my-profile">
           My profile
         </Link>
+        <Link className="dropdown-item" to="/wishlist">
+          Wishlist
+        </Link>
         <Link className="dropdown-item" to="/logout">
           Logout
         </Link>

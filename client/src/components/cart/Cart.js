@@ -9,61 +9,117 @@ class Cart extends Component {
     this.state = {
       products: [
         {
-          name: "abc",
-          imageUrl: "/images/demoProduct.webp",
-          rate: [
-            [200, 100, "ml"],
-            [300, 200, "ml"],
-            [500, 1, "lt"],
-            [900, 2, "lt"]
+          name: "Cold Pressed Coconut Oil",
+          image: "/images/demoProduct.webp",
+          unit: "ml",
+          variants: [
+            {
+              actualPrice: 200,
+              comparePrice: 220,
+              size: 100
+            },
+            {
+              actualPrice: 300,
+              comparePrice: 330,
+              size: 200
+            },
+            {
+              actualPrice: 500,
+              comparePrice: 550,
+              size: 1000
+            },
+            {
+              actualPrice: 900,
+              comparePrice: 980,
+              size: 2000
+            }
           ],
           tag: "50% OFF",
           selectedQty: 0,
           units: 1
         },
         {
-          name: "abc",
-          imageUrl: "/images/demoProduct.webp",
-          rate: [
-            [200, 100, "ml"],
-            [300, 200, "ml"],
-            [500, 1, "lt"],
-            [900, 2, "lt"]
+          name: "Cold Pressed Coconut Oil",
+          image: "/images/demoProduct.webp",
+          unit: "ml",
+          variants: [
+            {
+              actualPrice: 200,
+              comparePrice: 220,
+              size: 100
+            },
+            {
+              actualPrice: 300,
+              comparePrice: 330,
+              size: 200
+            },
+            {
+              actualPrice: 500,
+              comparePrice: 550,
+              size: 1000
+            },
+            {
+              actualPrice: 900,
+              comparePrice: 980,
+              size: 2000
+            }
           ],
           tag: "50% OFF",
           selectedQty: 0,
           units: 1
         }
       ],
-      subTotal: 0,
       deliveryCharges: 0
     };
   }
 
-  componentDidMount = () => {
-    let subTotal = 0;
-    for (let i = 0; i < this.state.products.length; i++) {
-      subTotal +=
-        this.state.products[i].rate[this.state.products[i].selectedQty][0] *
-        this.state.products[i].units;
+  decUnits = index => {
+    if (this.state.products[index].units - 1 === 0) {
+      this.removeProductFromCart();
+    } else {
+      this.setState(prevState => {
+        let newState = { ...prevState };
+        newState.products[index].units -= 1;
+        return { newState };
+      });
     }
-    this.setState({ subTotal });
+  };
+
+  incUnits = index => {
+    console.log("inc");
+
+    this.setState(prevState => {
+      let newState = { ...prevState };
+      newState.products[index].units += 1;
+      return { newState };
+    });
   };
 
   removeProductFromCart = index => {
-    let newProductsArr = [...this.state.products];
-    newProductsArr.splice(index, 1);
-    this.setState({ products: newProductsArr });
+    this.setState(prevState => {
+      let newState = { ...prevState };
+      newState.products.splice(index, 1);
+      return { newState };
+    });
   };
 
   render() {
+    let subTotal = 0;
     let productsInCart = [];
 
+    for (let i = 0; i < this.state.products.length; i++) {
+      subTotal +=
+        this.state.products[i].variants[this.state.products[i].selectedQty]
+          .actualPrice * this.state.products[i].units;
+    }
     for (let i = 0; i < this.state.products.length; i++) {
       productsInCart.push(
         <CartProductCard
           key={i}
+          index={i}
           product={this.state.products[i]}
+          incUnits={this.incUnits}
+          decUnits={this.decUnits}
           removeProductFromCart={() => this.removeProductFromCart(i)}
         />
       );
@@ -85,7 +141,7 @@ class Cart extends Component {
           <div className="cartMain text-left">
             <div className="billContainer">
               <div className="float-left">Sub Total</div>
-              <div className="float-right">Rs. {this.state.subTotal}</div>
+              <div className="float-right">Rs. {subTotal}</div>
               <br />
               <div className="float-left">Delivery Charges</div>
               <div className="float-right">
@@ -95,7 +151,7 @@ class Cart extends Component {
               <hr />
               <div className="float-left">Total</div>
               <div className="float-right">
-                Rs. {this.state.subTotal + this.state.deliveryCharges}
+                Rs. {subTotal + this.state.deliveryCharges}
               </div>
               <br />
             </div>
