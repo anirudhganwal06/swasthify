@@ -1,206 +1,184 @@
 import React, { Component } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
+
 import CategoryNav from "../common/CategoryNav";
+import InputStepper from "../common/InputStepper";
 
 class ProductDetails extends Component {
   constructor() {
     super();
     this.state = {
-      name: "Cold Pressed Coconut Oil",
-      imageUrl: "/images/demoProduct.webp",
-      rate: [
-        [200, 100, "ml"],
-        [300, 200, "ml"],
-        [500, 1, "lt"],
-        [900, 2, "lt"]
-      ],
-      tag: "50% OFF",
-      selectedQty: 0,
+      imageUrl: "",
+      variant: 0,
       wishlisted: false,
-      inCart: false,
-      units: 1,
-      detail: {
-        description:
-          "Coconut oil is a source of many oleochemicals such as fatty acids, methyl esters, and fatty alcohol. For cooking purposes, it is commonly used in the form of filtered coconut oil. Virgin coconut oil, which is high-quality oil, is prepared from the milk extracted from the raw kernel.",
-        reviews: "The product is rated 4.8 stars!",
-        shipping:
-          "The product will be Delivered within 2-3 Working Days After successful completion of your order."
-      },
-      showingDetail: "description"
+      units: 1
     };
   }
 
-  showSpecificDetail = e => {
+  static getDerivedStateFromProps(props, state) {
+    return isLoaded(props.wishlist) ? {
+      ...state,
+      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+    } : state;
+  }
+
+  decUnits = () => {
+    this.setState(({ units }) => ({
+      units: units === 1 ? 1 : units - 1
+    }));
+  };
+
+  incUnits = () => {
+    this.setState(({ units }) => ({
+      units: units + 1
+    }));
+  };
+
+  selectVariant = e => {
     this.setState({
-      showingDetail: e.target.dataset.detailtype
+      variant: e.target.value
     });
   };
 
-  decUnits = e => {
-    this.setState({
-      units: this.state.units - 1 === 0 ? 1 : this.state.units - 1
+  toggleWishlist = () => {
+    const firestore = this.props.firestore;
+    firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      "wishlist": this.state.wishlisted ?
+        firestore.FieldValue.arrayRemove(this.props.match.params.prodId) :
+        firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
     });
   };
 
-  incUnits = e => {
-    this.setState({
-      units: this.state.units + 1
+  addToCart = () => {
+    const cartId = this.props.match.params.prodId + "#" + this.state.variant;
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + cartId]: this.firestore.FieldValue.increment(this.props.units)
     });
   };
 
-  selectQty = e => {
-    this.setState({
-      selectedQty: +e.target.value
-    });
-  };
+  componentDidMount() {
+    if(this.state.imageUrl === "" && isLoaded(this.props.product))
+      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
+        .then(url => this.setState({ imageUrl: url }))
+        .catch(err => console.log(err));
+  }
 
-  toggleWishlist = e => {
-    this.setState({
-      wishlisted: !this.state.wishlisted
-    });
-  };
-
-  toggleCart = e => {
-    this.setState({
-      inCart: !this.state.inCart
-    });
-  };
+  componentDidUpdate() {
+    if(this.state.imageUrl === "" && isLoaded(this.props.product))
+      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
+        .then(url => this.setState({ imageUrl: url }))
+        .catch(err => console.log(err));
+  }
 
   render() {
-    let qtyBtns = [];
-    for (let i = 0; i < this.state.rate.length; i++) {
-      qtyBtns.push(
-        this.state.selectedQty === i ? (
+    const qtyBtns = [];
+    if(isLoaded(this.props.variants, this.props.product)) {
+      for (const i in this.props.variants)
+        qtyBtns.push(
           <button
             key={i}
-            className="btn qtySelectionBtn qtySelectedBtn"
-            onClick={this.selectQty}
+            className={"btn qtySelectionBtn" + (this.state.variant == i ? " qtySelectedBtn" : "")}
+            onClick={this.selectVariant}
             value={i}
           >
-            {this.state.rate[i][1] + " " + this.state.rate[i][2]}
+            {this.props.variants[i].size + " " + this.props.product.unit}
           </button>
-        ) : (
-          <button
-            key={i}
-            className="btn qtySelectionBtn"
-            onClick={this.selectQty}
-            value={i}
-          >
-            {this.state.rate[i][1] + " " + this.state.rate[i][2]}
-          </button>
-        )
-      );
-    }
+        );
 
-    return (
-      <section className="productDetailsSec">
-        <CategoryNav />
-        <div className="container">
-          <div className="productDetailsContainer">
+      return (
+        <section className="productDetailsSec">
+          <CategoryNav />
+          <div className="container productDetailsContainer">
             <div className="row">
               <div className="col-12 col-md-6 text-center">
                 <img
                   className="productImage"
-                  src="/images/demoProduct.webp"
-                  alt="Product"
+                  src={this.state.imageUrl}
+                  alt={this.props.product.image_alt}
                 />
               </div>
               <div className="col-12 col-md-6">
                 <p className="productName">
-                  {this.state.name}
-                  {this.state.wishlisted ? (
-                    <span
-                      className="fas fa-heart"
-                      onClick={this.toggleWishlist}
-                    ></span>
-                  ) : (
-                    <span
-                      className="far fa-heart"
-                      onClick={this.toggleWishlist}
-                    ></span>
-                  )}
+                  {this.props.product.name}
+                  <span
+                    className={(this.state.wishlisted ? "fas" : "far") + " fa-heart"}
+                    onClick={this.toggleWishlist}
+                  ></span>
                 </p>
                 <p className="productPrice">
-                  Rs. {this.state.rate[this.state.selectedQty][0]}
+                  ₹ {this.props.variants[this.state.variant].actualPrice}
                 </p>
                 <p>Available in:</p>
-                {qtyBtns}
+                <span>{qtyBtns}</span>
                 <br />
-                <div className="btn-group">
-                  <button
-                    type="button"
-                    className="btn themeColorHoverBtn"
-                    onClick={this.decUnits}
-                  >
-                    -
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-dark"
-                    disabled
-                  >
-                    {this.state.units}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn themeColorHoverBtn"
-                    onClick={this.incUnits}
-                  >
-                    +
-                  </button>
-                </div>
+                <InputStepper
+                  value={this.state.units}
+                  incrementHandler={this.incUnits}
+                  decrementHandler={this.decUnits}
+                />
                 <button
                   className="btn themeColorHoverBtn"
-                  onClick={this.toggleCart}
+                  onClick={this.addToCart}
                 >
-                  {this.state.inCart ? "ADDED TO CART" : "ADD TO CART"}
+                  ADD TO CART
                 </button>
               </div>
               <div className="col-12 productDetail">
                 <hr />
-                <b
-                  className={
-                    this.state.showingDetail === "description"
-                      ? "showingDetail"
-                      : ""
-                  }
-                  onClick={this.showSpecificDetail}
+                <b 
+                  className="showingDetail"
                   data-detailtype="description"
                 >
                   Description
                 </b>
-                <b
-                  className={
-                    this.state.showingDetail === "reviews"
-                      ? "showingDetail"
-                      : ""
-                  }
-                  onClick={this.showSpecificDetail}
-                  data-detailtype="reviews"
-                >
-                  Reviews
-                </b>
-                <b
-                  className={
-                    this.state.showingDetail === "shipping"
-                      ? "showingDetail"
-                      : ""
-                  }
-                  onClick={this.showSpecificDetail}
-                  data-detailtype="shipping"
-                >
-                  Shipping & Delivery
-                </b>
                 <br />
                 <p className="specificDetail">
-                  {this.state.detail[this.state.showingDetail]}
+                  {this.props.product.desc}
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    );
+        </section>
+      );
+    }
+    return null;
   }
 }
 
-export default ProductDetails;
+const getQuery = ({ match }) => [
+  {
+    collection: "products",
+    doc: match.params.prodId,
+    storeAs: match.params.prodId
+  },
+  {
+    collection: "products",
+    doc: match.params.prodId,
+    subcollections: [{
+      collection: "variants"
+    }],
+    storeAs: match.params.prodId + "-variants"
+  }
+];
+
+const mapStateToProps = (state, { match }) => ({
+  uid: state.firebase.auth.uid,
+  cart: state.firebase.profile.cart,
+  wishlist: state.firebase.profile.wishlist,
+  product: state.firestore.data[match.params.prodId],
+  variants: state.firestore.data[match.params.prodId + "-variants"]
+});
+
+export default compose(
+  withFirebase,
+  firestoreConnect(getQuery),
+  connect(mapStateToProps)
+)(ProductDetails);

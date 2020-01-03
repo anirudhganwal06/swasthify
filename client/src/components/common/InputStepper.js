@@ -3,14 +3,14 @@ import React from "react";
 const InputStepper = ({ className, value, incrementHandler, decrementHandler }) => (
   <div className={"btn-group " + className}>
     <button
-      className="btn themeColorHoverBtn btn-block w-25"
+      className="btn themeColorHoverBtn btn-block"
       onClick={decrementHandler}
     >
       -
     </button>
-    <span className="btn label w-50">{value}</span>
+    <button className="btn btn-outline-dark" disabled>{value}</button>
     <button
-      className="btn themeColorHoverBtn btn-block w-25"
+      className="btn themeColorHoverBtn btn-block"
       onClick={incrementHandler}
     >
       +

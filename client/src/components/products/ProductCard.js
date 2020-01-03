@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import InputStepper from "../common/InputStepper";
-import { firestoreConnect, isLoaded } from "react-redux-firebase";
+import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -11,13 +11,14 @@ class ProductCard extends Component {
     this.state = {
       variant: 0,
       selectedQty: 0,
-      wishlisted: false
+      wishlisted: false,
+      imageUrl: ""
     };
   }
 
   static getDerivedStateFromProps(props, state) {
     return isLoaded(props.cart, props.wishlist) ? {
-      variant: 0,
+      ...state,
       selectedQty: (props.cart[props.productId + "#" + state.variant] || 0),
       wishlisted: props.wishlist.indexOf(props.productId) !== -1
     } : state;
@@ -63,6 +64,12 @@ class ProductCard extends Component {
     });
   }
 
+  componentDidMount() {
+    this.props.firebase.storage().ref(this.props.image).getDownloadURL()
+      .then(url => this.setState({ imageUrl: url }))
+      .catch(err => console.log(err));
+  }
+
   render() {
     const variants = [];
 
@@ -78,7 +85,7 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          <img src={this.props.image} alt={this.props.image_alt} />
+          <img src={this.state.imageUrl} alt={this.props.image_alt} />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">
@@ -146,6 +153,7 @@ const mapStateToProps = (state, {productId}) => ({
 });
 
 export default compose(
+  withFirebase,
   firestoreConnect(getQuery),
   connect(mapStateToProps)
 )(ProductCard);
