@@ -11,7 +11,8 @@ const InputGroup = ({
   error,
   help,
   onChange,
-  required
+  required,
+  disabled
 }) => {
   return (
     <div className="form-group">
@@ -25,6 +26,7 @@ const InputGroup = ({
         value={value}
         onChange={onChange}
         required={!!required}
+        disabled={disabled}
       />
       <small className="form-text text-muted">{help}</small>
       <div className="invalid-feedback">{error}</div>
