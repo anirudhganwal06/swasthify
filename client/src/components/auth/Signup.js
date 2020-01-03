@@ -30,10 +30,7 @@ class Signup extends Component {
       else if (email.checkValidity() === false)
         errors.email = "Enter a valid email";
 
-      this.setState({
-        ...this.state,
-        errors: errors
-      });
+      this.setState({ errors });
     }
     else
       firebase.updateEmail(this.state.email, true)
@@ -44,10 +41,7 @@ class Signup extends Component {
           switch (err.code) {
             case "auth/email-already-in-use":
               errors.email = "Email already in use";
-              this.setState({
-                ...this.state,
-                errors: errors
-              });
+              this.setState({ errors });
               break;
 
             case "auth/requires-recent-login":

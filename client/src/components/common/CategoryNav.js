@@ -22,12 +22,9 @@ const CategoryNav = ({ categories }) => {
     );
 
   return (
-    <div className="container">
-      {/*********************** Category container ***************************/}
-      <div className="categoriesContainer">
-        <div className="row text-center justify-content-around">
-          {categoriesList}
-        </div>
+    <div className="container categoriesContainer">
+      <div className="row text-center justify-content-around">
+        {categoriesList}
       </div>
     </div>
   );
