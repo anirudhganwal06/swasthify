@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { firestoreConnect } from "react-redux-firebase";
 
 // a common css file for entire website
 import "./App.css";
@@ -52,4 +53,8 @@ class App extends Component {
   }
 }
 
-export default App;
+export default firestoreConnect([{
+  collection: "products",
+  doc: "categories",
+  storeAs: "categories"
+}])(App);

@@ -36,7 +36,7 @@ const mapStateToProps = state => ({
 
 const getQuery = ({ match }) => [{
   collection: "products",
-  where: [["category", "==", match.params.category.toLowerCase()]]
+  where: [["category", "==", match.params.category]]
 }];
 
 export default compose(

@@ -1,66 +1,40 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-class CategoryNav extends Component {
-  constructor() {
-    super();
-    this.state = {
-      categories: [
-        {
-          name: "Flours",
-          urlName: "flour"
-        },
-        {
-          name: "Rice",
-          urlName: "rice"
-        },
-        {
-          name: "Pulses",
-          urlName: "pulse"
-        },
-        {
-          name: "Spices",
-          urlName: "spice"
-        },
-        {
-          name: "Oils",
-          urlName: "oil"
-        }
-      ]
-    };
-  }
+const CategoryNav = ({ categories }) => {
+  const categoriesList = [];
 
-  render() {
-    let categoriesList = [];
-    const categories = this.state.categories;
-    for (let i = 0; i < categories.length; i++) {
-      categoriesList.push(
-        <div className="col-1" key={i}>
-          <Link to={"/products?category=" + categories[i].urlName}>
-            <div className="categoryContainer">
-              {/* <img
+  for(let category in categories)
+    categoriesList.push(
+      <div className="col-1" key={category}>
+        <Link to={"/products/" + category}>
+          <div className="categoryContainer">
+            {/* <img
                   className="categoryIcon"
                   src="/images/floursIcon.jpeg"
                   alt="Flours"
                 /> */}
-              <p>{categories[i].name}</p>
-            </div>
-          </Link>
-        </div>
-      );
-    }
-
-    return (
-      <div className="container">
-        {/*********************** Category container ***************************/}
-        <div className="categoriesContainer">
-          <div className="row text-center justify-content-around">
-            {categoriesList}
+            <p>{categories[category].name}</p>
           </div>
-        </div>
+        </Link>
       </div>
     );
-  }
-}
 
-export default CategoryNav;
+  return (
+    <div className="container">
+      {/*********************** Category container ***************************/}
+      <div className="categoriesContainer">
+        <div className="row text-center justify-content-around">
+          {categoriesList}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = state => ({
+  categories: state.firestore.data.categories
+});
+
+export default connect(mapStateToProps)(CategoryNav);
