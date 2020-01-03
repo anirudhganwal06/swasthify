@@ -15,7 +15,9 @@ const rrfProps = {
     profileFactory: userData => ({
       displayName: userData.displayName,
       email: userData.email,
-      mobileNo: userData.phoneNumber
+      mobileNo: userData.phoneNumber,
+      cart: {},
+      wishlist: []
     }),
     useFirestoreForProfile: true
   },

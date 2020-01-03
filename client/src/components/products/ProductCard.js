@@ -1,106 +1,151 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import InputStepper from "../common/InputStepper";
+import { firestoreConnect, isLoaded } from "react-redux-firebase";
 
 class ProductCard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      name: "Cold Pressed Coconut Oil",
-      imageUrl: "/images/demoProduct.webp",
-      rate: [
-        [200, 100, "ml"],
-        [300, 200, "ml"],
-        [500, 1, "lt"],
-        [900, 2, "lt"]
-      ],
-      tag: "50% OFF",
+      variant: 0,
       selectedQty: 0,
-      wishlisted: false,
-      inCart: false
+      wishlisted: false
     };
   }
 
-  onChange = e => {
+  static getDerivedStateFromProps(props, state) {
+    return isLoaded(props.cart, props.wishlist) ? {
+      variant: 0,
+      selectedQty: (props.cart[props.productId + "#" + state.variant] || 0),
+      wishlisted: props.wishlist.indexOf(props.productId) !== -1
+    } : state;
+  }
+
+  changeVariant = e => {
     this.setState({
-      selectedQty: e.target.value
+      variant: e.target.value
     });
   };
 
-  toggleWishlist = e => {
-    this.setState({
-      wishlisted: !this.state.wishlisted
+  toggleWishlist = () => {
+    const firestore = this.props.firestore;
+    firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      "wishlist": this.state.wishlisted ?
+        firestore.FieldValue.arrayRemove(this.props.productId) :
+        firestore.FieldValue.arrayUnion(this.props.productId)
     });
   };
 
-  toggleCart = e => {
-    this.setState({
-      inCart: !this.state.inCart
+  increaseQty = () => {
+    const cartId = this.props.productId + "#" + this.state.variant;
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + cartId]: ((this.props.cart && this.props.cart[cartId]) || 0) + 1
     });
-  };
+  }
+
+  decreaseQty = () => {
+    const cartId = this.props.productId + "#" + this.state.variant;
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + cartId]: this.props.cart[cartId] > 1 ? 
+        this.props.cart[cartId] - 1 :
+        this.props.firestore.FieldValue.delete()
+    });
+  }
 
   render() {
-    let qtyOptions = [];
+    const variants = [];
 
-    for (let i = 0; i < this.state.rate.length; i++) {
-      qtyOptions.push(
-        <option value={i} key={i}>
-          {this.state.rate[i][1] + " " + this.state.rate[i][2]}
+    for (const v in this.props.variants) {
+      variants.push(
+        <option value={v} key={v}>
+          {this.props.variants[v].size + " " + this.props.unit}
         </option>
       );
     }
 
-    return (
-        <div className="productCard">
-          <span className="badge badge-success">{this.state.tag}</span>
-          <div className="imageContainer">
-            <img src={this.state.imageUrl} alt="Product " />
+    return isLoaded(this.props.variants) ? (
+      <div className="productCard">
+        <span className="badge badge-success">{this.props.tag}</span>
+        <div className="imageContainer">
+          <img src={this.props.image} alt={this.props.image_alt} />
+        </div>
+        <p className="productName">{this.props.name}</p>
+        <div className="row mt-1">
+          <div className="col-6">
+            <p className="productPrice">
+              ₹ {this.props.variants[this.state.variant].actualPrice}
+            </p>
           </div>
-          <p className="productName">{this.state.name}</p>
-          <div className="row mt-1">
-            <div className="col-6">
-              <p className="productPrice">
-                Rs. {this.state.rate[this.state.selectedQty][0]}
-              </p>
-            </div>
-            <div className="col-6 align-items-center">
-              <div className="productQty">
-                <select className="custom-select" onChange={this.onChange}>
-                  {qtyOptions}
-                </select>
-              </div>
-            </div>
-            <div className="col-2 pt-3 text-center">
-              {this.state.wishlisted ? (
-                <span
-                  className="fas fa-heart"
-                  onClick={this.toggleWishlist}
-                ></span>
-              ) : (
-                <span
-                  className="far fa-heart"
-                  onClick={this.toggleWishlist}
-                ></span>
-              )}
-            </div>
-            <div className="col-3 p-1 pt-2">
-              <Link to="/product/123456">
-                <button className="btn themeColorHoverBtn btn-block">
-                  VIEW
-                </button>
-              </Link>
-            </div>
-            <div className="col-7 p-1 pt-2 pr-3">
+          <div className="col-6 align-items-center float-right">
+            <select className="custom-select custom-select-sm shadow-none" onChange={this.changeVariant}>
+              {variants}
+            </select>
+          </div>
+          <div className="col-2 pt-3 text-center">
+            <span
+              className={(this.state.wishlisted ? "fas" : "far") + " fa-heart"}
+              onClick={this.toggleWishlist}
+            ></span>
+          </div>
+          <div className="col-3 p-1 pt-2">
+            <Link to={"/product/" + this.props.productId}>
+              <button className="btn themeColorHoverBtn btn-block">
+                VIEW
+              </button>
+            </Link>
+          </div>
+          <div className="col-7 p-1 pt-2 pr-3">
+            {this.state.selectedQty > 0 ? (
+              <InputStepper
+                className="w-75 float-right"
+                value={this.state.selectedQty}
+                incrementHandler={this.increaseQty}
+                decrementHandler={this.decreaseQty}
+              />
+            ) : (
               <button
                 className="btn themeColorHoverBtn btn-block"
-                onClick={this.toggleCart}
+                onClick={this.increaseQty}
               >
-                {this.state.inCart ? "ADDED TO CART" : "ADD TO CART"}
+                ADD TO CART
               </button>
-            </div>
+            )}
           </div>
+        </div>
       </div>
-    );
+    ) : null;
   }
 }
 
-export default ProductCard;
+const getQuery = ({ productId }) => [{
+  collection: "products",
+  doc: productId,
+  subcollections: [{
+    collection: "variants"
+  }],
+  storeAs: productId + "-variants"
+}];
+
+const mapStateToProps = (state, {productId}) => ({
+  uid: state.firebase.auth.uid,
+  cart: state.firebase.profile.cart,
+  wishlist: state.firebase.profile.wishlist,
+  ...state.firestore.data.products[productId],
+  variants: state.firestore.data[productId + "-variants"]
+});
+
+export default compose(
+  firestoreConnect(getQuery),
+  connect(mapStateToProps)
+)(ProductCard);
