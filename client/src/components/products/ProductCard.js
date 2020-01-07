@@ -11,8 +11,7 @@ class ProductCard extends Component {
     this.state = {
       variant: 0,
       selectedQty: 0,
-      wishlisted: false,
-      imageUrl: ""
+      wishlisted: false
     };
   }
 
@@ -64,12 +63,6 @@ class ProductCard extends Component {
     });
   }
 
-  componentDidMount() {
-    this.props.firebase.storage().ref(this.props.image).getDownloadURL()
-      .then(url => this.setState({ imageUrl: url }))
-      .catch(err => console.log(err));
-  }
-
   render() {
     const variants = [];
 
@@ -85,7 +78,7 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          <img src={this.state.imageUrl} alt={this.props.image_alt} />
+          <img src={this.props.image} alt={this.props.image_alt} />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">

@@ -10,7 +10,6 @@ class ProductDetails extends Component {
   constructor() {
     super();
     this.state = {
-      imageUrl: "",
       variant: 0,
       wishlisted: false,
       units: 1
@@ -64,20 +63,6 @@ class ProductDetails extends Component {
     });
   };
 
-  componentDidMount() {
-    if(this.state.imageUrl === "" && isLoaded(this.props.product))
-      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
-        .then(url => this.setState({ imageUrl: url }))
-        .catch(err => console.log(err));
-  }
-
-  componentDidUpdate() {
-    if(this.state.imageUrl === "" && isLoaded(this.props.product))
-      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
-        .then(url => this.setState({ imageUrl: url }))
-        .catch(err => console.log(err));
-  }
-
   render() {
     const qtyBtns = [];
     if(isLoaded(this.props.variants, this.props.product)) {
@@ -101,7 +86,7 @@ class ProductDetails extends Component {
               <div className="col-12 col-md-6 text-center">
                 <img
                   className="productImage"
-                  src={this.state.imageUrl}
+                  src={this.props.image}
                   alt={this.props.product.image_alt}
                 />
               </div>
