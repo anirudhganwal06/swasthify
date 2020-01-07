@@ -53,8 +53,10 @@ class App extends Component {
   }
 }
 
-export default firestoreConnect([{
-  collection: "products",
-  doc: "categories",
-  storeAs: "categories"
-}])(App);
+export default firestoreConnect([
+  {
+    collection: "products",
+    doc: "categories",
+    storeAs: "categories"
+  }
+])(App);

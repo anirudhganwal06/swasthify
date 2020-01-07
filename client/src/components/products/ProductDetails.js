@@ -18,10 +18,12 @@ class ProductDetails extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.wishlist) ? {
-      ...state,
-      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
-    } : state;
+    return isLoaded(props.wishlist)
+      ? {
+          ...state,
+          wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+        }
+      : state;
   }
 
   decUnits = () => {
@@ -44,48 +46,65 @@ class ProductDetails extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      "wishlist": this.state.wishlisted ?
-        firestore.FieldValue.arrayRemove(this.props.match.params.prodId) :
-        firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
-    });
+    firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
+          : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+      }
+    );
   };
 
   addToCart = () => {
     const cartId = this.props.match.params.prodId + "#" + this.state.variant;
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + cartId]: this.firestore.FieldValue.increment(this.props.units)
-    });
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." + cartId]: this.firestore.FieldValue.increment(
+          this.props.units
+        )
+      }
+    );
   };
 
   componentDidMount() {
-    if(this.state.imageUrl === "" && isLoaded(this.props.product))
-      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
+    if (this.state.imageUrl === "" && isLoaded(this.props.product))
+      this.props.firebase
+        .storage()
+        .ref(this.props.product.image)
+        .getDownloadURL()
         .then(url => this.setState({ imageUrl: url }))
         .catch(err => console.log(err));
   }
 
   componentDidUpdate() {
-    if(this.state.imageUrl === "" && isLoaded(this.props.product))
-      this.props.firebase.storage().ref(this.props.product.image).getDownloadURL()
+    if (this.state.imageUrl === "" && isLoaded(this.props.product))
+      this.props.firebase
+        .storage()
+        .ref(this.props.product.image)
+        .getDownloadURL()
         .then(url => this.setState({ imageUrl: url }))
         .catch(err => console.log(err));
   }
 
   render() {
     const qtyBtns = [];
-    if(isLoaded(this.props.variants, this.props.product)) {
+    if (isLoaded(this.props.variants, this.props.product)) {
       for (const i in this.props.variants)
         qtyBtns.push(
           <button
             key={i}
-            className={"btn qtySelectionBtn" + (this.state.variant == i ? " qtySelectedBtn" : "")}
+            className={
+              "btn qtySelectionBtn" +
+              (+this.state.variant === +i ? " qtySelectedBtn" : "")
+            }
             onClick={this.selectVariant}
             value={i}
           >
@@ -109,7 +128,9 @@ class ProductDetails extends Component {
                 <p className="productName">
                   {this.props.product.name}
                   <span
-                    className={(this.state.wishlisted ? "fas" : "far") + " fa-heart"}
+                    className={
+                      (this.state.wishlisted ? "fas" : "far") + " fa-heart"
+                    }
                     onClick={this.toggleWishlist}
                   ></span>
                 </p>
@@ -133,16 +154,11 @@ class ProductDetails extends Component {
               </div>
               <div className="col-12 productDetail">
                 <hr />
-                <b 
-                  className="showingDetail"
-                  data-detailtype="description"
-                >
+                <b className="showingDetail" data-detailtype="description">
                   Description
                 </b>
                 <br />
-                <p className="specificDetail">
-                  {this.props.product.desc}
-                </p>
+                <p className="specificDetail">{this.props.product.desc}</p>
               </div>
             </div>
           </div>
@@ -162,9 +178,11 @@ const getQuery = ({ match }) => [
   {
     collection: "products",
     doc: match.params.prodId,
-    subcollections: [{
-      collection: "variants"
-    }],
+    subcollections: [
+      {
+        collection: "variants"
+      }
+    ],
     storeAs: match.params.prodId + "-variants"
   }
 ];

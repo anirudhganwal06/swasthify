@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import SideNav from "./SideNav";
-import Search from "./Search";
 import Cart from "../../cart/Cart";
 import { signedInLinks, signedOutLinks } from "./links";
 
@@ -25,18 +24,35 @@ class Header extends Component {
   closeCart = () => this.setState({ cartOpen: false });
 
   render() {
-    let links = [];
+    let signedInLinkComponent = [],
+      signedOutLinkComponent = [],
+      categoriesComponent = [];
     let importedLinks = null;
     if (this.props.isSignedIn) {
       importedLinks = signedInLinks;
+      for (let i in importedLinks) {
+        signedInLinkComponent.push(
+          <Link className="dropdown-item" to={importedLinks[i].url}>
+            {importedLinks[i].name}
+          </Link>
+        );
+      }
     } else {
       importedLinks = signedOutLinks;
+      for (let i in importedLinks) {
+        signedOutLinkComponent.push(
+          <Link className="nav-link" to={importedLinks[i].url}>
+            {importedLinks[i].name}
+          </Link>
+        );
+      }
     }
 
-    for (let i = 0; i < importedLinks.length; i++) {
-      links.push(
-        <Link className="dropdown-item" to={importedLinks[i].url} key={i}>
-          {importedLinks[i].name}
+    const categories = this.props.categories;
+    for (let i in categories) {
+      categoriesComponent.push(
+        <Link className="dropdown-item" to={categories[i].url}>
+          {categories[i].name}
         </Link>
       );
     }
@@ -56,49 +72,127 @@ class Header extends Component {
         ) : (
           ""
         )}
-        <div
-          className="headerItem headerMenuItem vCenterContents hCenterContents"
-          onClick={this.openSideNav}
-        >
-          <i className="fas fa-bars fa-2x"></i>
-        </div>
-        <Link to="/">
-          <div className="headerItem headerLeft vCenterContents hCenterContents">
+        <nav className="navbar navbar-expand-lg navbar-dark">
+          <Link className="navbar-brand" to="/">
             <img
-              className="swasthifyLogo vCenter"
+              className="headerSwasthifyLogo mr-3"
               src="/images/swasthifyLogo.webp"
               alt="Swasthify"
             />
-          </div>
-        </Link>
-        <Search classes="headerSearchItemBig" />
-        <div
-          className="headerItem headerRight myCart vCenterContents hCenterContents"
-          onClick={this.openCart}
-        >
-          <p>
+          </Link>
+          <div
+            className="nav-link ml-auto mr-2 cartBtnSmall"
+            onClick={this.openCart}
+          >
             <span className="fas fa-shopping-cart"></span>
-          </p>
-        </div>
+          </div>
+          <button onClick={this.openSideNav} className="navbar-toggler">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item dropdown mx-1">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Select City
+                </Link>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <Link className="dropdown-item" to="#">
+                    Faridabad
+                  </Link>
+                  <Link className="dropdown-item" to="#">
+                    Gurgaon
+                  </Link>
+                  <div className="dropdown-divider"></div>
+                  <Link className="dropdown-item" to="#">
+                    More coming soon ...
+                  </Link>
+                </div>
+              </li>
+              <li className="nav-item dropdown mx-1">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Select Category
+                </Link>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {categoriesComponent}
+                </div>
+              </li>
+              <li className="nav-item mx-1">
+                <Link className="nav-link" to="/about-us">
+                  About Us
+                </Link>
+              </li>
+            </ul>
+            <ul className="navbar-nav ml-auto">
+              {this.props.isSignedIn ? (
+                <li className="nav-item dropdown mx-2">
+                  <Link
+                    className="nav-link dropdown-toggle"
+                    to="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Anirudh
+                  </Link>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    {signedInLinkComponent}
+                  </div>
+                </li>
+              ) : (
+                <li className="nav-item mx-1">{signedOutLinkComponent}</li>
+              )}
 
-        {/* This section contains the MyAccount links */}
-        <div
-          className="headerItem headerRight myAcc vCenterContents hCenterContents dropdown-toggle"
-          id="dropdownMenuLink"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          My Account
-        </div>
-        <div
-          className="dropdown-menu text-center"
-          aria-labelledby="dropdownMenuLink"
-        >
-          {links}
-        </div>
-        {/*********************************************/}
-        <Search classes="headerSearchItemSmall vCenterContents hCenterContents" />
+              <li className="nav-item active">
+                <form className="form-inline my-2 my-lg-0">
+                  <div className="input-group">
+                    <input
+                      className="form-control"
+                      id="navSearch"
+                      type="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <div className="input-group-append">
+                      <button
+                        className="btn py-0 px-2 my-sm-0 "
+                        id="navSearchBtn"
+                        type="submit"
+                      >
+                        <span className="fas fa-search"></span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </li>
+              <li className="nav-item active mx-2">
+                <div className="nav-link" onClick={this.openCart}>
+                  <span className="fas fa-shopping-cart"></span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </header>
     );
   }
@@ -106,7 +200,8 @@ class Header extends Component {
 
 const mapStateToProps = state => {
   return {
-    isSignedIn: !state.firebase.auth.isEmpty
+    isSignedIn: !state.firebase.auth.isEmpty,
+    categories: state.firestore.data.categories
   };
 };
 
