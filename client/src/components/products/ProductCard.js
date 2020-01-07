@@ -11,8 +11,7 @@ class ProductCard extends Component {
     this.state = {
       variant: 0,
       selectedQty: 0,
-      wishlisted: false,
-      imageUrl: ""
+      wishlisted: false
     };
   }
 
@@ -48,7 +47,7 @@ class ProductCard extends Component {
       collection: "users",
       doc: this.props.uid
     }, {
-      ["cart." + cartId]: ((this.props.cart && this.props.cart[cartId]) || 0) + 1
+      ["cart." + cartId]: this.props.firestore.FieldValue.increment(1)
     });
   }
 
@@ -59,15 +58,9 @@ class ProductCard extends Component {
       doc: this.props.uid
     }, {
       ["cart." + cartId]: this.props.cart[cartId] > 1 ? 
-        this.props.cart[cartId] - 1 :
+        this.props.firestore.FieldValue.increment(-1) :
         this.props.firestore.FieldValue.delete()
     });
-  }
-
-  componentDidMount() {
-    this.props.firebase.storage().ref(this.props.image).getDownloadURL()
-      .then(url => this.setState({ imageUrl: url }))
-      .catch(err => console.log(err));
   }
 
   render() {
@@ -85,7 +78,7 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          <img src={this.state.imageUrl} alt={this.props.image_alt} />
+          <img src={this.props.image} alt={this.props.image_alt} />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">

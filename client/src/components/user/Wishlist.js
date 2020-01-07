@@ -1,135 +1,81 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withFirestore } from "react-redux-firebase";
 
 class Wishlist extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      products: [
-        {
-          name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
-          unit: "ml",
-          variants: [
-            {
-              actualPrice: 200,
-              comparePrice: 220,
-              size: 100
-            },
-            {
-              actualPrice: 300,
-              comparePrice: 330,
-              size: 200
-            },
-            {
-              actualPrice: 500,
-              comparePrice: 550,
-              size: 1000
-            },
-            {
-              actualPrice: 900,
-              comparePrice: 980,
-              size: 2000
-            }
-          ],
-          tag: "50% OFF"
-        },
-        {
-          name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
-          unit: "ml",
-          variants: [
-            {
-              actualPrice: 200,
-              comparePrice: 220,
-              size: 100
-            },
-            {
-              actualPrice: 300,
-              comparePrice: 330,
-              size: 200
-            },
-            {
-              actualPrice: 500,
-              comparePrice: 550,
-              size: 1000
-            },
-            {
-              actualPrice: 900,
-              comparePrice: 980,
-              size: 2000
-            }
-          ],
-          tag: "50% OFF"
-        },
-        {
-          name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
-          unit: "ml",
-          variants: [
-            {
-              actualPrice: 200,
-              comparePrice: 220,
-              size: 100
-            },
-            {
-              actualPrice: 300,
-              comparePrice: 330,
-              size: 200
-            },
-            {
-              actualPrice: 500,
-              comparePrice: 550,
-              size: 1000
-            },
-            {
-              actualPrice: 900,
-              comparePrice: 980,
-              size: 2000
-            }
-          ],
-          tag: "50% OFF"
-        }
-      ]
+      products: []
     };
   }
 
-  RemoveFromWishlist = index => {
-    this.setState(prevState => {
-      let newState = { ...prevState };
-      newState.products.splice(index, 1);
-      return { newState };
+  removeFromWishlist = id => {
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      "wishlist": this.props.firestore.FieldValue.arrayRemove(id)
     });
   };
+
+  fetchProducts = () => {
+    const promises = [];
+    this.props.wishlist.forEach(productId => 
+      promises.push(this.props.firestore.doc("products/" + productId).get()));
+      
+    Promise.all(promises).then(products =>
+      this.setState({
+        products: products.map(product => ({
+          id: product.id,
+          ...product.data()
+        }))
+      })
+    ).catch(error =>
+      console.log("Error getting document:", error)
+    );
+  };
+
+  componentDidMount() {
+    this.fetchProducts();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps !== this.props)
+      this.fetchProducts();
+  }
 
   render() {
     let productsList = [];
     const products = this.state.products;
-    for (let i = 0; i < products.length; i++) {
+    for (const product of products) {
       productsList.push(
-        <div className="cartProductCard" key={i}>
+        <div className="cartProductCard" key={product.id}>
           <button
             className="btn btn-outline-danger float-right"
-            onClick={() => this.RemoveFromWishlist(i)}
+            onClick={() => this.removeFromWishlist(product.id)}
           >
             <span className="fas fa-trash"></span>
           </button>
           <div className="row">
             <div className="col-4 colInRow">
-              <Link to="/product/12345">
+              <Link to={"/product/" + product.id}>
                 <div className="imageContainer">
-                  <img src={products[i].image} alt="Product " />
+                  <img src={product.image} alt="Product " />
                 </div>
               </Link>
             </div>
             <div className="col-8 colInRow">
-              <span className="badge badge-success">{products[i].tag}</span>
-              <p className="productName">{products[i].name}</p>
+              <span className="badge badge-success">{product.tag}</span>
+              <p className="productName">{product.name}</p>
               <p className="productName">
-                {products[i].variants[0].size + " " + products[i].unit}
+                {product.variants[0].size + " " + product.unit}
               </p>
               <p className="productPrice">
-                {"Rs. " + products[i].variants[0].actualPrice}
+                {"₹ " + product.variants[0].actualPrice}
               </p>
             </div>
           </div>
@@ -150,4 +96,12 @@ class Wishlist extends Component {
   }
 }
 
-export default Wishlist;
+const mapStateToProps = state => ({
+  uid: state.firebase.auth.uid,
+  wishlist: state.firebase.profile.wishlist
+});
+
+export default compose(
+  connect(mapStateToProps),
+  withFirestore
+)(Wishlist);

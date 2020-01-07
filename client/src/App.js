@@ -42,9 +42,9 @@ class App extends Component {
             <Route exact path="/products/:category" component={ProductList} />
             <Route exact path="/product/:prodId" component={ProductDetails} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            <Route exact path="/checkout" component={Checkout} />
-            <Route exact path="/my-profile" component={MyProfile} />
-            <Route exact path="/wishlist" component={Wishlist} />
+            <PrivateRoute exact path="/checkout" component={Checkout} />
+            <PrivateRoute exact path="/my-profile" component={MyProfile} />
+            <PrivateRoute exact path="/wishlist" component={Wishlist} />
           </main>
           <Footer />
         </div>
