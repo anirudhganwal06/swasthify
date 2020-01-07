@@ -4,6 +4,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import InputStepper from "../common/InputStepper";
 import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
+import loading from "../common/Loading";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -11,16 +12,19 @@ class ProductCard extends Component {
     this.state = {
       variant: 0,
       selectedQty: 0,
-      wishlisted: false
+      wishlisted: false,
+      imageLoading: true
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.cart, props.wishlist) ? {
-      ...state,
-      selectedQty: (props.cart[props.productId + "#" + state.variant] || 0),
-      wishlisted: props.wishlist.indexOf(props.productId) !== -1
-    } : state;
+    return isLoaded(props.cart, props.wishlist)
+      ? {
+          ...state,
+          selectedQty: props.cart[props.productId + "#" + state.variant] || 0,
+          wishlisted: props.wishlist.indexOf(props.productId) !== -1
+        }
+      : state;
   }
 
   changeVariant = e => {
@@ -31,37 +35,51 @@ class ProductCard extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      "wishlist": this.state.wishlisted ?
-        firestore.FieldValue.arrayRemove(this.props.productId) :
-        firestore.FieldValue.arrayUnion(this.props.productId)
-    });
+    firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.productId)
+          : firestore.FieldValue.arrayUnion(this.props.productId)
+      }
+    );
   };
 
   increaseQty = () => {
     const cartId = this.props.productId + "#" + this.state.variant;
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + cartId]: this.props.firestore.FieldValue.increment(1)
-    });
-  }
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." + cartId]: this.props.firestore.FieldValue.increment(1)
+      }
+    );
+  };
 
   decreaseQty = () => {
     const cartId = this.props.productId + "#" + this.state.variant;
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + cartId]: this.props.cart[cartId] > 1 ? 
-        this.props.firestore.FieldValue.increment(-1) :
-        this.props.firestore.FieldValue.delete()
-    });
-  }
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." + cartId]:
+          this.props.cart[cartId] > 1
+            ? this.props.firestore.FieldValue.increment(-1)
+            : this.props.firestore.FieldValue.delete()
+      }
+    );
+  };
+
+  handleLoadedImage = e => {
+    this.setState({ imageLoading: false });
+  };
 
   render() {
     const variants = [];
@@ -78,7 +96,12 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          <img src={this.props.image} alt={this.props.image_alt} />
+          {this.state.imageLoading ? loading() : ""}
+          <img
+            src={this.props.image}
+            alt={this.props.image_alt}
+            onLoad={this.handleLoadedImage}
+          />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">
@@ -88,7 +111,10 @@ class ProductCard extends Component {
             </p>
           </div>
           <div className="col-6 align-items-center float-right">
-            <select className="custom-select custom-select-sm shadow-none" onChange={this.changeVariant}>
+            <select
+              className="custom-select custom-select-sm shadow-none"
+              onChange={this.changeVariant}
+            >
               {variants}
             </select>
           </div>
@@ -100,9 +126,7 @@ class ProductCard extends Component {
           </div>
           <div className="col-3 p-1 pt-2">
             <Link to={"/product/" + this.props.productId}>
-              <button className="btn themeColorHoverBtn btn-block">
-                VIEW
-              </button>
+              <button className="btn themeColorHoverBtn btn-block">VIEW</button>
             </Link>
           </div>
           <div className="col-7 p-1 pt-2 pr-3">
@@ -128,16 +152,20 @@ class ProductCard extends Component {
   }
 }
 
-const getQuery = ({ productId }) => [{
-  collection: "products",
-  doc: productId,
-  subcollections: [{
-    collection: "variants"
-  }],
-  storeAs: productId + "-variants"
-}];
+const getQuery = ({ productId }) => [
+  {
+    collection: "products",
+    doc: productId,
+    subcollections: [
+      {
+        collection: "variants"
+      }
+    ],
+    storeAs: productId + "-variants"
+  }
+];
 
-const mapStateToProps = (state, {productId}) => ({
+const mapStateToProps = (state, { productId }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,

@@ -5,14 +5,14 @@ import { connect } from "react-redux";
 const CategoryNav = ({ categories }) => {
   const categoriesList = [];
 
-  for(let category in categories)
+  for (let category in categories)
     categoriesList.push(
       <div className="col-1" key={category}>
         <Link to={"/products/" + category}>
           <div className="categoryContainer">
             {/* <img
                   className="categoryIcon"
-                  src="/images/floursIcon.jpeg"
+                  src="/assests/images/floursIcon.jpeg"
                   alt="Flours"
                 /> */}
             <p>{categories[category].name}</p>

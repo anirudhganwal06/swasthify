@@ -13,14 +13,14 @@ function BannersCarousel() {
             <div className="carousel-item">
               <img
                 className="d-block w-100"
-                src="/images/carouselBanner1.jpg"
+                src="/assets/images/carouselBanner1.jpg"
                 alt="First slide"
               />
             </div>
             <div className="carousel-item active">
               <img
                 className="d-block w-100"
-                src="/images/carouselBanner2.jpg"
+                src="/assets/images/carouselBanner2.jpg"
                 alt="Second slide"
               />
             </div>

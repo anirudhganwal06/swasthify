@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import SideNav from "./SideNav";
 import Cart from "../../cart/Cart";
 import { signedInLinks, signedOutLinks } from "./links";
+import { isLoaded } from "react-redux-firebase";
+import loading from "../../common/Loading";
 
 class Header extends Component {
   constructor() {
@@ -32,7 +34,7 @@ class Header extends Component {
       importedLinks = signedInLinks;
       for (let i in importedLinks) {
         signedInLinkComponent.push(
-          <Link className="dropdown-item" to={importedLinks[i].url}>
+          <Link className="dropdown-item" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
         );
@@ -41,7 +43,7 @@ class Header extends Component {
       importedLinks = signedOutLinks;
       for (let i in importedLinks) {
         signedOutLinkComponent.push(
-          <Link className="nav-link" to={importedLinks[i].url}>
+          <Link className="nav-link" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
         );
@@ -50,8 +52,11 @@ class Header extends Component {
 
     const categories = this.props.categories;
     for (let i in categories) {
+      let url = categories[i].name;
+      url = url.toLowerCase();
+      url = url.replace(/s$/, "");
       categoriesComponent.push(
-        <Link className="dropdown-item" to={categories[i].url}>
+        <Link className="dropdown-item" to={"/products/" + url} key={i}>
           {categories[i].name}
         </Link>
       );
@@ -76,7 +81,7 @@ class Header extends Component {
           <Link className="navbar-brand" to="/">
             <img
               className="headerSwasthifyLogo mr-3"
-              src="/images/swasthifyLogo.webp"
+              src="/assets/images/swasthifyLogo.webp"
               alt="Swasthify"
             />
           </Link>
@@ -129,7 +134,9 @@ class Header extends Component {
                   Select Category
                 </Link>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {categoriesComponent}
+                  {isLoaded(this.props.categories)
+                    ? categoriesComponent
+                    : loading()}
                 </div>
               </li>
               <li className="nav-item mx-1">

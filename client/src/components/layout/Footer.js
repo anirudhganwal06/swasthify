@@ -61,7 +61,7 @@ class Footer extends Component {
             <div className="col-9 col-sm-6 col-lg-3 m-3 m-lg-0 order-lg-2">
               <img
                 id="paymentIcon"
-                src="/images/paymentIcon.webp"
+                src="/assets/images/paymentIcon.webp"
                 alt="Payment Methods"
               />
             </div>
