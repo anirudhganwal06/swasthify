@@ -47,7 +47,7 @@ class ProductCard extends Component {
       collection: "users",
       doc: this.props.uid
     }, {
-      ["cart." + cartId]: ((this.props.cart && this.props.cart[cartId]) || 0) + 1
+      ["cart." + cartId]: this.props.firestore.FieldValue.increment(1)
     });
   }
 
@@ -58,7 +58,7 @@ class ProductCard extends Component {
       doc: this.props.uid
     }, {
       ["cart." + cartId]: this.props.cart[cartId] > 1 ? 
-        this.props.cart[cartId] - 1 :
+        this.props.firestore.FieldValue.increment(-1) :
         this.props.firestore.FieldValue.delete()
     });
   }
