@@ -10,7 +10,7 @@ class ProductCard extends Component {
     super(props);
     this.state = {
       variant: 0,
-      selectedQty: 0,
+      units: 0,
       wishlisted: false
     };
   }
@@ -18,7 +18,8 @@ class ProductCard extends Component {
   static getDerivedStateFromProps(props, state) {
     return isLoaded(props.cart, props.wishlist) ? {
       ...state,
-      selectedQty: (props.cart[props.productId + "#" + state.variant] || 0),
+      units: ((props.cart[props.productId] &&
+        props.cart[props.productId][state.variant]) || 0),
       wishlisted: props.wishlist.indexOf(props.productId) !== -1
     } : state;
   }
@@ -42,24 +43,24 @@ class ProductCard extends Component {
   };
 
   increaseQty = () => {
-    const cartId = this.props.productId + "#" + this.state.variant;
     this.props.firestore.update({
       collection: "users",
       doc: this.props.uid
     }, {
-      ["cart." + cartId]: this.props.firestore.FieldValue.increment(1)
+      ["cart." + this.props.productId + "." + this.state.variant]: 
+        this.props.firestore.FieldValue.increment(1)
     });
   }
 
   decreaseQty = () => {
-    const cartId = this.props.productId + "#" + this.state.variant;
     this.props.firestore.update({
       collection: "users",
       doc: this.props.uid
     }, {
-      ["cart." + cartId]: this.props.cart[cartId] > 1 ? 
-        this.props.firestore.FieldValue.increment(-1) :
-        this.props.firestore.FieldValue.delete()
+      ["cart." + this.props.productId + "." + this.state.variant]:
+        this.props.cart[this.props.productId][this.state.variant] > 1 ? 
+          this.props.firestore.FieldValue.increment(-1) :
+          this.props.firestore.FieldValue.delete()
     });
   }
 
@@ -106,10 +107,10 @@ class ProductCard extends Component {
             </Link>
           </div>
           <div className="col-7 p-1 pt-2 pr-3">
-            {this.state.selectedQty > 0 ? (
+            {this.state.units > 0 ? (
               <InputStepper
                 className="w-75 float-right"
-                value={this.state.selectedQty}
+                value={this.state.units}
                 incrementHandler={this.increaseQty}
                 decrementHandler={this.decreaseQty}
               />

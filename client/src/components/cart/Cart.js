@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withFirestore } from "react-redux-firebase";
 
 import CartProductCard from "./CartProductCard";
 
@@ -7,122 +10,83 @@ class Cart extends Component {
   constructor() {
     super();
     this.state = {
-      products: [
-        {
-          name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
-          unit: "ml",
-          variants: [
-            {
-              actualPrice: 200,
-              comparePrice: 220,
-              size: 100
-            },
-            {
-              actualPrice: 300,
-              comparePrice: 330,
-              size: 200
-            },
-            {
-              actualPrice: 500,
-              comparePrice: 550,
-              size: 1000
-            },
-            {
-              actualPrice: 900,
-              comparePrice: 980,
-              size: 2000
-            }
-          ],
-          tag: "50% OFF",
-          selectedQty: 0,
-          units: 1
-        },
-        {
-          name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
-          unit: "ml",
-          variants: [
-            {
-              actualPrice: 200,
-              comparePrice: 220,
-              size: 100
-            },
-            {
-              actualPrice: 300,
-              comparePrice: 330,
-              size: 200
-            },
-            {
-              actualPrice: 500,
-              comparePrice: 550,
-              size: 1000
-            },
-            {
-              actualPrice: 900,
-              comparePrice: 980,
-              size: 2000
-            }
-          ],
-          tag: "50% OFF",
-          selectedQty: 0,
-          units: 1
-        }
-      ],
-      deliveryCharges: 0
+      products: []
     };
   }
 
-  decUnits = index => {
-    if (this.state.products[index].units - 1 === 0) {
-      this.removeProductFromCart();
-    } else {
-      this.setState(prevState => {
-        let newState = { ...prevState };
-        newState.products[index].units -= 1;
-        return { newState };
-      });
-    }
-  };
-
-  incUnits = index => {
-    console.log("inc");
-
-    this.setState(prevState => {
-      let newState = { ...prevState };
-      newState.products[index].units += 1;
-      return { newState };
+  decUnits = (productId, variant) => {
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + productId + "." + variant]:
+        this.state.products[productId].selectedVariants[variant] > 1 ? 
+          this.props.firestore.FieldValue.increment(-1) :
+          this.props.firestore.FieldValue.delete()
     });
   };
 
-  removeProductFromCart = index => {
-    this.setState(prevState => {
-      let newState = { ...prevState };
-      newState.products.splice(index, 1);
-      return { newState };
+  incUnits = (productId, variant) => {
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + productId + "." + variant]: 
+        this.props.firestore.FieldValue.increment(1)
     });
   };
+
+  fetchProducts = () => {
+    const promises = [];
+    
+    for(const product in this.props.cart)
+      promises.push(this.props.firestore.doc("products/" + product).get());
+
+    Promise.all(promises).then(fetchedProducts => {
+      const products = {};
+      fetchedProducts.forEach(product => 
+        products[product.id] = {
+          selectedVariants: this.props.cart[product.id],
+          ...product.data()
+        }
+      );
+      this.setState({ products });
+    }).catch(error =>
+      console.log("Error getting document:", error)
+    );
+  };
+
+  componentDidMount() {
+    this.fetchProducts();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps !== this.props)
+      this.fetchProducts();
+  }
 
   render() {
     let subTotal = 0;
     let productsInCart = [];
 
-    for (let i = 0; i < this.state.products.length; i++) {
-      subTotal +=
-        this.state.products[i].variants[this.state.products[i].selectedQty]
-          .actualPrice * this.state.products[i].units;
-    }
-    for (let i = 0; i < this.state.products.length; i++) {
-      productsInCart.push(
-        <CartProductCard
-          key={i}
-          index={i}
-          product={this.state.products[i]}
-          incUnits={this.incUnits}
-          decUnits={this.decUnits}
-          removeProductFromCart={() => this.removeProductFromCart(i)}
-        />
-      );
+    for(const id in this.state.products) {
+      const product = this.state.products[id];
+      for(const variant in  product.selectedVariants) {
+        subTotal +=
+          product.variants[variant].actualPrice *
+          product.selectedVariants[variant];
+
+        productsInCart.push(
+          <CartProductCard
+            key={id + "." + variant}
+            index={id}
+            product={product}
+            variant={variant}
+            incUnits={this.incUnits}
+            decUnits={this.decUnits}
+          />
+        );
+      }
     }
 
     return (
@@ -141,17 +105,17 @@ class Cart extends Component {
           <div className="cartMain text-left">
             <div className="billContainer">
               <div className="float-left">Sub Total</div>
-              <div className="float-right">Rs. {subTotal}</div>
+              <div className="float-right">₹ {subTotal}</div>
               <br />
-              <div className="float-left">Delivery Charges</div>
+              {/* <div className="float-left">Delivery Charges</div>
               <div className="float-right">
-                Rs. {this.state.deliveryCharges}
+                ₹ {this.state.deliveryCharges}
               </div>
-              <br />
+              <br /> */}
               <hr />
               <div className="float-left">Total</div>
               <div className="float-right">
-                Rs. {subTotal + this.state.deliveryCharges}
+                ₹ {subTotal/* + this.state.deliveryCharges*/}
               </div>
               <br />
             </div>
@@ -173,4 +137,12 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+const mapStateToProps = state => ({
+  uid: state.firebase.auth.uid,
+  cart: state.firebase.profile.cart
+});
+
+export default compose(
+  connect(mapStateToProps),
+  withFirestore
+)(Cart);

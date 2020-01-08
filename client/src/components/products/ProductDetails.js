@@ -54,12 +54,12 @@ class ProductDetails extends Component {
   };
 
   addToCart = () => {
-    const cartId = this.props.match.params.prodId + "#" + this.state.variant;
     this.props.firestore.update({
       collection: "users",
       doc: this.props.uid
     }, {
-      ["cart." + cartId]: this.firestore.FieldValue.increment(this.props.units)
+      ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
+        this.firestore.FieldValue.increment(this.props.units)
     });
   };
 
