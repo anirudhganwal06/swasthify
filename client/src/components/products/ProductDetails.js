@@ -21,9 +21,9 @@ class ProductDetails extends Component {
   static getDerivedStateFromProps(props, state) {
     return isLoaded(props.wishlist)
       ? {
-          ...state,
-          wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
-        }
+        ...state,
+        wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+      }
       : state;
   }
 
@@ -61,21 +61,16 @@ class ProductDetails extends Component {
   };
 
   addToCart = () => {
-    const cartId = this.props.match.params.prodId + "#" + this.state.variant;
-    this.props.firestore.update(
-      {
-        collection: "users",
-        doc: this.props.uid
-      },
-      {
-        ["cart." + cartId]: this.firestore.FieldValue.increment(
-          this.props.units
-        )
-      }
-    );
-  };
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
+        this.firestore.FieldValue.increment(this.props.units)
+    });
+  }
 
-  handleLoadedImage = e => {
+  handleLoadedImage = () => {
     this.setState({ imageLoading: false });
   };
 
