@@ -10,7 +10,7 @@ class Cart extends Component {
       products: [
         {
           name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
+          image: "/assets/images/demoProduct.webp",
           unit: "ml",
           variants: [
             {
@@ -40,7 +40,7 @@ class Cart extends Component {
         },
         {
           name: "Cold Pressed Coconut Oil",
-          image: "/images/demoProduct.webp",
+          image: "/assets/images/demoProduct.webp",
           unit: "ml",
           variants: [
             {

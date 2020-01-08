@@ -14,29 +14,33 @@ class Wishlist extends Component {
   }
 
   removeFromWishlist = id => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      "wishlist": this.props.firestore.FieldValue.arrayRemove(id)
-    });
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.props.firestore.FieldValue.arrayRemove(id)
+      }
+    );
   };
 
   fetchProducts = () => {
     const promises = [];
-    this.props.wishlist.forEach(productId => 
-      promises.push(this.props.firestore.doc("products/" + productId).get()));
-      
-    Promise.all(promises).then(products =>
-      this.setState({
-        products: products.map(product => ({
-          id: product.id,
-          ...product.data()
-        }))
-      })
-    ).catch(error =>
-      console.log("Error getting document:", error)
+    this.props.wishlist.forEach(productId =>
+      promises.push(this.props.firestore.doc("products/" + productId).get())
     );
+
+    Promise.all(promises)
+      .then(products =>
+        this.setState({
+          products: products.map(product => ({
+            id: product.id,
+            ...product.data()
+          }))
+        })
+      )
+      .catch(error => console.log("Error getting document:", error));
   };
 
   componentDidMount() {
@@ -44,8 +48,7 @@ class Wishlist extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps !== this.props)
-      this.fetchProducts();
+    if (prevProps !== this.props) this.fetchProducts();
   }
 
   render() {
@@ -101,7 +104,4 @@ const mapStateToProps = state => ({
   wishlist: state.firebase.profile.wishlist
 });
 
-export default compose(
-  connect(mapStateToProps),
-  withFirestore
-)(Wishlist);
+export default compose(connect(mapStateToProps), withFirestore)(Wishlist);

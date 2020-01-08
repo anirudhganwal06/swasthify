@@ -91,16 +91,16 @@ class MyProfile extends Component {
 
   render() {
     const deliveryAddresses = [];
-
-    for (const address in this.props.addresses) {
+    const addresses = this.props.user.addresses;
+    for (const address in addresses) {
       deliveryAddresses.push(
         <DeliveryAddressCard
           key={address}
           index={address}
-          line1={this.props.addresses[address].line1}
-          line2={this.props.addresses[address].line2}
-          city={this.props.addresses[address].city}
-          pincode={this.props.addresses[address].pincode}
+          line1={addresses[address].line1}
+          line2={addresses[address].line2}
+          city={addresses[address].city}
+          pincode={addresses[address].pincode}
           delete={true}
           deleteAddress={this.deleteAddress}
           edit={true}
@@ -184,8 +184,7 @@ const getQuery = props => [
 
 const mapStateToProps = state => ({
   uid: state.firebase.auth.uid,
-  user: state.firebase.profile,
-  addresses: state.firestore.data.addresses
+  user: state.firebase.profile
 });
 
 export default compose(

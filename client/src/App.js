@@ -27,6 +27,7 @@ import Checkout from "./components/checkout/Checkout";
 import MyProfile from "./components/user/MyProfile";
 import Wishlist from "./components/user/Wishlist";
 import loading from "./components/common/Loading";
+import AddAddress from "./components/user/AddAddress";
 const ProductList = React.lazy(() =>
   import("./components/products/ProductList.js")
 );
@@ -50,6 +51,12 @@ class App extends Component {
               <PrivateRoute exact path="/checkout" component={Checkout} />
               <PrivateRoute exact path="/my-profile" component={MyProfile} />
               <PrivateRoute exact path="/wishlist" component={Wishlist} />
+              <PrivateRoute exact path="/address/add" component={AddAddress} />
+              <Route
+                exact
+                path="/address/:index/edit"
+                component={() => <AddAddress editMode={true} />}
+              />
             </main>
             <Footer />
           </div>
