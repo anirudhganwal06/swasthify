@@ -17,17 +17,19 @@ class MyProfile extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return (isLoaded(props.user) && !state.loaded) ? {
-      name: props.user.displayName,
-      email: props.user.email,
-      errors: state.errors,
-      loaded: true
-    } : state;
+    return isLoaded(props.user) && !state.loaded
+      ? {
+          name: props.user.displayName,
+          email: props.user.email,
+          errors: state.errors,
+          loaded: true
+        }
+      : state;
   }
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
 
   updateProfile = (e, data) => {
     e.preventDefault();
@@ -36,9 +38,9 @@ class MyProfile extends Component {
     const name = document.getElementById("name");
     const email = document.getElementById("email");
 
-    switch(data) {
+    switch (data) {
       case "name":
-        if(name.checkValidity())
+        if (name.checkValidity())
           firebase.updateProfile({
             displayName: name.value
           });
@@ -48,13 +50,14 @@ class MyProfile extends Component {
           this.setState({ errors });
         }
         break;
-    
+
       case "email":
-        if(email.checkValidity())
-          firebase.updateEmail(email.value, true)
+        if (email.checkValidity())
+          firebase
+            .updateEmail(email.value, true)
             .then(() => firebase.reloadAuth())
             .catch(err => {
-              switch(err.code) {
+              switch (err.code) {
                 case "auth/email-already-in-use":
                   errors.email = "Email already in use";
                   this.setState({ errors });
@@ -74,6 +77,7 @@ class MyProfile extends Component {
           this.setState({ errors });
         }
         break;
+      default:
     }
   };
 
@@ -124,11 +128,11 @@ class MyProfile extends Component {
                   onChange={this.onChange}
                   value={this.state.name}
                 />
-                <button 
+                <button
                   className="input-group-append btn themeColorHoverBtn ml-2"
                   onClick={e => this.updateProfile(e, "name")}
                 >
-                    Save
+                  Save
                 </button>
               </div>
               <label htmlFor="email">Email ID</label>
@@ -142,11 +146,11 @@ class MyProfile extends Component {
                   onChange={this.onChange}
                   value={this.state.email}
                 />
-                <button 
+                <button
                   className="input-group-append btn themeColorHoverBtn ml-2"
                   onClick={e => this.updateProfile(e, "email")}
                 >
-                    Save
+                  Save
                 </button>
               </div>
               <label htmlFor="mobile">Mobile Number</label>
@@ -171,10 +175,12 @@ class MyProfile extends Component {
   }
 }
 
-const getQuery = props => [{
-  collection: "users/" + props.uid + "/addresses",
-  storeAs: "addresses"
-}];
+const getQuery = props => [
+  {
+    collection: "users/" + props.uid + "/addresses",
+    storeAs: "addresses"
+  }
+];
 
 const mapStateToProps = state => ({
   uid: state.firebase.auth.uid,

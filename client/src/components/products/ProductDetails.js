@@ -5,6 +5,7 @@ import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
 
 import CategoryNav from "../common/CategoryNav";
 import InputStepper from "../common/InputStepper";
+import loading from "../common/Loading";
 
 class ProductDetails extends Component {
   constructor() {
@@ -12,15 +13,18 @@ class ProductDetails extends Component {
     this.state = {
       variant: 0,
       wishlisted: false,
-      units: 1
+      units: 1,
+      imageLoading: true
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.wishlist) ? {
-      ...state,
-      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
-    } : state;
+    return isLoaded(props.wishlist)
+      ? {
+        ...state,
+        wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+      }
+      : state;
   }
 
   decUnits = () => {
@@ -43,14 +47,17 @@ class ProductDetails extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      "wishlist": this.state.wishlisted ?
-        firestore.FieldValue.arrayRemove(this.props.match.params.prodId) :
-        firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
-    });
+    firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
+          : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+      }
+    );
   };
 
   addToCart = () => {
@@ -61,80 +68,87 @@ class ProductDetails extends Component {
       ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
         this.firestore.FieldValue.increment(this.props.units)
     });
+  }
+
+  handleLoadedImage = () => {
+    this.setState({ imageLoading: false });
   };
 
   render() {
     const qtyBtns = [];
-    if(isLoaded(this.props.variants, this.props.product)) {
-      for (const i in this.props.variants)
-        qtyBtns.push(
-          <button
-            key={i}
-            className={"btn qtySelectionBtn" + (this.state.variant == i ? " qtySelectedBtn" : "")}
-            onClick={this.selectVariant}
-            value={i}
-          >
-            {this.props.variants[i].size + " " + this.props.product.unit}
-          </button>
-        );
+    if (!isLoaded(this.props.variants, this.props.product)) {
+      return loading();
+    }
 
-      return (
-        <section className="productDetailsSec">
-          <CategoryNav />
-          <div className="container productDetailsContainer">
-            <div className="row">
-              <div className="col-12 col-md-6 text-center">
-                <img
-                  className="productImage"
-                  src={this.props.image}
-                  alt={this.props.product.image_alt}
-                />
-              </div>
-              <div className="col-12 col-md-6">
-                <p className="productName">
-                  {this.props.product.name}
-                  <span
-                    className={(this.state.wishlisted ? "fas" : "far") + " fa-heart"}
-                    onClick={this.toggleWishlist}
-                  ></span>
-                </p>
-                <p className="productPrice">
-                  ₹ {this.props.variants[this.state.variant].actualPrice}
-                </p>
-                <p>Available in:</p>
-                <span>{qtyBtns}</span>
-                <br />
-                <InputStepper
-                  value={this.state.units}
-                  incrementHandler={this.incUnits}
-                  decrementHandler={this.decUnits}
-                />
-                <button
-                  className="btn themeColorHoverBtn"
-                  onClick={this.addToCart}
-                >
-                  ADD TO CART
-                </button>
-              </div>
-              <div className="col-12 productDetail">
-                <hr />
-                <b 
-                  className="showingDetail"
-                  data-detailtype="description"
-                >
-                  Description
-                </b>
-                <br />
-                <p className="specificDetail">
-                  {this.props.product.desc}
-                </p>
-              </div>
+    for (const i in this.props.variants)
+      qtyBtns.push(
+        <button
+          key={i}
+          className={
+            "btn qtySelectionBtn" +
+            (+this.state.variant === +i ? " qtySelectedBtn" : "")
+          }
+          onClick={this.selectVariant}
+          value={i}
+        >
+          {this.props.variants[i].size + " " + this.props.product.unit}
+        </button>
+      );
+
+    return (
+      <section className="productDetailsSec">
+        <CategoryNav />
+        <div className="container productDetailsContainer">
+          <div className="row">
+            <div className="col-12 col-md-6 text-center">
+              {this.state.imageLoading ? loading() : ""}
+              <img
+                className="productImage"
+                src={this.props.product.image}
+                alt={this.props.product.image_alt}
+                onLoad={this.handleLoadedImage}
+              />
+            </div>
+            <div className="col-12 col-md-6">
+              <p className="productName">
+                {this.props.product.name}
+                <span
+                  className={
+                    (this.state.wishlisted ? "fas" : "far") + " fa-heart"
+                  }
+                  onClick={this.toggleWishlist}
+                ></span>
+              </p>
+              <p className="productPrice">
+                ₹ {this.props.variants[this.state.variant].actualPrice}
+              </p>
+              <p>Available in:</p>
+              <span>{qtyBtns}</span>
+              <br />
+              <InputStepper
+                value={this.state.units}
+                incrementHandler={this.incUnits}
+                decrementHandler={this.decUnits}
+              />
+              <button
+                className="btn themeColorHoverBtn"
+                onClick={this.addToCart}
+              >
+                ADD TO CART
+              </button>
+            </div>
+            <div className="col-12 productDetail">
+              <hr />
+              <b className="showingDetail" data-detailtype="description">
+                Description
+              </b>
+              <br />
+              <p className="specificDetail">{this.props.product.desc}</p>
             </div>
           </div>
-        </section>
-      );
-    }
-    return null;
+        </div>
+      </section>
+    );
   }
 }
 
@@ -147,9 +161,11 @@ const getQuery = ({ match }) => [
   {
     collection: "products",
     doc: match.params.prodId,
-    subcollections: [{
-      collection: "variants"
-    }],
+    subcollections: [
+      {
+        collection: "variants"
+      }
+    ],
     storeAs: match.params.prodId + "-variants"
   }
 ];

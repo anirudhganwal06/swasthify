@@ -4,6 +4,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import InputStepper from "../common/InputStepper";
 import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
+import loading from "../common/Loading";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class ProductCard extends Component {
     this.state = {
       variant: 0,
       units: 0,
-      wishlisted: false
+      wishlisted: false,
+      imageLoading: true
     };
   }
 
@@ -32,14 +34,17 @@ class ProductCard extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      "wishlist": this.state.wishlisted ?
-        firestore.FieldValue.arrayRemove(this.props.productId) :
-        firestore.FieldValue.arrayUnion(this.props.productId)
-    });
+    firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.productId)
+          : firestore.FieldValue.arrayUnion(this.props.productId)
+      }
+    );
   };
 
   increaseQty = () => {
@@ -64,6 +69,10 @@ class ProductCard extends Component {
     });
   }
 
+  handleLoadedImage = () => {
+    this.setState({ imageLoading: false });
+  };
+
   render() {
     const variants = [];
 
@@ -79,7 +88,12 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          <img src={this.props.image} alt={this.props.image_alt} />
+          {this.state.imageLoading ? loading() : ""}
+          <img
+            src={this.props.image}
+            alt={this.props.image_alt}
+            onLoad={this.handleLoadedImage}
+          />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">
@@ -89,7 +103,10 @@ class ProductCard extends Component {
             </p>
           </div>
           <div className="col-6 align-items-center float-right">
-            <select className="custom-select custom-select-sm shadow-none" onChange={this.changeVariant}>
+            <select
+              className="custom-select custom-select-sm shadow-none"
+              onChange={this.changeVariant}
+            >
               {variants}
             </select>
           </div>
@@ -101,9 +118,7 @@ class ProductCard extends Component {
           </div>
           <div className="col-3 p-1 pt-2">
             <Link to={"/product/" + this.props.productId}>
-              <button className="btn themeColorHoverBtn btn-block">
-                VIEW
-              </button>
+              <button className="btn themeColorHoverBtn btn-block">VIEW</button>
             </Link>
           </div>
           <div className="col-7 p-1 pt-2 pr-3">
@@ -129,16 +144,20 @@ class ProductCard extends Component {
   }
 }
 
-const getQuery = ({ productId }) => [{
-  collection: "products",
-  doc: productId,
-  subcollections: [{
-    collection: "variants"
-  }],
-  storeAs: productId + "-variants"
-}];
+const getQuery = ({ productId }) => [
+  {
+    collection: "products",
+    doc: productId,
+    subcollections: [
+      {
+        collection: "variants"
+      }
+    ],
+    storeAs: productId + "-variants"
+  }
+];
 
-const mapStateToProps = (state, {productId}) => ({
+const mapStateToProps = (state, { productId }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,

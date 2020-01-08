@@ -14,7 +14,7 @@ const sideNav = props => {
   for (let i = 0; i < importedLinks.length; i++) {
     links.push(
       <Link to={importedLinks[i].url} key={i}>
-        <div className="sideNavLink">{importedLinks[i].name}</div>
+        <div className="sideNavLink pl-4">{importedLinks[i].name}</div>
       </Link>
     );
   }
@@ -25,7 +25,7 @@ const sideNav = props => {
         <div className="sideNavHeading vCenterContents hCenterContents">
           <h1>My Account</h1>
         </div>
-        <div className="sideNavLinks">{links}</div>
+        <div className="sideNavLinks text-left">{links}</div>
       </div>
       <div className="sideNavEmptySpace" onClick={props.closeSideNav}></div>
     </div>

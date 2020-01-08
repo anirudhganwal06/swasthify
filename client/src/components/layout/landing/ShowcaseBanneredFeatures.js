@@ -10,7 +10,7 @@ function ShowcaseBanneredFeatures() {
               <div className="banner">
                 <img
                   className="bannerImage"
-                  src="/images/featureBanner1.webp"
+                  src="/assets/images/featureBanner1.webp"
                   alt="Banner1"
                 />
                 <h1 className="bannerHeading">PREMIUM QUALITY</h1>
@@ -26,7 +26,7 @@ function ShowcaseBanneredFeatures() {
               <div className="banner">
                 <img
                   className="bannerImage"
-                  src="/images/featureBanner2.webp"
+                  src="/assets/images/featureBanner2.webp"
                   alt="Banner1"
                 />
                 <h1 className="bannerHeading">CHEMICAL FREE</h1>
@@ -43,7 +43,7 @@ function ShowcaseBanneredFeatures() {
               <div className="banner">
                 <img
                   className="bannerImage"
-                  src="/images/featureBanner3.webp"
+                  src="/assets/images/featureBanner3.webp"
                   alt="Banner1"
                 />
                 <h1 className="bannerHeading">FRESHLY DELIVERED</h1>
