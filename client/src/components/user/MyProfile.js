@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
+import { withFirebase, firestoreConnect } from "react-redux-firebase";
 
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
 
@@ -11,18 +11,8 @@ class MyProfile extends Component {
     this.state = {
       name: props.user.displayName,
       email: props.user.email,
-      errors: {},
-      loaded: false
+      errors: {}
     };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    return (isLoaded(props.user) && !state.loaded) ? {
-      name: props.user.displayName,
-      email: props.user.email,
-      errors: state.errors,
-      loaded: true
-    } : state;
   }
 
   onChange = e => {

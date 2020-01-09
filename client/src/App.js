@@ -1,6 +1,5 @@
 import React, { Component, Suspense } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { firestoreConnect } from "react-redux-firebase";
 
 // a common css file for entire website
 import "./App.css";
@@ -19,20 +18,17 @@ import Signup from "./components/auth/Signup";
 import Logout from "./components/auth/Logout";
 
 // User based components
-import Dashboard from "./components/dashboard/Dashboard";
+import MyProfile from "./components/user/MyProfile";
+import Wishlist from "./components/user/Wishlist";
+import OrdersList from "./components/user/OrdersList";
+import Checkout from "./components/checkout/Checkout";
+import AddAddress from "./components/user/AddAddress";
 
 // Products
 import ProductDetails from "./components/products/ProductDetails";
-import Checkout from "./components/checkout/Checkout";
-import MyProfile from "./components/user/MyProfile";
-import Wishlist from "./components/user/Wishlist";
+import ProductList from "./components/products/ProductList";
+
 import loading from "./components/common/Loading";
-import AddAddress from "./components/user/AddAddress";
-import OrdersList from "./components/user/OrdersList";
-const ProductList = React.lazy(() =>
-  import("./components/products/ProductList.js")
-);
-// import ProductList from "./components/products/ProductList";
 
 class App extends Component {
   render() {
@@ -45,16 +41,15 @@ class App extends Component {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
-              <Route exact path="/logout" component={Logout} />
+              <PrivateRoute exact path="/logout" component={Logout} />
               <Route exact path="/products/:category" component={ProductList} />
               <Route exact path="/product/:prodId" component={ProductDetails} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/checkout" component={Checkout} />
               <PrivateRoute exact path="/my-profile" component={MyProfile} />
               <PrivateRoute exact path="/wishlist" component={Wishlist} />
-              <Route exact path="/orders" component={OrdersList} />
+              <PrivateRoute exact path="/orders" component={OrdersList} />
               <PrivateRoute exact path="/address/add" component={AddAddress} />
-              <Route
+              <PrivateRoute
                 exact
                 path="/address/:index/edit"
                 component={() => <AddAddress editMode={true} />}
@@ -68,10 +63,4 @@ class App extends Component {
   }
 }
 
-export default firestoreConnect([
-  {
-    collection: "products",
-    doc: "categories",
-    storeAs: "categories"
-  }
-])(App);
+export default App;
