@@ -3,7 +3,6 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 
-import CategoryNav from "../common/CategoryNav";
 import InputStepper from "../common/InputStepper";
 import loading from "../common/Loading";
 
@@ -92,7 +91,6 @@ class ProductDetails extends Component {
 
     return (
       <section className="productDetailsSec">
-        <CategoryNav />
         <div className="container productDetailsContainer">
           <div className="row">
             <div className="col-12 col-md-6 text-center">
