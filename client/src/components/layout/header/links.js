@@ -8,6 +8,10 @@ export const signedInLinks = [
     url: "/wishlist"
   },
   {
+    name: "Orders",
+    url: "/orders"
+  },
+  {
     name: "Logout",
     url: "/logout"
   }
