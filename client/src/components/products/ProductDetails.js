@@ -19,12 +19,10 @@ class ProductDetails extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.wishlist)
-      ? {
-        ...state,
-        wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
-      }
-      : state;
+    return isLoaded(props.wishlist) ? {
+      ...state,
+      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+    } : state;
   }
 
   decUnits = () => {

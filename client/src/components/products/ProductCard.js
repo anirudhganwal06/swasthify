@@ -19,12 +19,16 @@ class ProductCard extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.cart, props.wishlist) ? {
-      ...state,
-      units: ((props.cart[props.productId] &&
-        props.cart[props.productId][state.variant]) || 0),
-      wishlisted: props.wishlist.indexOf(props.productId) !== -1
-    } : state;
+    return isLoaded(props.cart, props.wishlist)
+      ? {
+          ...state,
+          units:
+            (props.cart[props.productId] &&
+              props.cart[props.productId][state.variant]) ||
+            0,
+          wishlisted: props.wishlist.indexOf(props.productId) !== -1
+        }
+      : state;
   }
 
   changeVariant = e => {
@@ -49,26 +53,34 @@ class ProductCard extends Component {
   };
 
   increaseQty = () => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + this.props.productId + "." + this.state.variant]: 
-        this.props.firestore.FieldValue.increment(1)
-    });
-  }
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." +
+        this.props.productId +
+        "." +
+        this.state.variant]: this.props.firestore.FieldValue.increment(1)
+      }
+    );
+  };
 
   decreaseQty = () => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + this.props.productId + "." + this.state.variant]:
-        this.props.cart[this.props.productId][this.state.variant] > 1 ? 
-          this.props.firestore.FieldValue.increment(-1) :
-          this.props.firestore.FieldValue.delete()
-    });
-  }
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." + this.props.productId + "." + this.state.variant]:
+          this.props.cart[this.props.productId][this.state.variant] > 1
+            ? this.props.firestore.FieldValue.increment(-1)
+            : this.props.firestore.FieldValue.delete()
+      }
+    );
+  };
 
   handleLoadedImage = () => {
     this.setState({ imageLoading: false });
