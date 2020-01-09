@@ -45,17 +45,14 @@ class ProductDetails extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update(
-      {
-        collection: "users",
-        doc: this.props.uid
-      },
-      {
-        wishlist: this.state.wishlisted
-          ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
-          : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
-      }
-    );
+    firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      wishlist: this.state.wishlisted
+        ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
+        : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+    });
   };
 
   addToCart = () => {
