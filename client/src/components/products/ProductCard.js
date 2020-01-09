@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { isLoaded, withFirestore } from "react-redux-firebase";
+
 import InputStepper from "../common/InputStepper";
-import { withFirebase, firestoreConnect, isLoaded } from "react-redux-firebase";
 import loading from "../common/Loading";
 
 class ProductCard extends Component {
@@ -84,16 +85,17 @@ class ProductCard extends Component {
       );
     }
 
-    return isLoaded(this.props.variants) ? (
+    return (
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          {this.state.imageLoading ? loading() : ""}
-          <img
-            src={this.props.image}
-            alt={this.props.image_alt}
-            onLoad={this.handleLoadedImage}
-          />
+          {this.state.imageLoading ? loading() :
+            <img
+              src={this.props.image}
+              alt={this.props.image_alt}
+              onLoad={this.handleLoadedImage}
+            />
+          }
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">
@@ -140,33 +142,18 @@ class ProductCard extends Component {
           </div>
         </div>
       </div>
-    ) : null;
+    );
   }
 }
-
-const getQuery = ({ productId }) => [
-  {
-    collection: "products",
-    doc: productId,
-    subcollections: [
-      {
-        collection: "variants"
-      }
-    ],
-    storeAs: productId + "-variants"
-  }
-];
 
 const mapStateToProps = (state, { productId }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,
   ...state.firestore.data.products[productId],
-  variants: state.firestore.data[productId + "-variants"]
 });
 
 export default compose(
-  withFirebase,
-  firestoreConnect(getQuery),
+  withFirestore,
   connect(mapStateToProps)
 )(ProductCard);

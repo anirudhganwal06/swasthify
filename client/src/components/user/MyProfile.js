@@ -17,14 +17,12 @@ class MyProfile extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.user) && !state.loaded
-      ? {
-          name: props.user.displayName,
-          email: props.user.email,
-          errors: state.errors,
-          loaded: true
-        }
-      : state;
+    return (isLoaded(props.user) && !state.loaded) ? {
+      name: props.user.displayName,
+      email: props.user.email,
+      errors: state.errors,
+      loaded: true
+    } : state;
   }
 
   onChange = e => {
