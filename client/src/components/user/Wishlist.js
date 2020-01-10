@@ -14,15 +14,12 @@ class Wishlist extends Component {
   }
 
   removeFromWishlist = id => {
-    this.props.firestore.update(
-      {
-        collection: "users",
-        doc: this.props.uid
-      },
-      {
-        wishlist: this.props.firestore.FieldValue.arrayRemove(id)
-      }
-    );
+    this.props.firestore.update({
+      collection: "users",
+      doc: this.props.uid
+    }, {
+      wishlist: this.props.firestore.FieldValue.arrayRemove(id)
+    });
   };
 
   fetchProducts = () => {

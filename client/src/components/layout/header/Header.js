@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { compose } from "redux";
 import { connect } from "react-redux";
+import { firestoreConnect } from "react-redux-firebase";
 
 import SideNav from "./SideNav";
 import Cart from "../../cart/Cart";
@@ -205,6 +207,12 @@ class Header extends Component {
   }
 }
 
+const getQuery = () => [{
+  collection: "products",
+  doc: "categories",
+  storeAs: "categories"
+}];
+
 const mapStateToProps = state => {
   return {
     isSignedIn: !state.firebase.auth.isEmpty,
@@ -212,4 +220,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default compose(
+  firestoreConnect(getQuery),
+  connect(mapStateToProps)
+)(Header);
