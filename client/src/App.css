@@ -689,6 +689,7 @@ footer a:hover {
   cursor: pointer;
   padding: 10px;
   box-shadow: 0 0 2px -1px #000;
+  background-color: #fff;
 }
 
 .productCard:hover {
@@ -930,4 +931,12 @@ footer a:hover {
   z-index: 50;
   color: black;
   /* padding: 50px; */
+}
+
+/********* product carousel *********/
+
+.productCarouselContainer {
+  box-shadow: 0 0 3px -1px #000;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

@@ -1,13 +1,13 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
-
 import "react-multi-carousel/lib/styles.css";
 import ProductCard from "./ProductCard";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 // import { firebaseConnect } from "react-redux-firebase";
 
-const ProductCarousel = () => {
+const ProductCarousel = (props) => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -28,16 +28,46 @@ const ProductCarousel = () => {
     }
   };
 
+
+  
   return (
     <div className="container">
-      <Carousel responsive={responsive}>
-        <div>
-          <ProductCard productId="flour-wheat" />
+      <div className="productCarouselContainer">
+        <div className="clearfix">
+          <h3 className="text-capitalize mb-1 float-left">{props.category || props.tag}</h3>
+          <Link to={"/" + (props.category ? "category/" : "tag/") + props.category}>
+            <button className="btn themeColorHoverBtn btn-sm float-right">
+            See All
+            </button>
+          </Link>
         </div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-      </Carousel>
+        <Carousel responsive={responsive}>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+          <div className="p-1">
+            <ProductCard productId={props.products[0].id} />
+          </div>
+        </Carousel>
+      </div>
     </div>
   );
 };
