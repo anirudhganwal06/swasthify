@@ -7,10 +7,10 @@ class AddAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      line1: "",
-      line2: "",
-      city: "",
-      pincode: "",
+      line1: props.editMode ? props.address.line1 : "",
+      line2: props.editMode ? props.address.line2 : "",
+      city: props.editMode ? props.address.city : "",
+      pincode: props.editMode ? props.address.pincode : "",
       errors: {},
       editMode: props.editMode
     };
@@ -18,6 +18,11 @@ class AddAddress extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    // submit logic goes here!
   };
 
   render() {

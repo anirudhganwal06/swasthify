@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 
 // import ProductCarousel from "../products/ProductCarousel";
-import BannersCarousel from "./BannersCarousel";
-import ShowcaseFeatures from "./ShowcaseFeatures";
-import ShowcaseBanneredFeatures from "./ShowcaseBanneredFeatures";
+import BannersCarousel from "../common/BannersCarousel";
+import ShowcaseFeatures from "../common/ShowcaseFeatures";
+import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
+// import ProductsCarousel from "../products/ProductCarousel";
 
 class Landing extends Component {
   render() {
     return (
       <section id="landingSec">
+        {/* <ProductsCarousel /> */}
         <BannersCarousel />
         <ShowcaseFeatures />
         {/* <ProductCarousel /> */}

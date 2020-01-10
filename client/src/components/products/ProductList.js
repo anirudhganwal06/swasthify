@@ -10,13 +10,13 @@ import loading from "../common/Loading";
 const ProductList = ({ products, match }) => {
   const productList = isLoaded(products)
     ? products.map(product => (
-        <div
-          key={product.id}
-          className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
-        >
-          <ProductCard productId={product.id} />
-        </div>
-      ))
+      <div
+        key={product.id}
+        className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
+      >
+        <ProductCard productId={product.id} />
+      </div>
+    ))
     : [];
 
   return (

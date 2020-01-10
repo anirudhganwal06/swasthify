@@ -10,7 +10,7 @@ import PrivateRoute from "./components/common/PrivateRoute";
 
 // Layout Components
 import Header from "./components/layout/header/Header";
-import Landing from "./components/layout/landing/Landing";
+import Landing from "./components/layout/Landing";
 import Footer from "./components/layout/Footer";
 
 // Auth Components
@@ -54,10 +54,10 @@ class App extends Component {
               <PrivateRoute exact path="/wishlist" component={Wishlist} />
               <Route exact path="/orders" component={OrdersList} />
               <PrivateRoute exact path="/address/add" component={AddAddress} />
-              <Route
+              <PrivateRoute
                 exact
                 path="/address/:index/edit"
-                component={() => <AddAddress editMode={true} />}
+                component={props => <AddAddress editMode={true} {...props} />}
               />
             </main>
             <Footer />
