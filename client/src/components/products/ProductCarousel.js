@@ -1,13 +1,14 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
-
 import "react-multi-carousel/lib/styles.css";
-import ProductCard from "./ProductCard";
 import { compose } from "redux";
 import { connect } from "react-redux";
-// import { firebaseConnect } from "react-redux-firebase";
+import { firestoreConnect, isLoaded } from "react-redux-firebase";
 
-const ProductCarousel = () => {
+import ProductCard from "./ProductCard";
+import loading from "../common/Loading";
+
+const ProductCarousel = props => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -28,32 +29,36 @@ const ProductCarousel = () => {
     }
   };
 
+  const products = [];
+  
+  for(const product in props.products)
+    products.push((
+      <div>
+        <ProductCard collection={props.collection} productId={product} />
+      </div>
+    ));
   return (
     <div className="container">
-      <Carousel responsive={responsive}>
-        <div>
-          <ProductCard productId="flour-wheat" />
-        </div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-      </Carousel>
+      {isLoaded(props.products) ? (
+        <Carousel responsive={responsive}>
+          {products}
+        </Carousel>
+      ) : loading()}
     </div>
   );
 };
 
 const mapStateToProps = state => ({
-  products: state.firestore.ordered.products
+  products: state.firestore.data.products
 });
 
-// const getQuery = () => [
-//   {
-//     collection: "products",
-//     where: [["category", "==", "flour"]]
-//   }
-// ];
+const getQuery = ({ category }) => [{
+  collection: "products",
+  where: [["category", "==", category]],
+  storeAs: "products." + category
+}];
 
 export default compose(
-  // firebaseConnect(getQuery),
+  firestoreConnect(getQuery),
   connect(mapStateToProps)
 )(ProductCarousel);

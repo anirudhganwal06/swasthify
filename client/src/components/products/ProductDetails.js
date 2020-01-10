@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
+import classnames from "classnames";
 
 import InputStepper from "../common/InputStepper";
 import loading from "../common/Loading";
@@ -94,14 +95,13 @@ class ProductDetails extends Component {
         <div className="container productDetailsContainer">
           <div className="row">
             <div className="col-12 col-md-6 text-center">
-              {this.state.imageLoading ? loading() :
-                <img
-                  className="productImage"
-                  src={this.props.product.image}
-                  alt={this.props.product.image_alt}
-                  onLoad={this.handleLoadedImage}
-                />
-              }
+              {this.state.imageLoading ? loading() : ""}
+              <img
+                className={classnames({ "d-none": this.state.imageLoading })}
+                src={this.props.image}
+                alt={this.props.image_alt}
+                onLoad={this.handleLoadedImage}
+              />
             </div>
             <div className="col-12 col-md-6">
               <p className="productName">

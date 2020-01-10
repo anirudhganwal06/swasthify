@@ -13,7 +13,7 @@ const ProductList = ({ products, match }) => {
         key={product.id}
         className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
       >
-        <ProductCard productId={product.id} />
+        <ProductCard collection="products" productId={product.id} />
       </div>
     )) : [];
 

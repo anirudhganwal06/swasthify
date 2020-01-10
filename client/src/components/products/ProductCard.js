@@ -159,11 +159,11 @@ class ProductCard extends Component {
   }
 }
 
-const mapStateToProps = (state, { productId }) => ({
+const mapStateToProps = (state, { collection, productId }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,
-  ...state.firestore.data.products[productId]
+  ...state.firestore.data[collection][productId]
 });
 
 export default compose(withFirestore, connect(mapStateToProps))(ProductCard);
