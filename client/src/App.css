@@ -114,7 +114,7 @@ a:hover {
 
 header {
   position: fixed;
-  z-index: 2;
+  z-index: 1001;
   width: 100%;
 }
 
@@ -167,7 +167,7 @@ nav {
   width: 300px;
   color: #000;
   background-color: #eee;
-  z-index: 1;
+  z-index: 1002;
   box-shadow: 5px 0 10px black;
 }
 
@@ -202,7 +202,7 @@ nav {
   height: 100vh;
   width: calc(100% - 300px);
   background-color: #fff1;
-  z-index: 1;
+  z-index: 1002;
 }
 
 .cart {
@@ -213,7 +213,7 @@ nav {
   width: 420px;
   color: #000;
   background-color: #eee;
-  z-index: 3;
+  z-index: 1002;
   box-shadow: -5px 0 10px black;
 }
 
@@ -224,7 +224,7 @@ nav {
   height: 100%;
   width: calc(100% - 420px);
   background-color: #000a;
-  z-index: 2 !important;
+  z-index: 1002 !important;
 }
 
 .cartHeading {
@@ -505,7 +505,7 @@ footer a:hover {
 }
 
 .carouselContainer img {
-  height: 400px;
+  height: 300px;
 }
 
 @media screen and (max-width: 1199px) {

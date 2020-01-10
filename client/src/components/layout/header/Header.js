@@ -80,9 +80,12 @@ class Header extends Component {
           ""
         )}
         <nav className="navbar navbar-expand-lg navbar-dark">
+          <button onClick={this.openSideNav} className="navbar-toggler">
+            <span className="navbar-toggler-icon"></span>
+          </button>
           <Link className="navbar-brand" to="/">
             <img
-              className="headerSwasthifyLogo mr-3"
+              className="headerSwasthifyLogo mx-3"
               src="/assets/images/swasthifyLogo.webp"
               alt="Swasthify"
             />
@@ -93,9 +96,6 @@ class Header extends Component {
           >
             <span className="fas fa-shopping-cart"></span>
           </div>
-          <button onClick={this.openSideNav} className="navbar-toggler">
-            <span className="navbar-toggler-icon"></span>
-          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item dropdown mx-1">

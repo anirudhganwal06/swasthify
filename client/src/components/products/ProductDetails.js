@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 import classnames from "classnames";
 
-import InputStepper from "../common/InputStepper";
 import loading from "../common/Loading";
 
 class ProductDetails extends Component {
@@ -13,29 +12,18 @@ class ProductDetails extends Component {
     this.state = {
       variant: 0,
       wishlisted: false,
-      units: 1,
+      inCart: false,
       imageLoading: true
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.wishlist) ? {
+    return isLoaded(props.wishlist, props.cart) ? {
       ...state,
-      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1
+      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
+      inCart: !!props.cart[props.match.params.prodId] && !!props.cart[props.match.params.prodId][state.variant]
     } : state;
   }
-
-  decUnits = () => {
-    this.setState(({ units }) => ({
-      units: units === 1 ? 1 : units - 1
-    }));
-  };
-
-  incUnits = () => {
-    this.setState(({ units }) => ({
-      units: units + 1
-    }));
-  };
 
   selectVariant = e => {
     this.setState({
@@ -56,13 +44,22 @@ class ProductDetails extends Component {
   };
 
   addToCart = () => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
-        this.props.firestore.FieldValue.increment(this.state.units)
-    });
+    if (this.state.inCart) {
+      this.props.firestore.update({
+        collection: "users",
+        doc: this.props.uid
+      }, {
+        ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
+        this.props.firestore.FieldValue.delete()
+      });
+    } else {
+      this.props.firestore.update({
+        collection: "users",
+        doc: this.props.uid
+      }, {
+        ["cart." + this.props.match.params.prodId + "." + this.state.variant]: 1
+      });
+    }
   }
 
   handleLoadedImage = () => {
@@ -89,7 +86,6 @@ class ProductDetails extends Component {
           {this.props.product.variants[i].size + " " + this.props.product.unit}
         </button>
       );
-
     return (
       <section className="productDetailsSec">
         <div className="container productDetailsContainer">
@@ -97,9 +93,9 @@ class ProductDetails extends Component {
             <div className="col-12 col-md-6 text-center">
               {this.state.imageLoading ? loading() : ""}
               <img
-                className={classnames({ "d-none": this.state.imageLoading })}
-                src={this.props.image}
-                alt={this.props.image_alt}
+                className={classnames("productImage", { "d-none": this.state.imageLoading })}
+                src={this.props.product.image}
+                alt={this.props.product.image_alt}
                 onLoad={this.handleLoadedImage}
               />
             </div>
@@ -119,16 +115,11 @@ class ProductDetails extends Component {
               <p>Available in:</p>
               <span>{qtyBtns}</span>
               <br />
-              <InputStepper
-                value={this.state.units}
-                incrementHandler={this.incUnits}
-                decrementHandler={this.decUnits}
-              />
               <button
                 className="btn themeColorHoverBtn"
                 onClick={this.addToCart}
               >
-                ADD TO CART
+                {this.state.inCart ? "REMOVE FROM CART" : "ADD TO CART"}
               </button>
             </div>
             <div className="col-12 productDetail">

@@ -11,6 +11,10 @@ class Landing extends Component {
     return (
       <section id="landingSec">
         <ProductsCarousel category="flour" />
+        <ProductsCarousel category="spice" />
+        <ProductsCarousel category="flour" />
+        <ProductsCarousel category="spice" />
+
         <BannersCarousel />
         <ShowcaseFeatures />
         {/* <ProductCarousel /> */}
