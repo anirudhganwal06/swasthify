@@ -15,10 +15,9 @@ class Landing extends Component {
         <ProductsCarousel category="flour" />
         <ProductsCarousel category="spice" />
 
+        <ShowcaseBanneredFeatures />
         <BannersCarousel />
         <ShowcaseFeatures />
-        {/* <ProductCarousel /> */}
-        <ShowcaseBanneredFeatures />
       </section>
     );
   }

@@ -70,6 +70,7 @@ class Header extends Component {
           <SideNav
             closeSideNav={this.closeSideNav}
             isSignedIn={this.props.isSignedIn}
+            categories={this.props.categories}
           />
         ) : (
           ""

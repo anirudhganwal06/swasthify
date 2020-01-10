@@ -23,3 +23,10 @@ export const signedOutLinks = [
     url: "/login"
   }
 ];
+
+export const extraLinks = [
+  {
+    name: "About Us",
+    url: "/about-us"
+  }
+];
