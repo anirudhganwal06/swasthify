@@ -28,6 +28,10 @@ import AddAddress from "./components/user/AddAddress";
 import ProductDetails from "./components/products/ProductDetails";
 import ProductList from "./components/products/ProductList";
 
+// Pages
+import AboutUs from "./components/pages/AboutUs";
+
+// Loading
 import loading from "./components/common/Loading";
 
 class App extends Component {
@@ -54,6 +58,7 @@ class App extends Component {
                 path="/address/:index/edit"
                 component={props => <AddAddress editMode={true} {...props} />}
               />
+              <Route exact path="/about-us" component={AboutUs} />
             </main>
             <Footer />
           </div>

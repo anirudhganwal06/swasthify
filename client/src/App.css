@@ -505,7 +505,7 @@ footer a:hover {
 }
 
 .carouselContainer img {
-  height: 250px;
+  height: 400px;
 }
 
 @media screen and (max-width: 1199px) {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { isLoaded, withFirestore } from "react-redux-firebase";
+import classnames from "classnames";
 
 import InputStepper from "../common/InputStepper";
 import loading from "../common/Loading";
@@ -19,12 +20,16 @@ class ProductCard extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.cart, props.wishlist) ? {
-      ...state,
-      units: (props.cart[props.productId]
-              && props.cart[props.productId][state.variant]) || 0,
-      wishlisted: props.wishlist.indexOf(props.productId) !== -1
-    } : state;
+    return isLoaded(props.cart, props.wishlist)
+      ? {
+        ...state,
+        units:
+            (props.cart[props.productId] &&
+              props.cart[props.productId][state.variant]) ||
+            0,
+        wishlisted: props.wishlist.indexOf(props.productId) !== -1
+      }
+      : state;
   }
 
   changeVariant = e => {
@@ -35,36 +40,47 @@ class ProductCard extends Component {
 
   toggleWishlist = () => {
     const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      wishlist: this.state.wishlisted
-        ? firestore.FieldValue.arrayRemove(this.props.productId)
-        : firestore.FieldValue.arrayUnion(this.props.productId)
-    });
+    firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.productId)
+          : firestore.FieldValue.arrayUnion(this.props.productId)
+      }
+    );
   };
 
   increaseQty = () => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + this.props.productId + "." + this.state.variant]:
-          this.props.firestore.FieldValue.increment(1)
-    });
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." +
+        this.props.productId +
+        "." +
+        this.state.variant]: this.props.firestore.FieldValue.increment(1)
+      }
+    );
   };
 
   decreaseQty = () => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      ["cart." + this.props.productId + "." + this.state.variant]:
-        this.props.cart[this.props.productId][this.state.variant] > 1
-          ? this.props.firestore.FieldValue.increment(-1)
-          : this.props.firestore.FieldValue.delete()
-    });
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart." + this.props.productId + "." + this.state.variant]:
+          this.props.cart[this.props.productId][this.state.variant] > 1
+            ? this.props.firestore.FieldValue.increment(-1)
+            : this.props.firestore.FieldValue.delete()
+      }
+    );
   };
 
   handleLoadedImage = () => {
@@ -86,13 +102,13 @@ class ProductCard extends Component {
       <div className="productCard">
         <span className="badge badge-success">{this.props.tag}</span>
         <div className="imageContainer">
-          {this.state.imageLoading ? loading() :
-            <img
-              src={this.props.image}
-              alt={this.props.image_alt}
-              onLoad={this.handleLoadedImage}
-            />
-          }
+          {this.state.imageLoading ? loading() : ""}
+          <img
+            className={classnames({ "d-none": this.state.imageLoading })}
+            src={this.props.image}
+            alt={this.props.image_alt}
+            onLoad={this.handleLoadedImage}
+          />
         </div>
         <p className="productName">{this.props.name}</p>
         <div className="row mt-1">
@@ -147,10 +163,7 @@ const mapStateToProps = (state, { productId }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,
-  ...state.firestore.data.products[productId],
+  ...state.firestore.data.products[productId]
 });
 
-export default compose(
-  withFirestore,
-  connect(mapStateToProps)
-)(ProductCard);
+export default compose(withFirestore, connect(mapStateToProps))(ProductCard);

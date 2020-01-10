@@ -4,13 +4,13 @@ import React, { Component } from "react";
 import BannersCarousel from "../common/BannersCarousel";
 import ShowcaseFeatures from "../common/ShowcaseFeatures";
 import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
-// import ProductsCarousel from "../products/ProductCarousel";
+import ProductsCarousel from "../products/ProductCarousel";
 
 class Landing extends Component {
   render() {
     return (
       <section id="landingSec">
-        {/* <ProductsCarousel /> */}
+        <ProductsCarousel category="flour" />
         <BannersCarousel />
         <ShowcaseFeatures />
         {/* <ProductCarousel /> */}

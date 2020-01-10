@@ -1,72 +1,59 @@
-// import React, { Component } from "react";
-// import ProductCard from "./ProductCard";
+import React from "react";
+import Carousel from "react-multi-carousel";
 
-// class ProductCarousel extends Component {
-//   constructor() {
-//     super();
-//     this.state = {};
+import "react-multi-carousel/lib/styles.css";
+import ProductCard from "./ProductCard";
+import { compose } from "redux";
+import { connect } from "react-redux";
+// import { firebaseConnect } from "react-redux-firebase";
+
+const ProductCarousel = () => {
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1
+    }
+  };
+
+  return (
+    <div className="container">
+      <Carousel responsive={responsive}>
+        <div>
+          <ProductCard productId="flour-wheat" />
+        </div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+        <div>Item 4</div>
+      </Carousel>
+    </div>
+  );
+};
+
+const mapStateToProps = state => ({
+  products: state.firestore.ordered.products
+});
+
+// const getQuery = () => [
+//   {
+//     collection: "products",
+//     where: [["category", "==", "flour"]]
 //   }
+// ];
 
-//   moveLeft = e => {};
-
-//   moveRight = e => {};
-
-//   render() {
-//     // const showingCards = [];
-//     // for (let i = 0; i < )
-
-//     return (
-//       <section id="productCarouselSec">
-//         <div className="container">
-//           <div
-//             class="carouselArrow carouselLeft vCenterContents hCenterContents"
-//             onClick={this.moveLeft}
-//           >
-//             <span className="fas fa-angle-left"></span>
-//           </div>
-//           <div class="carouselName text-center">
-//             <b className="categoryName">Best Sellers</b>
-//           </div>
-//           <div
-//             class="carouselArrow carouselRight vCenterContents hCenterContents"
-//             onClick={this.moveRight}
-//           >
-//             <span className="fas fa-angle-right"></span>
-//           </div>
-//           <div className="productCarouselContainer">
-//             <div className="productCarouselContainerInner">
-//               {/* <div className="row justify-content-center"> */}
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               <div className="carouselProductCard mt-3 mb-3">
-//                 <ProductCard />
-//               </div>
-//               {/* </div> */}
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-//     );
-//   }
-// }
-
-// export default ProductCarousel;
+export default compose(
+  // firebaseConnect(getQuery),
+  connect(mapStateToProps)
+)(ProductCarousel);

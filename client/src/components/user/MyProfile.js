@@ -103,10 +103,10 @@ class MyProfile extends Component {
           <div className="col-12 text-center">
             <h1>My Profile</h1>
           </div>
-          <div className="col-12 col-md-8 mt-3">
+          <div className="col-12 col-md-8 mt-4">
             <form>
               <label htmlFor="name">Full Name</label>
-              <div className="input-group mb-3">
+              <div className="input-group mb-4">
                 <input
                   className="form-control"
                   id="name"
@@ -124,7 +124,7 @@ class MyProfile extends Component {
                 </button>
               </div>
               <label htmlFor="email">Email ID</label>
-              <div className="input-group mb-3">
+              <div className="input-group mb-4">
                 <input
                   className="form-control"
                   id="email"
@@ -142,7 +142,7 @@ class MyProfile extends Component {
                 </button>
               </div>
               <label htmlFor="mobile">Mobile Number</label>
-              <div className="input-group mb-3">
+              <div className="input-group mb-4">
                 <input
                   className="form-control"
                   id="mobile"
