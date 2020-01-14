@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { isLoaded, withFirestore } from "react-redux-firebase";
@@ -39,33 +39,34 @@ class ProductCard extends Component {
   };
 
   toggleWishlist = () => {
-    const firestore = this.props.firestore;
-    firestore.update(
-      {
+    if(this.props.uid) {
+      const firestore = this.props.firestore;
+      firestore.update({
         collection: "users",
         doc: this.props.uid
-      },
-      {
+      }, {
         wishlist: this.state.wishlisted
           ? firestore.FieldValue.arrayRemove(this.props.productId)
           : firestore.FieldValue.arrayUnion(this.props.productId)
-      }
-    );
+      });
+    }
+    else
+      this.props.history.push("/login");
   };
 
   increaseQty = () => {
-    this.props.firestore.update(
-      {
+    if(this.props.uid)
+      this.props.firestore.update({
         collection: "users",
         doc: this.props.uid
-      },
-      {
+      }, {
         ["cart." +
-        this.props.productId +
-        "." +
-        this.state.variant]: this.props.firestore.FieldValue.increment(1)
-      }
-    );
+          this.props.productId +
+          "." +
+          this.state.variant]: this.props.firestore.FieldValue.increment(1)
+      });
+    else
+      this.props.history.push("/login");
   };
 
   decreaseQty = () => {
@@ -166,4 +167,8 @@ const mapStateToProps = (state, { collection, productId }) => ({
   ...state.firestore.data[collection][productId]
 });
 
-export default compose(withFirestore, connect(mapStateToProps))(ProductCard);
+export default compose(
+  withFirestore,
+  withRouter,
+  connect(mapStateToProps)
+)(ProductCard);

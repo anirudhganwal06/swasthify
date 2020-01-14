@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
@@ -32,34 +33,41 @@ class ProductDetails extends Component {
   };
 
   toggleWishlist = () => {
-    const firestore = this.props.firestore;
-    firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      wishlist: this.state.wishlisted
-        ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
-        : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
-    });
+    if(this.props.uid) {
+      const firestore = this.props.firestore;
+      firestore.update({
+        collection: "users",
+        doc: this.props.uid
+      }, {
+        wishlist: this.state.wishlisted
+          ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
+          : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+      });
+    }
+    else
+      this.props.history.push("/login");
   };
 
   addToCart = () => {
-    if (this.state.inCart) {
-      this.props.firestore.update({
-        collection: "users",
-        doc: this.props.uid
-      }, {
-        ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
-        this.props.firestore.FieldValue.delete()
-      });
-    } else {
-      this.props.firestore.update({
-        collection: "users",
-        doc: this.props.uid
-      }, {
-        ["cart." + this.props.match.params.prodId + "." + this.state.variant]: 1
-      });
-    }
+    if(this.props.uid)
+      if (this.state.inCart) {
+        this.props.firestore.update({
+          collection: "users",
+          doc: this.props.uid
+        }, {
+          ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
+          this.props.firestore.FieldValue.delete()
+        });
+      } else {
+        this.props.firestore.update({
+          collection: "users",
+          doc: this.props.uid
+        }, {
+          ["cart." + this.props.match.params.prodId + "." + this.state.variant]: 1
+        });
+      }
+    else
+      this.props.history.push("/login");
   }
 
   handleLoadedImage = () => {
@@ -151,6 +159,7 @@ const mapStateToProps = (state, { match }) => ({
 });
 
 export default compose(
+  withRouter,
   firestoreConnect(getQuery),
   connect(mapStateToProps)
 )(ProductDetails);
