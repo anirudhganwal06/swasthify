@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withFirebase, firestoreConnect } from "react-redux-firebase";
+import { withFirebase } from "react-redux-firebase";
 
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
 
@@ -163,13 +163,6 @@ class MyProfile extends Component {
   }
 }
 
-const getQuery = props => [
-  {
-    collection: "users/" + props.uid + "/addresses",
-    storeAs: "addresses"
-  }
-];
-
 const mapStateToProps = state => ({
   uid: state.firebase.auth.uid,
   user: state.firebase.profile
@@ -177,6 +170,5 @@ const mapStateToProps = state => ({
 
 export default compose(
   withFirebase,
-  connect(mapStateToProps),
-  firestoreConnect(getQuery)
+  connect(mapStateToProps)
 )(MyProfile);
