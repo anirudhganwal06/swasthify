@@ -160,7 +160,7 @@ class Header extends Component {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Anirudh
+                    { this.props.name || this.props.mobileNo }
                   </Link>
                   <div
                     className="dropdown-menu"
@@ -216,6 +216,8 @@ const getQuery = () => [{
 
 const mapStateToProps = state => {
   return {
+    name: state.firebase.profile.displayName,
+    mobileNo: state.firebase.profile.mobileNo,
     isSignedIn: !state.firebase.auth.isEmpty,
     categories: state.firestore.data.categories
   };

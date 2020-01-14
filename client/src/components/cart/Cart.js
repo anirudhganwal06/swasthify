@@ -47,7 +47,7 @@ class Cart extends Component {
   fetchProducts = () => {
     const promises = [];
 
-    for (const product in this.props.cart)
+    for (const product in this.props.cart.products)
       promises.push(this.props.firestore.doc("products/" + product).get());
 
     Promise.all(promises)
@@ -56,7 +56,7 @@ class Cart extends Component {
         fetchedProducts.forEach(
           product =>
             (products[product.id] = {
-              selectedVariants: this.props.cart[product.id],
+              selectedVariants: this.props.cart.products[product.id],
               ...product.data()
             })
         );
@@ -74,16 +74,11 @@ class Cart extends Component {
   }
 
   render() {
-    let subTotal = 0;
     let productsInCart = [];
 
     for (const id in this.state.products) {
       const product = this.state.products[id];
       for (const variant in product.selectedVariants) {
-        subTotal +=
-          product.variants[variant].actualPrice *
-          product.selectedVariants[variant];
-
         productsInCart.push(
           <CartProductCard
             key={id + "." + variant}
@@ -113,17 +108,17 @@ class Cart extends Component {
           <div className="cartMain text-left">
             <div className="billContainer">
               <div className="float-left">Sub Total</div>
-              <div className="float-right">₹ {subTotal}</div>
+              <div className="float-right">₹ {this.props.cart.subTotal}</div>
               <br />
-              {/* <div className="float-left">Delivery Charges</div>
+              <div className="float-left">Discount</div>
               <div className="float-right">
-                ₹ {this.state.deliveryCharges}
+                ₹ {this.props.cart.discount}
               </div>
-              <br /> */}
+              <br />
               <hr />
               <div className="float-left">Total</div>
               <div className="float-right">
-                ₹ {subTotal /* + this.state.deliveryCharges*/}
+                ₹ {this.props.cart.total}
               </div>
               <br />
             </div>

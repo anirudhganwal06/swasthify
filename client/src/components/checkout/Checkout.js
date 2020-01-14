@@ -1,17 +1,21 @@
 import React, { Component } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withFirestore } from "react-redux-firebase";
 
 import InputGroup from "../common/InputGroup";
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
 import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
 
-export default class Checkout extends Component {
+class Checkout extends Component {
   constructor() {
     super();
     this.state = {
       recieverName: "",
       selectedAddress: null,
       selectedPaymentOption: "",
+      products: [],
       paymentOptions: [
         {
           name: "COD",
@@ -26,42 +30,40 @@ export default class Checkout extends Component {
           description: "Unified Payment Interface"
         }
       ],
-      order: {
-        totalAmount: "129",
-        subTotal: "100",
-        deliveryCharges: "29",
-        products: [
-          {
-            name: "Cold Pressed Coconut Oil",
-            imageUrl: "/images/demoProduct.webp",
-            rate: [
-              [200, 100, "ml"],
-              [300, 200, "ml"],
-              [500, 1, "lt"],
-              [900, 2, "lt"]
-            ],
-            selectedQty: 0,
-            units: 3
-          },
-          {
-            name: "Cold Pressed Coconut Oil",
-            imageUrl: "/images/demoProduct.webp",
-            rate: [
-              [200, 100, "ml"],
-              [300, 200, "ml"],
-              [500, 1, "lt"],
-              [900, 2, "lt"]
-            ],
-            selectedQty: 0,
-            units: 3
-          }
-        ]
-      },
       errors: {}
     };
   }
 
-  onChange = e => {
+  componentDidMount() {
+    this.fetchProducts();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) this.fetchProducts();
+  }
+
+  fetchProducts = () => {
+    const promises = [];
+
+    for (const product in this.props.order.products)
+      promises.push(this.props.firestore.doc("products/" + product).get());
+
+    Promise.all(promises)
+      .then(fetchedProducts => {
+        const products = {};
+        fetchedProducts.forEach(
+          product =>
+            (products[product.id] = {
+              selectedVariants: this.props.order.products[product.id],
+              ...product.data()
+            })
+        );
+        this.setState({ products });
+      })
+      .catch(error => console.log("Error getting document:", error));
+  };
+
+  recieversNameChangeHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -82,17 +84,17 @@ export default class Checkout extends Component {
     const deliveryAddresses = [];
     const paymentOptions = [];
 
-    for (let i = 0; i < 2; i++) {
+    const addresses = this.props.addresses;
+    for (const address in addresses) {
       deliveryAddresses.push(
         <DeliveryAddressCard
-          key={i}
-          index={i}
-          addAddress={false}
-          selected={i === this.state.selectedAddress}
-          line1="1029"
-          line2="Vikas Colony"
-          city="Kosli, Rewari"
-          pincode="123302"
+          key={address}
+          index={address}
+          line1={addresses[address].line1}
+          line2={addresses[address].line2}
+          city={addresses[address].city}
+          pincode={addresses[address].pincode}
+          selected={address === this.state.selectedAddress}
           onClick={this.selectDeliveryAddress}
         />
       );
@@ -127,7 +129,7 @@ export default class Checkout extends Component {
                 name="recieverName"
                 placeholder="Enter reciever's name"
                 value={this.state.recieverName}
-                onChange={this.onChange}
+                onChange={this.recieversNameChangeHandler}
                 error={this.state.errors.recieverName}
               />
               <p>Delivery Address</p>
@@ -152,10 +154,21 @@ export default class Checkout extends Component {
             </form>
           </div>
           <div className="col-12 col-md-5 col-xl-4">
-            <OrderSummary order={this.state.order} />
+            <OrderSummary order={{ ...this.props.order, products: this.state.products }} />
           </div>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  uid: state.firebase.auth.uid,
+  addresses: state.firebase.profile.addresses,
+  order: state.firebase.profile.cart
+});
+
+export default compose(
+  withFirestore,
+  connect(mapStateToProps),
+)(Checkout);
