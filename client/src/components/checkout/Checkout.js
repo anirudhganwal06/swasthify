@@ -75,11 +75,6 @@ class Checkout extends Component {
     this.setState({ selectedPaymentOption: name });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
-    // on submit logic
-  };
-
   render() {
     const deliveryAddresses = [];
     const paymentOptions = [];
@@ -121,7 +116,7 @@ class Checkout extends Component {
             <h1>Checkout</h1>
           </div>
           <div className="col-12 col-md-7 col-xl-6">
-            <form noValidate onSubmit={this.onSubmit}>
+            <form noValidate >
               <InputGroup
                 id="recieverName"
                 label="Reciever's Name"
@@ -132,12 +127,16 @@ class Checkout extends Component {
                 onChange={this.recieversNameChangeHandler}
                 error={this.state.errors.recieverName}
               />
+
+              <input type="text" name="selectedAddress" value={this.state.selectedAddress} hidden />
               <p>Delivery Address</p>
               <div className="row">{deliveryAddresses}</div>
               <small className="text-muted">
                 Please select one of the above addresses on which you want your
                 order to be delivered.
               </small>
+
+              <input type="text" name="selectedPaymentOption" value={this.state.selectedPaymentOption} hidden />
               <p className="mt-3">Payment Options</p>
               <div className="row mb-2 justify-content-center">
                 {paymentOptions}

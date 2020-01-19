@@ -34,6 +34,9 @@ import AboutUs from "./components/pages/AboutUs";
 // Loading
 import loading from "./components/common/Loading";
 
+// Error
+import Error from "./components/error/Error";
+
 class App extends Component {
   render() {
     return (
@@ -59,6 +62,7 @@ class App extends Component {
                 component={props => <AddAddress editMode={true} {...props} />}
               />
               <Route exact path="/about-us" component={AboutUs} />
+              <Route path="*" component={() => <Error statusCode="404" />} />
             </main>
             <Footer />
           </div>
