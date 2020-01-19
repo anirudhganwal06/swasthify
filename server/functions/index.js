@@ -8,19 +8,25 @@ admin.initializeApp();
 
 exports.placeOrder = functions.https.onRequest(async (req, res) => {
   const fs = admin.firestore();
-  
-  console.log(req.body);
+
+  const userDoc = await fs.doc('users/' + req.body.uid).get();
+  const orderMetadataDoc = await fs.doc('orders/config').get();
+
+  const user = userDoc.data();
+  const orderMetadata = orderMetadataDoc.data();
+
   const paytmParams = {};
   paytmParams['MID'] = paytmConfig.MID;
-  paytmParams['ORDER_ID'] = req.query.ORDER_ID;
-  paytmParams['CUST_ID'] = 'CUST0001';
+  paytmParams['ORDER_ID'] = orderMetadata.prefix + ("00000000" + (Number(orderMetadata.lastOrder) + 1)).slice(-8);
+  paytmParams['CUST_ID'] = req.body.uid;
   paytmParams['INDUSTRY_TYPE_ID'] = paytmConfig.INDUSTRY_TYPE_ID;
   paytmParams['CHANNEL_ID'] = paytmConfig.CHANNEL_ID;
-  paytmParams['TXN_AMOUNT'] = '1.00';
+  paytmParams['TXN_AMOUNT'] = String(user.cart.total);
   paytmParams['WEBSITE'] = paytmConfig.WEBSITE;
-  paytmParams['CALLBACK_URL'] = 'https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp';
-  paytmParams['EMAIL'] = 'abc@gmail.com';
-  paytmParams['MOBILE_NO'] = '9999999999';
+  paytmParams['CALLBACK_URL'] = '';
+  paytmParams['EMAIL'] = user.email;
+  paytmParams['MOBILE_NO'] = user.mobileNo;
+  console.log(paytmParams);
   paytmChecksum.genchecksum(paytmParams, paytmConfig.MERCHANT_KEY, (err, checksum) => {
     if(err) {
       console.error(err);
