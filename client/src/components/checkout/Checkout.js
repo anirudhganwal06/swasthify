@@ -116,7 +116,11 @@ class Checkout extends Component {
             <h1>Checkout</h1>
           </div>
           <div className="col-12 col-md-7 col-xl-6">
-            <form noValidate >
+            <form
+              action="https://us-central1-swasthify-6d5c2.cloudfunctions.net/placeOrder"
+              method="POST"
+            >
+              <input type="hidden" name="uid" value={this.props.uid} />
               <InputGroup
                 id="recieverName"
                 label="Reciever's Name"
@@ -126,9 +130,10 @@ class Checkout extends Component {
                 value={this.state.recieverName}
                 onChange={this.recieversNameChangeHandler}
                 error={this.state.errors.recieverName}
+                required
               />
 
-              <input type="text" name="selectedAddress" value={this.state.selectedAddress} hidden />
+              <input type="hidden" name="address" value={this.state.selectedAddress} required />
               <p>Delivery Address</p>
               <div className="row">{deliveryAddresses}</div>
               <small className="text-muted">
@@ -136,7 +141,7 @@ class Checkout extends Component {
                 order to be delivered.
               </small>
 
-              <input type="text" name="selectedPaymentOption" value={this.state.selectedPaymentOption} hidden />
+              <input type="hidden" name="paymentMode" value={this.state.selectedPaymentOption} required />
               <p className="mt-3">Payment Options</p>
               <div className="row mb-2 justify-content-center">
                 {paymentOptions}
