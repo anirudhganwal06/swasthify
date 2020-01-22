@@ -22,12 +22,8 @@ class Checkout extends Component {
           description: "Cash On Delivery"
         },
         {
-          name: "Card",
-          description: "Debit / Credit Card"
-        },
-        {
-          name: "UPI",
-          description: "Unified Payment Interface"
+          name: "Pay Online",
+          description: "Pay Online"
         }
       ],
       errors: {}

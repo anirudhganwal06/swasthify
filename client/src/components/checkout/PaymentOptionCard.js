@@ -3,7 +3,7 @@ import classnames from "classnames";
 
 const paymentOptionCard = props => {
   return (
-    <div className="col-4 mt-2 text-center">
+    <div className="col-6 mt-2 text-center">
       <div
         className={classnames("deliveryAddressCard", {
           selectedDeliveryAddressCard: props.selected

@@ -1,34 +1,15 @@
 import React, { Component } from "react";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { withFirestore } from "react-redux-firebase";
+import OrderCard from "../user/OrderCard";
 
-class OrderList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      products: []
-    };
-  }
-
+export default class OrdersList extends Component {
   render() {
     return (
       <div className="container p-3">
-        <div className="row justify-content-center mb-5">
-          <div className="col-12 text-center">
-            <h1>My Orders</h1>
-          </div>
-          <div className="col-12 col-md-8 mt-3"></div>
-        </div>
+        <h1 className="text-center">My Orders</h1>
+        <OrderCard />
+        <OrderCard />
+        <OrderCard />
       </div>
     );
   }
 }
-
-const mapStateToProps = state => ({
-  uid: state.firebase.auth.uid,
-  wishlist: state.firebase.profile.wishlist
-});
-
-export default compose(connect(mapStateToProps), withFirestore)(OrderList);
