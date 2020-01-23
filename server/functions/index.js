@@ -23,7 +23,7 @@ exports.placeOrder = functions.https.onRequest(async (req, res) => {
   paytmParams['CHANNEL_ID'] = paytmConfig.CHANNEL_ID;
   paytmParams['TXN_AMOUNT'] = String(user.cart.total);
   paytmParams['WEBSITE'] = paytmConfig.WEBSITE;
-  paytmParams['CALLBACK_URL'] = '';
+  paytmParams['CALLBACK_URL'] = 'https://us-central1-swasthify-6d5c2.cloudfunctions.net/verifyOrder';
   paytmParams['EMAIL'] = user.email;
   paytmParams['MOBILE_NO'] = user.mobileNo;
   console.log(paytmParams);
@@ -52,4 +52,22 @@ exports.placeOrder = functions.https.onRequest(async (req, res) => {
     res.write('</html>');
     return res.end();
   });
+});
+
+exports.verifyOrder = functions.https.onRequest((req, res) => {
+  const paytmParams = {};
+  let checksumhash;
+
+  for(const key in req.body) {
+    if(key === "CHECKSUMHASH") {
+      checksumhash = req.body[key];
+    } else {
+      paytmParams[key] = req.body[key];
+    }
+  }
+
+  if(paytmChecksum.verifychecksum(paytmParams, paytmConfig.MERCHANT_KEY, checksumhash))
+    return res.status(200).send("Success");
+  else
+    return res.status();
 });
