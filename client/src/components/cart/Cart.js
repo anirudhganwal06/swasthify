@@ -21,7 +21,7 @@ class Cart extends Component {
         doc: this.props.uid
       },
       {
-        ["cart." + productId + "." + variant]:
+        ["cart.products." + productId + "." + variant]:
           this.state.products[productId].selectedVariants[variant] > 1
             ? this.props.firestore.FieldValue.increment(-1)
             : this.props.firestore.FieldValue.delete()
@@ -30,13 +30,14 @@ class Cart extends Component {
   };
 
   incUnits = (productId, variant) => {
+    console.log("inc working");
     this.props.firestore.update(
       {
         collection: "users",
         doc: this.props.uid
       },
       {
-        ["cart." +
+        ["cart.products." +
         productId +
         "." +
         variant]: this.props.firestore.FieldValue.increment(1)

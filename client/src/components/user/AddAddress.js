@@ -2,15 +2,18 @@ import React, { Component } from "react";
 import InputGroup from "../common/InputGroup";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { withFirebase } from "react-redux-firebase";
 
 class AddAddress extends Component {
   constructor(props) {
     super(props);
+    const address = props.addresses[props.match.params.index];
     this.state = {
-      line1: props.editMode ? props.address.line1 : "",
-      line2: props.editMode ? props.address.line2 : "",
-      city: props.editMode ? props.address.city : "",
-      pincode: props.editMode ? props.address.pincode : "",
+      line1: props.editMode ? address.line1 : "",
+      line2: props.editMode ? address.line2 : "",
+      city: props.editMode ? address.city : "",
+      pincode: props.editMode ? address.pincode : "",
       errors: {},
       editMode: props.editMode
     };
@@ -22,7 +25,28 @@ class AddAddress extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+
+    const firebase = this.props.firebase;
+    console.log(firebase);
+    let newAddresses = [ ...this.props.addresses ];
+    let newAddress = {
+      line1: this.state.line1,
+      line2: this.state.line2,
+      city: this.state.city,
+      pincode: this.state.pincode
+    };
+    newAddresses[this.props.match.params.index] = newAddress;
+
     // submit logic goes here!
+    if(this.state.editMode)
+      firebase.updateProfile({
+        addresses: newAddresses
+      });
+    else
+      firebase.updateProfile({
+        addresses: firebase.firestore.FieldValue.arrayUnion(newAddress)
+      });
+    this.props.history.goBack();
   };
 
   render() {
@@ -97,8 +121,8 @@ class AddAddress extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  address: state.firebase.profile.addresses[props.match.params.index]
+const mapStateToProps = (state) => ({
+  addresses: state.firebase.profile.addresses
 });
 
-export default compose(connect(mapStateToProps))(AddAddress);
+export default compose(withFirebase, withRouter, connect(mapStateToProps))(AddAddress);

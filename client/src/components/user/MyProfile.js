@@ -69,11 +69,12 @@ class MyProfile extends Component {
     }
   };
 
-  deleteAddress = (e, address) => {
+  deleteAddress = (e, index) => {
     e.preventDefault();
-    this.props.firestore.delete({
-      collection: "users/" + this.props.uid + "/addresses",
-      doc: address
+    let newAddresses = [ ...this.props.user.addresses ];
+    newAddresses.splice(index, 1);
+    this.props.firebase.updateProfile({
+      addresses: newAddresses
     });
   };
 
