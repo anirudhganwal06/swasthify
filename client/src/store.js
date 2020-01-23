@@ -1,17 +1,12 @@
-import { createStore, combineReducers } from "redux";
-import { firebaseReducer } from "react-redux-firebase";
-import { firestoreReducer } from "redux-firestore";
+import { createStore } from "redux";
+import rootReducer from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-const reducer = combineReducers({
-  firebase: firebaseReducer,
-  firestore: firestoreReducer
-});
 
 const initialState = {};
 
 const store = createStore(
-  reducer,
+  rootReducer,
   initialState,
   composeWithDevTools()
 );

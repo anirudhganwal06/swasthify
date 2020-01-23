@@ -10,6 +10,8 @@ import { signedInLinks, signedOutLinks } from "./links";
 import { isLoaded } from "react-redux-firebase";
 import loading from "../../common/Loading";
 
+import { setFlashMessage } from "../../../actions/flashActions";
+
 class Header extends Component {
   constructor() {
     super();
@@ -23,7 +25,13 @@ class Header extends Component {
 
   closeSideNav = () => this.setState({ sideNavOpen: false });
 
-  openCart = () => this.setState({ cartOpen: true });
+  openCart = () => {
+    if (this.props.isSignedIn) {
+      this.setState({ cartOpen: true });
+    } else {
+      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+    }
+  }
 
   closeCart = () => this.setState({ cartOpen: false });
 
@@ -225,5 +233,5 @@ const mapStateToProps = state => {
 
 export default compose(
   firestoreConnect(getQuery),
-  connect(mapStateToProps)
+  connect(mapStateToProps, {setFlashMessage})
 )(Header);

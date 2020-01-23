@@ -940,3 +940,27 @@ footer a:hover {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+/********** flash *******************/
+
+.flashMessage {
+  background-color: #122;
+  color: white;
+  z-index: 5;
+  left: 10px;
+  margin-right: 10px;
+  top: 70px;
+  border-radius: 5px;
+}
+
+.flashMessage .alert {
+  margin-bottom: 0;
+}
+
+.flashMessage button,
+.flashMessage button:hover {
+  color: white;
+  background-color: #122;
+  right: 0;
+}
+

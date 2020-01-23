@@ -8,6 +8,8 @@ import classnames from "classnames";
 import InputStepper from "../common/InputStepper";
 import loading from "../common/Loading";
 
+import { setFlashMessage } from "../../actions/flashActions";
+
 class ProductCard extends Component {
   constructor(props) {
     super(props);
@@ -24,9 +26,9 @@ class ProductCard extends Component {
       ? {
         ...state,
         units:
-            (props.cart[props.productId] &&
-              props.cart[props.productId][state.variant]) ||
-            0,
+          (props.cart[props.productId] &&
+            props.cart[props.productId][state.variant]) ||
+          0,
         wishlisted: props.wishlist.indexOf(props.productId) !== -1
       }
       : state;
@@ -39,34 +41,41 @@ class ProductCard extends Component {
   };
 
   toggleWishlist = () => {
-    if(this.props.uid) {
+    if (this.props.uid) {
       const firestore = this.props.firestore;
-      firestore.update({
-        collection: "users",
-        doc: this.props.uid
-      }, {
-        wishlist: this.state.wishlisted
-          ? firestore.FieldValue.arrayRemove(this.props.productId)
-          : firestore.FieldValue.arrayUnion(this.props.productId)
-      });
+      firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          wishlist: this.state.wishlisted
+            ? firestore.FieldValue.arrayRemove(this.props.productId)
+            : firestore.FieldValue.arrayUnion(this.props.productId)
+        }
+      );
+    } else {
+      this.props.setFlashMessage(true, "Please, login to use wishlist!", 3000);
     }
-    else
-      this.props.history.push("/login");
   };
 
   increaseQty = () => {
-    if(this.props.uid)
-      this.props.firestore.update({
-        collection: "users",
-        doc: this.props.uid
-      }, {
-        ["cart." +
+    if (this.props.uid) {
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart." +
           this.props.productId +
           "." +
           this.state.variant]: this.props.firestore.FieldValue.increment(1)
-      });
-    else
-      this.props.history.push("/login");
+        }
+      );
+    } else {
+      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+    }
   };
 
   decreaseQty = () => {
@@ -170,5 +179,5 @@ const mapStateToProps = (state, { collection, productId }) => ({
 export default compose(
   withFirestore,
   withRouter,
-  connect(mapStateToProps)
+  connect(mapStateToProps, { setFlashMessage })
 )(ProductCard);

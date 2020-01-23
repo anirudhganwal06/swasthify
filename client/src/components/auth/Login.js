@@ -1,6 +1,9 @@
 import React from "react";
 import { useFirebase } from "react-redux-firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { connect } from "react-redux";
+
+import { setFlashMessage } from "../../actions/flashActions";
 
 const Login = props => {
   const firebase = useFirebase();
@@ -13,6 +16,7 @@ const Login = props => {
             if (authResult.additionalUserInfo.isNewUser)
               props.history.push("/signup");
             else {
+              props.setFlashMessage(true, "User logged in successfully!", 3000);
               props.history.push("/");
             }
           });
@@ -45,4 +49,8 @@ const Login = props => {
   );
 };
 
-export default Login;
+// const mapStateToProps = state => ({
+
+// });
+
+export default connect(null, {setFlashMessage})(Login);

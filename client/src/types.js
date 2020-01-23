@@ -1,0 +1,1 @@
+export const SET_FLASH = "SET_FLASH";
