@@ -1,9 +1,7 @@
-const functions = require('firebase-functions');
-
 const paytmChecksum = require('./paytm/checksum');
 const paytmConfig = require('./paytm/config');
 
-module.exports = functions.https.onRequest(async (req, res) => {
+module.exports = async (req, res) => {
   createOrder(req.body, (user, order) => {
     if(req.body.paymentMode === "COD")
       ;
@@ -48,4 +46,4 @@ module.exports = functions.https.onRequest(async (req, res) => {
       return res.end();
     });
   });  
-});
+}

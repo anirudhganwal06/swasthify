@@ -1,2 +1,4 @@
-exports.placeOrder = require('./routes/placeOrder');
-exports.verifyOrder = require('./routes/verifyOrder');
+const functions = require('firebase-functions');
+
+exports.placeOrder = functions.https.onRequest(require('./routes/placeOrder'));
+exports.verifyOrder = functions.https.onRequest(require('./routes/verifyOrder'));

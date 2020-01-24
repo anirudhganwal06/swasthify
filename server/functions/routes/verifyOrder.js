@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 
-module.exports = functions.https.onRequest((req, res) => {
+module.exports = async (req, res) => {
   const paytmParams = {};
   let checksumhash;
 
@@ -16,4 +16,4 @@ module.exports = functions.https.onRequest((req, res) => {
     return res.status(200).send("Success");
   else
     return res.status();
-});
+}

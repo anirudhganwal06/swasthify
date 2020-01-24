@@ -1,8 +1,6 @@
-const admin = require('./firebase');
+const fs = require('./firebase').firestore();
 
 exports.createOrder = async ({ uid, address, paymentMode }, onCreateComplete) => {
-  const fs = admin.firestore();
-
   const userDoc = await fs.doc('users/' + uid).get();
   const orderMetadataDoc = await fs.doc('orders/config').get();
 
@@ -29,7 +27,7 @@ exports.createOrder = async ({ uid, address, paymentMode }, onCreateComplete) =>
   for(const pid in user.cart.products)
     promises.push(fs.collection('products').doc(pid).get());
 
-  Promise.all(promises).then(products => {
+  return Promise.all(promises).then(products => {
     products.forEach(product => {
       for(const variant in product)
         order[product.id] = {
@@ -42,6 +40,5 @@ exports.createOrder = async ({ uid, address, paymentMode }, onCreateComplete) =>
 
     return fs.collection("orders").doc(order.id).set(order.data);
   })
-  .then(() => onCreateComplete(user, order))
-  .catch(err => console.log(err));
+  .then(() => ({ user, order }));
 }
