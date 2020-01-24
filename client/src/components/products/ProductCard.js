@@ -26,7 +26,7 @@ class ProductCard extends Component {
       ? {
         ...state,
         units:
-          (props.cart.products[props.productId] &&
+          (props.cart.products && props.cart.products[props.productId] &&
             props.cart.products[props.productId][state.variant]) ||
           0,
         wishlisted: props.wishlist.indexOf(props.productId) !== -1
