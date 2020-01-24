@@ -18,7 +18,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
       orderDate: new Date(),
       paymentMethod: paymentMode,
       paymentStatus: "pending",
-      subtotal: user.cart.subtotal,
+      subTotal: user.cart.subTotal,
       total: user.cart.total,
       user: userDoc.id
     }
@@ -35,7 +35,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
 
   return Promise.all(promises).then(products => {
     products.forEach(product => {
-      for(const variant in product)
+      for(const variant in product.data())
         order[product.id] = {
           [variant]: {
             price: product.data().variants[variant].actualPrice,
