@@ -5,4 +5,5 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceConfig),
     databaseURL: "https://swasthify-6d5c2.firebaseio.com"
 });
+
 module.exports = admin;
