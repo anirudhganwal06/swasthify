@@ -27,11 +27,15 @@ class Header extends Component {
 
   openCart = () => {
     if (this.props.isSignedIn) {
-      this.setState({ cartOpen: true });
+      if (this.props.cart) {
+        this.setState({ cartOpen: true });
+      } else {
+        this.props.setFlashMessage(true, "Please wait for the login process to succeed!", 3000);
+      }
     } else {
       this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
     }
-  }
+  };
 
   closeCart = () => this.setState({ cartOpen: false });
 
@@ -66,7 +70,11 @@ class Header extends Component {
       url = url.toLowerCase();
       url = url.replace(/s$/, "");
       categoriesComponent.push(
-        <Link className="dropdown-item" to={"/products/" + url} key={i}>
+        <Link
+          className="dropdown-item"
+          to={"/products?category=" + url}
+          key={i}
+        >
           {categories[i].name}
         </Link>
       );
@@ -168,7 +176,7 @@ class Header extends Component {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    { this.props.name || this.props.mobileNo }
+                    {this.props.name || this.props.mobileNo}
                   </Link>
                   <div
                     className="dropdown-menu"
@@ -216,22 +224,25 @@ class Header extends Component {
   }
 }
 
-const getQuery = () => [{
-  collection: "products",
-  doc: "categories",
-  storeAs: "categories"
-}];
+const getQuery = () => [
+  {
+    collection: "products",
+    doc: "categories",
+    storeAs: "categories"
+  }
+];
 
 const mapStateToProps = state => {
   return {
     name: state.firebase.profile.displayName,
     mobileNo: state.firebase.profile.mobileNo,
     isSignedIn: !state.firebase.auth.isEmpty,
-    categories: state.firestore.data.categories
+    categories: state.firestore.data.categories,
+    cart: state.firebase.profile.cart
   };
 };
 
 export default compose(
   firestoreConnect(getQuery),
-  connect(mapStateToProps, {setFlashMessage})
+  connect(mapStateToProps, { setFlashMessage })
 )(Header);

@@ -2,11 +2,13 @@ import React from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
+import queryString from "query-string";
 
 import ProductCard from "./ProductCard";
 import loading from "../common/Loading";
 
-const ProductList = ({ products, match }) => {
+const ProductList = ({ products, location }) => {
+  const queryParams = queryString.parse(location.search);
   const productList = isLoaded(products) ?
     products.map(product => (
       <div
@@ -20,7 +22,7 @@ const ProductList = ({ products, match }) => {
   return (
     <section id="productListSec">
       <div className="container productListContainer">
-        <b className="categoryName text-capitalize">{match.params.category}</b>
+        <b className="categoryName text-capitalize">{queryParams.category}</b>
 
         { isLoaded(products) 
           ? <div className="row justify-content-center">{productList}</div>
@@ -35,10 +37,15 @@ const mapStateToProps = state => ({
   products: state.firestore.ordered.products
 });
 
-const getQuery = ({ match }) => [{
-  collection: "products",
-  where: [["category", "==", match.params.category]]
-}];
+const getQuery = ({ location }) =>{
+  const queryParams = queryString.parse(location.search);
+  return(
+    [{
+      collection: "products",
+      where: [["category", "==", queryParams.category]]
+    }]
+  );
+};
 
 export default compose(
   firestoreConnect(getQuery),

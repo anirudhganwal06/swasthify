@@ -53,7 +53,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
               <PrivateRoute exact path="/logout" component={Logout} />
-              <Route exact path="/products/:category" component={ProductList} />
+              <Route exact path="/products" component={ProductList} />
               <Route exact path="/product/:prodId" component={ProductDetails} />
               <PrivateRoute exact path="/checkout" component={Checkout} />
               <PrivateRoute exact path="/my-profile" component={MyProfile} />

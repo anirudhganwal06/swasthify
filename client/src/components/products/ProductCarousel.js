@@ -35,7 +35,7 @@ const ProductCarousel = props => {
       <div className="productCarouselContainer">
         <div className="clearfix">
           <h3 className="text-capitalize mb-1 float-left">{props.category || props.tag}</h3>
-          <Link to={"/" + (props.category ? "products/" : "tag/") + props.category}>
+          <Link to={"/products?" + (props.category ? "category=" : "tag=") + props.category}>
             <button className="btn themeColorHoverBtn btn-sm float-right">
             See All
             </button>
