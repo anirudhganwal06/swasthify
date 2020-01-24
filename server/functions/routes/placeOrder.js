@@ -2,8 +2,13 @@ const paytmChecksum = require('../paytm/checksum');
 const paytmConfig = require('../paytm/config');
 const config = require('../config');
 
+const { createOrder } = require('../orders');
+
 module.exports = async (req, res) => {
-  createOrder(req.body).then(({ user, order }) => {
+  if(!(req.body.uid && req.body.address && req.body.paymentMode))
+    return res.status(400).send('Parameters not passes');
+
+  return createOrder(req.body).then(({ user, order }) => {
     if(req.body.paymentMode === "COD")
       return res.redirect(config.frontendUrl + '/orders');
 
