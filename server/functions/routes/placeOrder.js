@@ -1,5 +1,5 @@
-const paytmChecksum = require('./paytm/checksum');
-const paytmConfig = require('./paytm/config');
+const paytmChecksum = require('../paytm/checksum');
+const paytmConfig = require('../paytm/config');
 
 module.exports = async (req, res) => {
   createOrder(req.body, (user, order) => {
