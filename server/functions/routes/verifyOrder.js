@@ -1,17 +1,30 @@
+const updateOrder = require('../orders').updateOrder;
+const config = require('../config');
+
 module.exports = async (req, res) => {
   const paytmParams = {};
   let checksumhash;
 
-  for(const key in req.body) {
-    if(key === "CHECKSUMHASH") {
+  for(const key in req.body)
+    if(key === "CHECKSUMHASH")
       checksumhash = req.body[key];
-    } else {
+    else
       paytmParams[key] = req.body[key];
+
+  if(paytmChecksum.verifychecksum(paytmParams, paytmConfig.MERCHANT_KEY, checksumhash)) {
+    const orderParams = {
+      TXNID: paytmParams.TXNID,
+      BANKTXNID: paytmParams.BANKTXNID,
+      paymentStatus: paytmParams.STATUS,
+      deliveryStatus: "processing",
+      TXNDATE: paytmParams.TXNDATE,
+      GATEWAYNAME: paytmParams.GATEWAYNAME,
+      BANKNAME: paytmParams.BANKNAME,
+      PAYMENTMODE: paytmParams.PAYMENTMODE
     }
+
+    await updateOrder(orderParams);
   }
 
-  if(paytmChecksum.verifychecksum(paytmParams, paytmConfig.MERCHANT_KEY, checksumhash))
-    return res.status(200).send("Success");
-  else
-    return res.status();
+  return res.redirect(config.frontendUrl + "/orders");
 }

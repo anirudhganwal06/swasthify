@@ -33,18 +33,26 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
   for(const pid in user.cart.products)
     promises.push(fs.collection('products').doc(pid).get());
 
-  return Promise.all(promises).then(products => {
-    products.forEach(product => {
-      for(const variant in product.data().variants)
-        order[product.id] = {
-          [variant]: {
-            price: product.data().variants[variant].actualPrice,
-            quantity: user.cart.products[product.id][variant]
-          }
+  const products = await Promise.all(promises)
+  
+  products.forEach(product => {
+    for(const variant in product.data().variants)
+      order.data[product.id] = {
+        [variant]: {
+          price: product.data().variants[variant].actualPrice,
+          quantity: user.cart.products[product.id][variant]
         }
-    });
+      }
+  });
 
-    return fs.collection("orders").doc(order.id).set(order.data);
-  })
-  .then(() => ({ user, order }));
+  const batch = fs.batch();
+  batch.set(fs.doc("orders/" + order.id), order.data);
+  batch.update(fs.doc("users/" + uid), { cart: {} })
+
+  await batch.commit();
+  return { user, order };
+}
+
+exports.updateOrder = orderDetails => {
+  return fs.doc('orders/' + id).update(orderDetails);
 }
