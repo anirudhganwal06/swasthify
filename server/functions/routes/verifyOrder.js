@@ -1,5 +1,3 @@
-const functions = require('firebase-functions');
-
 module.exports = async (req, res) => {
   const paytmParams = {};
   let checksumhash;

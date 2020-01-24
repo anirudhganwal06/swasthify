@@ -1,6 +1,8 @@
-const fs = require('./firebase').firestore();
+const admin = require('./firebase');
 
-exports.createOrder = async ({ uid, address, paymentMode }, onCreateComplete) => {
+const fs = admin.firestore();
+
+exports.createOrder = async ({ uid, address, paymentMode }) => {
   const userDoc = await fs.doc('users/' + uid).get();
   const orderMetadataDoc = await fs.doc('orders/config').get();
 
@@ -21,6 +23,10 @@ exports.createOrder = async ({ uid, address, paymentMode }, onCreateComplete) =>
       user: userDoc.id
     }
   };
+
+  fs.doc('orders/config').update({
+    lastOrder: admin.firestore.FieldValue.increment(1)
+  });
 
   const promises = [];
 

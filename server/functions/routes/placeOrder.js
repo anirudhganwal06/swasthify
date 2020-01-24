@@ -1,11 +1,12 @@
-const paytmChecksum = require('./paytm/checksum');
-const paytmConfig = require('./paytm/config');
+const paytmChecksum = require('../paytm/checksum');
+const paytmConfig = require('../paytm/config');
+const config = require('../config');
 
 module.exports = async (req, res) => {
-  createOrder(req.body, (user, order) => {
+  createOrder(req.body).then(({ user, order }) => {
     if(req.body.paymentMode === "COD")
-      ;
-  
+      return res.redirect(config.frontendUrl + '/orders');
+
     const paytmParams = {
       MID: paytmConfig.MID,
       ORDER_ID: order.id,
@@ -18,9 +19,9 @@ module.exports = async (req, res) => {
       EMAIL: user.email,
       MOBILE_NO: user.mobileNo
     };
-  
+
     console.log(paytmParams);
-    paytmChecksum.genchecksum(paytmParams, paytmConfig.MERCHANT_KEY, (err, checksum) => {
+    return paytmChecksum.genchecksum(paytmParams, paytmConfig.MERCHANT_KEY, (err, checksum) => {
       if(err) {
         console.error(err);
         return res.status(500).send("Internal Server Error");
@@ -45,5 +46,6 @@ module.exports = async (req, res) => {
       res.write('</html>');
       return res.end();
     });
-  });  
+  })
+  .catch(err => console.log(err));
 }
