@@ -7,7 +7,7 @@ module.exports = functions.firestore.document('users/{userId}')
       
       const promises = [];
       const data = change.after.data().cart.products;
-      const discount= change.after.data().cart.discount;
+      const discount = change.after.data().cart.discount || 0;
 
       for (const product in data)
         promises.push(fs.doc('products/' + product).get());
@@ -28,6 +28,7 @@ module.exports = functions.firestore.document('users/{userId}')
       
       return fs.doc('users/' + context.params.userId).update({
         "cart.subTotal": total,
+        "cart.discount": discount,
         "cart.total": total - discount
       });
     } else {

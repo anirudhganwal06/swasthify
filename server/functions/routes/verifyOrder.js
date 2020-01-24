@@ -1,3 +1,5 @@
+const paytmChecksum = require('../paytm/checksum');
+const paytmConfig = require('../paytm/config');
 const updateOrder = require('../orders').updateOrder;
 const config = require('../config');
 
@@ -23,7 +25,7 @@ module.exports = async (req, res) => {
       PAYMENTMODE: paytmParams.PAYMENTMODE
     }
 
-    await updateOrder(orderParams);
+    await updateOrder(paytmParams.ORDERID, orderParams);
   }
 
   return res.redirect(config.frontendUrl + "/orders");
