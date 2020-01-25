@@ -26,7 +26,6 @@ class OrderCard extends Component {
       orderDate: "12 September, 2019",
       deliveryStatus: "delivered",
       deliveryDate: "14 September, 2019",
-      orderStatus: "Delivered",
       paymentStatus: "Succeed",
       totalAmount: "900"
     };
