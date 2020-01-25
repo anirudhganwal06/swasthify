@@ -30,7 +30,11 @@ class Header extends Component {
       if (this.props.cart) {
         this.setState({ cartOpen: true });
       } else {
-        this.props.setFlashMessage(true, "Please wait for the login process to succeed!", 3000);
+        this.props.setFlashMessage(
+          true,
+          "Please wait for the login process to succeed!",
+          3000
+        );
       }
     } else {
       this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
@@ -64,20 +68,24 @@ class Header extends Component {
       }
     }
 
-    const categories = this.props.categories;
-    for (let i in categories) {
-      let url = categories[i].name;
-      url = url.toLowerCase();
-      url = url.replace(/s$/, "");
-      categoriesComponent.push(
-        <Link
-          className="dropdown-item"
-          to={"/products?category=" + url}
-          key={i}
-        >
-          {categories[i].name}
-        </Link>
-      );
+    let categories = [];
+    if (isLoaded(this.props.misc)) {
+      categories = this.props.misc.categories;
+
+      for (let i in categories) {
+        let url = categories[i];
+        url = url.toLowerCase();
+        url = url.replace(/s$/, "");
+        categoriesComponent.push(
+          <Link
+            className="dropdown-item"
+            to={"/products?category=" + url}
+            key={i}
+          >
+            {categories[i]}
+          </Link>
+        );
+      }
     }
 
     return (
@@ -153,9 +161,7 @@ class Header extends Component {
                   Select Category
                 </Link>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {isLoaded(this.props.categories)
-                    ? categoriesComponent
-                    : loading()}
+                  {isLoaded(this.props.misc) ? categoriesComponent : loading()}
                 </div>
               </li>
               <li className="nav-item mx-1">
@@ -227,8 +233,8 @@ class Header extends Component {
 const getQuery = () => [
   {
     collection: "products",
-    doc: "categories",
-    storeAs: "categories"
+    doc: "miscellaneous",
+    storeAs: "misc"
   }
 ];
 
@@ -237,7 +243,7 @@ const mapStateToProps = state => {
     name: state.firebase.profile.displayName,
     mobileNo: state.firebase.profile.mobileNo,
     isSignedIn: !state.firebase.auth.isEmpty,
-    categories: state.firestore.data.categories,
+    misc: state.firestore.data.misc,
     cart: state.firebase.profile.cart
   };
 };
