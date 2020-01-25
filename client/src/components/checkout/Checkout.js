@@ -13,7 +13,7 @@ class Checkout extends Component {
     super();
     this.state = {
       recieverName: "",
-      selectedAddress: null,
+      selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
       paymentOptions: [

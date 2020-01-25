@@ -6,6 +6,7 @@ import queryString from "query-string";
 
 import ProductCard from "./ProductCard";
 import loading from "../common/Loading";
+import punctuationMarks from "../common/punctuationMarks";
 
 const ProductList = ({ products, location }) => {
   const queryParams = queryString.parse(location.search);
@@ -18,11 +19,20 @@ const ProductList = ({ products, location }) => {
         <ProductCard collection="products" productId={product.id} />
       </div>
     )) : [];
-
+  
+  let pageTitle = "";
+  if (queryParams.category) {
+    pageTitle = "Category: " + queryParams.category; 
+  } else if(queryParams.search) {
+    pageTitle = "Search: " + queryParams.search; 
+  } else {
+    pageTitle = "Products"; 
+  }
+  
   return (
     <section id="productListSec">
       <div className="container productListContainer">
-        <b className="categoryName text-capitalize">{queryParams.category}</b>
+        <b  className="categoryName">{pageTitle}</b>
 
         { isLoaded(products) 
           ? <div className="row justify-content-center">{productList}</div>
@@ -39,12 +49,39 @@ const mapStateToProps = state => ({
 
 const getQuery = ({ location }) =>{
   const queryParams = queryString.parse(location.search);
-  return(
-    [{
-      collection: "products",
-      where: [["category", "==", queryParams.category]]
-    }]
-  );
+  if (queryParams.category) {
+    return(
+      [{
+        collection: "products",
+        where: [["category", "==", queryParams.category]]
+      }]
+    );
+  } else if (queryParams.search) {
+    let search = queryParams.search.trim();
+    let nameWithoutPunc = "";
+    for (let i in search) {
+      if (punctuationMarks.includes(search[i])) {
+        nameWithoutPunc += " ";
+      } else {
+        nameWithoutPunc += search[i].toLowerCase();
+      }
+    }
+    let searchList = nameWithoutPunc.split(" ");
+    console.log(searchList);
+    return [
+      {
+        collection: "products",
+        where: [["keywords", "array-contains-any", searchList]]
+      }
+    ];
+  } else {
+    return [
+      {
+        collection: "products",
+        where: [["unit", ">", 0]]
+      }
+    ];
+  }
 };
 
 export default compose(

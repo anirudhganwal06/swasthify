@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
@@ -17,7 +17,8 @@ class Header extends Component {
     super();
     this.state = {
       sideNavOpen: false,
-      cartOpen: false
+      cartOpen: false,
+      search: ""
     };
   }
 
@@ -42,6 +43,14 @@ class Header extends Component {
   };
 
   closeCart = () => this.setState({ cartOpen: false });
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onSearch = () => {
+    this.props.history.push("/products?search=" + this.state.search);
+  }
 
   render() {
     let signedInLinkComponent = [],
@@ -201,12 +210,15 @@ class Header extends Component {
                     <input
                       className="form-control"
                       id="navSearch"
+                      name="search"
                       type="search"
                       placeholder="Search"
                       aria-label="Search"
+                      onChange={this.onChange}
                     />
                     <div className="input-group-append">
                       <button
+                        onClick={this.onSearch}
                         className="btn py-0 px-2 my-sm-0 "
                         id="navSearchBtn"
                         type="submit"
@@ -249,6 +261,7 @@ const mapStateToProps = state => {
 };
 
 export default compose(
+  withRouter,
   firestoreConnect(getQuery),
   connect(mapStateToProps, { setFlashMessage })
 )(Header);
