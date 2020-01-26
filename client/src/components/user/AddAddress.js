@@ -8,7 +8,7 @@ import { withFirebase } from "react-redux-firebase";
 class AddAddress extends Component {
   constructor(props) {
     super(props);
-    const address = props.addresses[props.match.params.index];
+    const address = props.editMode ? props.addresses[props.match.params.index] : {};
     this.state = {
       line1: props.editMode ? address.line1 : "",
       line2: props.editMode ? address.line2 : "",

@@ -17,7 +17,10 @@ const rrfProps = {
       email: userData.email,
       mobileNo: userData.phoneNumber,
       cart: {},
-      wishlist: []
+      wishlist: [],
+      addresses: [],
+      orders: {},
+      coupons: []
     }),
     useFirestoreForProfile: true
   },
