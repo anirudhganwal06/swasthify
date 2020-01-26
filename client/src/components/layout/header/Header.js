@@ -109,7 +109,7 @@ class Header extends Component {
           <SideNav
             closeSideNav={this.closeSideNav}
             isSignedIn={this.props.isSignedIn}
-            categories={this.props.categories}
+            misc={this.props.misc}
           />
         ) : (
           ""
@@ -125,7 +125,7 @@ class Header extends Component {
             className="navbar-toggler mr-0 ml-0 p-1"
           > */}
             <span
-              className="fas fa-bars"
+              className="fas fa-bars navbar-toggler text-white"
               onClick={this.openSideNav}
             ></span>
           {/* </button> */}
