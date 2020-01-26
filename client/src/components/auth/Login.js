@@ -17,7 +17,7 @@ const Login = props => {
               props.history.push("/signup");
             else {
               props.setFlashMessage(true, "User logged in successfully!", 3000);
-              props.history.push("/");
+              props.history.goBack();
             }
           });
         return false;
