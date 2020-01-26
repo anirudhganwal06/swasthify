@@ -15,7 +15,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
       address: user.addresses[address],
       discount: user.cart.discount,
       mobileNo: "+911234567890",
-      orderDate: fs.Timestamp.fromDate(new Date()),
+      orderDate: admin.firestore.Timestamp.fromDate(new Date()),
       deliveryStatus: "processing",
       paymentMethod: paymentMode,
       paymentStatus: "pending",
@@ -51,7 +51,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
   batch.set(fs.doc("orders/" + order.id), order.data);
   batch.update(fs.doc("users/" + uid), {
     "cart.products": {},
-    "orders": fs.FieldValue.arrayUnion(order.id)
+    "orders": admin.firestore.FieldValue.arrayUnion(order.id)
   });
 
   await batch.commit();
