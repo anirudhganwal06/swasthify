@@ -126,8 +126,11 @@ nav {
   background-color: #122;
 }
 
-.navbar-toggler-icon {
-  font-size: 15px;
+.fa-bars {
+  color: #fff;
+  font-size: 22px;
+  padding: 0;
+  margin: 0;
 }
 
 .searchDivSm {

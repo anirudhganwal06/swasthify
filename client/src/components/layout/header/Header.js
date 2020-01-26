@@ -120,12 +120,15 @@ class Header extends Component {
           ""
         )}
         <nav className="navbar navbar-expand-lg navbar-dark">
-          <button
+          {/* <button
             onClick={this.openSideNav}
-            className="navbar-toggler mr-1 ml-0"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+            className="navbar-toggler mr-0 ml-0 p-1"
+          > */}
+            <span
+              className="fas fa-bars"
+              onClick={this.openSideNav}
+            ></span>
+          {/* </button> */}
           <Link className="navbar-brand" to="/">
             <img
               className="headerSwasthifyLogo mx-3"
@@ -133,7 +136,7 @@ class Header extends Component {
               alt="Swasthify"
             />
           </Link>
-          <div className="nav-link ml-auto mr-2 cartBtnSmall cPointer text-white">
+          <div className="nav-link ml-auto mr-0 pr-1 cartBtnSmall cPointer text-white">
             <span
               className="fas fa-search mr-4"
               onClick={this.toggleSearch}
