@@ -18,7 +18,6 @@ module.exports = async (req, res) => {
       TXNID: paytmParams.TXNID,
       BANKTXNID: paytmParams.BANKTXNID,
       paymentStatus: paytmParams.STATUS,
-      deliveryStatus: "processing",
       TXNDATE: paytmParams.TXNDATE,
       GATEWAYNAME: paytmParams.GATEWAYNAME,
       BANKNAME: paytmParams.BANKNAME,

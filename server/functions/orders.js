@@ -15,7 +15,8 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
       address: user.addresses[address],
       discount: user.cart.discount,
       mobileNo: "+911234567890",
-      orderDate: new Date(),
+      orderDate: fs.Timestamp.fromDate(new Date()),
+      deliveryStatus: "processing",
       paymentMethod: paymentMode,
       paymentStatus: "pending",
       subTotal: user.cart.subTotal,
@@ -33,10 +34,9 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
   const products = await Promise.all(promises)
 
   products.forEach(product => {
-    for(const variant in product.data().variants)
-    if(user.cart.products[product.id][variant]) {
+    for(const variant in user.cart.products[product.id]) {
       if(!order.data.products[product.id])
-      order.data.products[product.id] = {};
+        order.data.products[product.id] = {};
 
       order.data.products[product.id][variant] = {
         price: product.data().variants[variant].actualPrice,
@@ -49,7 +49,10 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
 
   batch.update(fs.doc('orders/config'), { lastOrder: admin.firestore.FieldValue.increment(1) });
   batch.set(fs.doc("orders/" + order.id), order.data);
-  batch.update(fs.doc("users/" + uid), { "cart.products": {} })
+  batch.update(fs.doc("users/" + uid), {
+    "cart.products": {},
+    "orders": fs.FieldValue.arrayUnion(order.id)
+  });
 
   await batch.commit();
   return { user, order };
