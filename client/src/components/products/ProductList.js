@@ -75,11 +75,12 @@ const getQuery = ({ location }) =>{
       }
     ];
   } else {
+
     return [
-      {
-        collection: "products",
-        where: [["unit", ">", 0]]
-      }
+      // {
+      //   collection: "products",
+      //   where: [["unit", ">", 0]]
+      // }
     ];
   }
 };

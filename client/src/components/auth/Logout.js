@@ -5,6 +5,7 @@ import { useFirebase } from "react-redux-firebase";
 const Logout = () => {
   useFirebase().logout();
   
+  
   return (
     <Redirect to="/"></Redirect>
   );

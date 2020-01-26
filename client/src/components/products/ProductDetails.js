@@ -6,6 +6,7 @@ import { firestoreConnect, isLoaded } from "react-redux-firebase";
 import classnames from "classnames";
 
 import loading from "../common/Loading";
+import { setFlashMessage } from "../../actions/flashActions";
 
 class ProductDetails extends Component {
   constructor() {
@@ -45,7 +46,7 @@ class ProductDetails extends Component {
       });
     }
     else
-      this.props.history.push("/login");
+      this.props.setFlashMessage(true, "Please, login to use wishlist!", 3000);
   };
 
   addToCart = () => {
@@ -67,7 +68,7 @@ class ProductDetails extends Component {
         });
       }
     else
-      this.props.history.push("/login");
+      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
   }
 
   handleLoadedImage = () => {
@@ -161,5 +162,5 @@ const mapStateToProps = (state, { match }) => ({
 export default compose(
   withRouter,
   firestoreConnect(getQuery),
-  connect(mapStateToProps)
+  connect(mapStateToProps, { setFlashMessage })
 )(ProductDetails);

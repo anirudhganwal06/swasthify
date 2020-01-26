@@ -18,6 +18,7 @@ class Header extends Component {
     this.state = {
       sideNavOpen: false,
       cartOpen: false,
+      searchOpen: false,
       search: ""
     };
   }
@@ -44,13 +45,18 @@ class Header extends Component {
 
   closeCart = () => this.setState({ cartOpen: false });
 
+  toggleSearch = () => {
+    // if ()
+    this.setState({ searchOpen: !this.state.searchOpen });
+  };
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
 
   onSearch = () => {
     this.props.history.push("/products?search=" + this.state.search);
-  }
+  };
 
   render() {
     let signedInLinkComponent = [],
@@ -114,7 +120,10 @@ class Header extends Component {
           ""
         )}
         <nav className="navbar navbar-expand-lg navbar-dark">
-          <button onClick={this.openSideNav} className="navbar-toggler">
+          <button
+            onClick={this.openSideNav}
+            className="navbar-toggler mr-1 ml-0"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
           <Link className="navbar-brand" to="/">
@@ -124,15 +133,19 @@ class Header extends Component {
               alt="Swasthify"
             />
           </Link>
-          <div
-            className="nav-link ml-auto mr-2 cartBtnSmall"
-            onClick={this.openCart}
-          >
-            <span className="fas fa-shopping-cart"></span>
+          <div className="nav-link ml-auto mr-2 cartBtnSmall cPointer text-white">
+            <span
+              className="fas fa-search mr-4"
+              onClick={this.toggleSearch}
+            ></span>
+            <span
+              className="fas fa-shopping-cart"
+              onClick={this.openCart}
+            ></span>
           </div>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item dropdown mx-1">
+              {/* <li className="nav-item dropdown mx-1">
                 <Link
                   className="nav-link dropdown-toggle"
                   to="#"
@@ -156,6 +169,14 @@ class Header extends Component {
                     More coming soon ...
                   </Link>
                 </div>
+              </li> */}
+              <li className="nav-item mx-1">
+                <span
+                  className="nav-link cPointer"
+                  title="Delivery in Faridabad only!"
+                >
+                  Faridabad
+                </span>
               </li>
               <li className="nav-item dropdown mx-1">
                 <Link
@@ -169,7 +190,10 @@ class Header extends Component {
                 >
                   Select Category
                 </Link>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div
+                  className="dropdown-menu text-capitalize"
+                  aria-labelledby="navbarDropdown"
+                >
                   {isLoaded(this.props.misc) ? categoriesComponent : loading()}
                 </div>
               </li>
@@ -230,13 +254,31 @@ class Header extends Component {
                 </form>
               </li>
               <li className="nav-item active mx-2">
-                <div className="nav-link" onClick={this.openCart}>
+                <div className="nav-link cPointer" onClick={this.openCart}>
                   <span className="fas fa-shopping-cart"></span>
                 </div>
               </li>
             </ul>
           </div>
         </nav>
+        {this.state.searchOpen ? (
+          <div className="searchDivSm">
+            <form onSubmit={this.onSearch}>
+              <input
+                className="form-control w-100"
+                name="search"
+                type="text"
+                autoFocus
+                placeholder="Search for products ..."
+                onChange={this.onChange}
+                value={this.state.search}
+              ></input>
+              <input type="submit" hidden />
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
       </header>
     );
   }
