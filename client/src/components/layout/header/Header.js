@@ -25,7 +25,10 @@ class Header extends Component {
 
   openSideNav = () => this.setState({ sideNavOpen: true });
 
-  closeSideNav = () => this.setState({ sideNavOpen: false });
+  closeSideNav = () => {
+    console.log("closeSideNav");
+    this.setState({ sideNavOpen: false })
+  };
 
   openCart = () => {
     if (this.props.isSignedIn) {

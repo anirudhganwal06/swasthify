@@ -16,14 +16,18 @@ const sideNav = props => {
     if (importedLinks[i].url === "/logout") {
       for (let i in extraLinks) {
         links.push(
-          <Link to={extraLinks[i].url} key={extraLinks[i].name}>
+          <Link to={extraLinks[i].url} key={extraLinks[i].name} onClick={props.closeSideNav}>
             <div className="sideNavLink pl-4">{extraLinks[i].name}</div>
           </Link>
         );
       }
     }
     links.push(
-      <Link to={importedLinks[i].url} key={importedLinks[i].name}>
+      <Link
+        to={importedLinks[i].url}
+        key={importedLinks[i].name}
+        onClick={props.closeSideNav}
+      >
         <div className="sideNavLink pl-4">{importedLinks[i].name}</div>
       </Link>
     );
@@ -32,7 +36,11 @@ const sideNav = props => {
   if(!props.isSignedIn) {
     for (let i in extraLinks) {
       links.push(
-        <Link to={extraLinks[i].url} key={extraLinks[i].name}>
+        <Link
+          to={extraLinks[i].url}
+          key={extraLinks[i].name}
+          onClick={props.closeSideNav}
+        >
           <div className="sideNavLink pl-4">{extraLinks[i].name}</div>
         </Link>
       );
@@ -44,8 +52,14 @@ const sideNav = props => {
     const categories = props.misc.categories;
     for (let i in categories) {
       categoriesLinks.push(
-        <Link to={"/products?category=" + categories[i]} key={categories[i]}>
-          <div className="sideNavLink pl-4 text-left text-capitalize">{categories[i]}</div>
+        <Link
+          to={"/products?category=" + categories[i]}
+          key={categories[i]}
+          onClick={props.closeSideNav}
+        >
+          <div className="sideNavLink pl-4 text-left text-capitalize">
+            {categories[i]}
+          </div>
         </Link>
       );
     }
