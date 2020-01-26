@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { signedInLinks, signedOutLinks, extraLinks } from "./links";
+import { isLoaded } from "react-redux-firebase";
 
 const sideNav = props => {
   let links = [];
@@ -15,14 +16,18 @@ const sideNav = props => {
     if (importedLinks[i].url === "/logout") {
       for (let i in extraLinks) {
         links.push(
-          <Link to={extraLinks[i].url} key={extraLinks[i].name}>
+          <Link to={extraLinks[i].url} key={extraLinks[i].name} onClick={props.closeSideNav}>
             <div className="sideNavLink pl-4">{extraLinks[i].name}</div>
           </Link>
         );
       }
     }
     links.push(
-      <Link to={importedLinks[i].url} key={importedLinks[i].name}>
+      <Link
+        to={importedLinks[i].url}
+        key={importedLinks[i].name}
+        onClick={props.closeSideNav}
+      >
         <div className="sideNavLink pl-4">{importedLinks[i].name}</div>
       </Link>
     );
@@ -31,7 +36,11 @@ const sideNav = props => {
   if(!props.isSignedIn) {
     for (let i in extraLinks) {
       links.push(
-        <Link to={extraLinks[i].url} key={extraLinks[i].name}>
+        <Link
+          to={extraLinks[i].url}
+          key={extraLinks[i].name}
+          onClick={props.closeSideNav}
+        >
           <div className="sideNavLink pl-4">{extraLinks[i].name}</div>
         </Link>
       );
@@ -39,16 +48,21 @@ const sideNav = props => {
   }
 
   let categoriesLinks = [];
-  const categories = props.categories;
-  for (let i in categories) {
-    let url = categories[i].name;
-    url = url.toLowerCase();
-    url = url.replace(/s$/, "");
-    categoriesLinks.push(
-      <Link to={"/products/" + url} key={url}>
-        <div className="sideNavLink pl-4 text-left">{categories[i].name}</div>
-      </Link>
-    );
+  if (isLoaded(props.misc)) {
+    const categories = props.misc.categories;
+    for (let i in categories) {
+      categoriesLinks.push(
+        <Link
+          to={"/products?category=" + categories[i]}
+          key={categories[i]}
+          onClick={props.closeSideNav}
+        >
+          <div className="sideNavLink pl-4 text-left text-capitalize">
+            {categories[i]}
+          </div>
+        </Link>
+      );
+    }
   }
 
   return (

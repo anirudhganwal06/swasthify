@@ -69,6 +69,10 @@ a:hover {
   justify-content: center;
 }
 
+.cPointer {
+  cursor: pointer;
+}
+
 .themeColorHoverBtn {
   background-color: #fff;
   color: #122;
@@ -122,28 +126,52 @@ nav {
   background-color: #122;
 }
 
-#navSearch {
-  background-color: #122;
-  border-color: #999;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+.fa-bars {
+  font-size: 22px;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
+.searchDivSm {
+  padding: 5px;
+  padding-top: 0;
+  background-color: #122;
+}
+
+.searchDivSm input,
+.searchDivSm input:focus,
+.searchDivSm input:active {
+  background-color: #233;
+  border-color: #0000;
+  color: white;
+}
+
+
+#navSearch {
+  background-color: #233;
+  border: none;
+  /* border-color: #999; */
+  /* border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px; */
+}
+
+
 #navSearch:focus {
-  border-color: #aaa;
+  /* border-color: #aaa; */
   color: #eee;
 }
 
 #navSearchBtn {
-  background-color: #122;
+  background-color: #233;
   color: #fff;
-  border: 2px solid #999;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+  /* border: 2px solid #999; */
+  /* border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px; */
 }
 
 #navSearchBtn:hover {
-  border-color: #aaa;
+  /* border-color: #aaa; */
   color: #eee;
 }
 
@@ -690,6 +718,7 @@ footer a:hover {
   padding: 10px;
   box-shadow: 0 0 2px -1px #000;
   background-color: #fff;
+  height: 100%;
 }
 
 .productCard:hover {
@@ -697,15 +726,23 @@ footer a:hover {
 }
 
 .productCard .imageContainer {
+  position: relative;
   margin: 0 auto;
-  height: 180px;
+  padding-top: 80%;
   width: 80%;
+  /* padding-left: auto;
+  padding-right: auto; */
+  width: auto;
 }
 
 .productCard .imageContainer img {
+  position: absolute;
+  top: 0;
   margin-top: 5%;
   height: 95%;
   width: 100%;
+  /* width: 100%;
+  max-width: 300px; */
   transition: 500ms;
 }
 
