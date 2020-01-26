@@ -110,7 +110,7 @@ class ProductCard extends Component {
 
     return (
       <div className="productCard">
-        <span className="badge badge-success">{this.props.tag}</span>
+        {/* <span className="badge badge-success">{this.props.tag}</span> */}
         {this.state.imageLoading ? loading() : ""}
         <div className={classnames("imageContainer", {"d-none": this.state.imageLoading})}>
           <img

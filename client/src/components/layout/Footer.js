@@ -39,16 +39,6 @@ class Footer extends Component {
                   <br />
                   <a href="/about-us">Contact Us</a>
                   <br />
-                  <a href="/about-us">My Account</a>
-                  <br />
-                </div>
-                <div className="col-12 col-sm-6 col-md-3">
-                  <a href="/about-us">Order History</a>
-                  <br />
-                  <a href="/about-us">Advanced Search</a>
-                  <br />
-                  <a href="/about-us">Login</a>
-                  <br />
                 </div>
               </div>
             </div>
