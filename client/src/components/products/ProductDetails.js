@@ -20,11 +20,15 @@ class ProductDetails extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    return isLoaded(props.wishlist, props.cart) ? {
-      ...state,
-      wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
-      inCart: !!props.cart[props.match.params.prodId] && !!props.cart[props.match.params.prodId][state.variant]
-    } : state;
+    return isLoaded(props.wishlist, props.cart)
+      ? {
+          ...state,
+          wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
+          inCart:
+            !!props.cart.products[props.match.params.prodId] &&
+            !!props.cart.products[props.match.params.prodId][state.variant]
+        }
+      : state;
   }
 
   selectVariant = e => {
@@ -34,42 +38,54 @@ class ProductDetails extends Component {
   };
 
   toggleWishlist = () => {
-    if(this.props.uid) {
+    if (this.props.uid) {
       const firestore = this.props.firestore;
-      firestore.update({
-        collection: "users",
-        doc: this.props.uid
-      }, {
-        wishlist: this.state.wishlisted
-          ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
-          : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
-      });
-    }
-    else
+      firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          wishlist: this.state.wishlisted
+            ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
+            : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+        }
+      );
+    } else
       this.props.setFlashMessage(true, "Please, login to use wishlist!", 3000);
   };
 
   addToCart = () => {
-    if(this.props.uid)
+    if (this.props.uid)
       if (this.state.inCart) {
-        this.props.firestore.update({
-          collection: "users",
-          doc: this.props.uid
-        }, {
-          ["cart." + this.props.match.params.prodId + "." + this.state.variant]:
-          this.props.firestore.FieldValue.delete()
-        });
+        this.props.firestore.update(
+          {
+            collection: "users",
+            doc: this.props.uid
+          },
+          {
+            ["cart.products." +
+            this.props.match.params.prodId +
+            "." +
+            this.state.variant]: this.props.firestore.FieldValue.delete()
+          }
+        );
       } else {
-        this.props.firestore.update({
-          collection: "users",
-          doc: this.props.uid
-        }, {
-          ["cart." + this.props.match.params.prodId + "." + this.state.variant]: 1
-        });
+        this.props.firestore.update(
+          {
+            collection: "users",
+            doc: this.props.uid
+          },
+          {
+            ["cart.products." +
+            this.props.match.params.prodId +
+            "." +
+            this.state.variant]: this.props.firestore.FieldValue.increment(1)
+          }
+        );
       }
-    else
-      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
-  }
+    else this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+  };
 
   handleLoadedImage = () => {
     this.setState({ imageLoading: false });
@@ -102,7 +118,9 @@ class ProductDetails extends Component {
             <div className="col-12 col-md-6 text-center">
               {this.state.imageLoading ? loading() : ""}
               <img
-                className={classnames("productImage", { "d-none": this.state.imageLoading })}
+                className={classnames("productImage", {
+                  "d-none": this.state.imageLoading
+                })}
                 src={this.props.product.image}
                 alt={this.props.product.image_alt}
                 onLoad={this.handleLoadedImage}
@@ -119,7 +137,7 @@ class ProductDetails extends Component {
                 ></span>
               </p>
               <p className="productPrice">
-                ₹ {this.props.product.variants[this.state.variant].actualPrice}
+                ₹ {this.props.product.variants[this.state.variant].discountedPrice}
               </p>
               <p>Available in:</p>
               <span>{qtyBtns}</span>
@@ -146,17 +164,19 @@ class ProductDetails extends Component {
   }
 }
 
-const getQuery = ({ match }) => [{
-  collection: "products",
-  doc: match.params.prodId,
-  storeAs: match.params.prodId
-}];
+const getQuery = ({ match }) => [
+  {
+    collection: "products",
+    doc: match.params.prodId,
+    storeAs: match.params.prodId
+  }
+];
 
 const mapStateToProps = (state, { match }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,
-  product: state.firestore.data[match.params.prodId],
+  product: state.firestore.data[match.params.prodId]
 });
 
 export default compose(

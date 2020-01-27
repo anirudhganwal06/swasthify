@@ -123,7 +123,7 @@ class ProductCard extends Component {
         <div className="row mt-1">
           <div className="col-6">
             <p className="productPrice">
-              ₹ {this.props.variants[this.state.variant].actualPrice}
+              ₹ {this.props.variants[this.state.variant].discountedPrice}
             </p>
           </div>
           <div className="col-6 align-items-center float-right">

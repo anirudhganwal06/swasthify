@@ -20,7 +20,7 @@ module.exports = functions.firestore.document('users/{userId}')
         for (const product in data) {
           if (product === actualProduct.id) {
             for (const variant in data[product]) {
-              total += actualProduct.data().variants[variant].actualPrice * data[product][variant];
+              total += actualProduct.data().variants[variant].discountedPrice * data[product][variant];
             }
           }
         }

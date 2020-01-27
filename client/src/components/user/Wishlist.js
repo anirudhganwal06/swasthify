@@ -75,7 +75,7 @@ class Wishlist extends Component {
                 {product.variants[0].size + " " + product.unit}
               </p>
               <p className="productPrice">
-                {"₹ " + product.variants[0].actualPrice}
+                {"₹ " + product.variants[0].discountedPrice}
               </p>
             </div>
           </div>

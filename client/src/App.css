@@ -696,6 +696,10 @@ footer a:hover {
 
 /****************** products list ***************/
 
+#productListSec {
+  padding: 0;
+}
+
 .productListContainer {
   margin: 10px auto;
   background-color: #fff;

@@ -39,7 +39,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
         order.data.products[product.id] = {};
 
       order.data.products[product.id][variant] = {
-        price: product.data().variants[variant].actualPrice,
+        price: product.data().variants[variant].discountedPrice,
         quantity: user.cart.products[product.id][variant]
       }
     }

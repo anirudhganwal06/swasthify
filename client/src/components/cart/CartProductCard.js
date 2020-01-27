@@ -21,7 +21,7 @@ const cartProductCard = props => (
               props.product.unit}
         </p>
         <p className="productPrice">
-            ₹ {props.product.variants[props.variant].actualPrice}
+            ₹ {props.product.variants[props.variant].discountedPrice}
         </p>
         <span className="fas fa-times"></span>
         <InputStepper
@@ -31,7 +31,7 @@ const cartProductCard = props => (
         />
         <div className="cartFinalProductPrice">
           {"₹ " +
-            (props.product.variants[props.variant].actualPrice *
+            (props.product.variants[props.variant].discountedPrice *
               props.product.selectedVariants[props.variant])}
         </div>
       </div>

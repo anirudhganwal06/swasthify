@@ -19,12 +19,12 @@ const orderSummary = ({ order }) => {
                 " " + order.products[i].unit}
               </p>
               <span>
-                {"₹ " + order.products[i].variants[v].actualPrice}
+                {"₹ " + order.products[i].variants[v].discountedPrice}
               </span>
               <span className="fas fa-times ml-2 mr-2"></span>
               <span>{order.products[i].selectedVariants[v]}</span>
               <div className="finalProductPrice">
-                {"₹ " + order.products[i].variants[v].actualPrice *
+                {"₹ " + order.products[i].variants[v].discountedPrice *
                 order.products[i].selectedVariants[v]}
               </div>
             </div>
