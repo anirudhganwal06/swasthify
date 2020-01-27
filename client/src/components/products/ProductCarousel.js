@@ -71,7 +71,6 @@ const ProductCarousel = props => {
           <Carousel
             responsive={responsive}
           >
-            {console.log("productCardContainers")}
             {productCardContainers}
           </Carousel>
           {isLoaded(props.products) ? "" : loading()}
