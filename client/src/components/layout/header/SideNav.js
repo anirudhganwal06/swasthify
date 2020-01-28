@@ -69,7 +69,7 @@ const sideNav = props => {
     <div className="sideNavContainer">
       <div className="sideNav">
         <div className="sideNavHeading vCenterContents hCenterContents">
-          <h1>Welcome, {props.username}</h1>
+          <h5 className="text-white">Welcome, {props.username ? props.username : "user"}</h5>
         </div>
         <div className="sideNavLinks text-left">{links}</div>
         <hr />
