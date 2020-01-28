@@ -86,7 +86,7 @@ class Signup extends Component {
                 error={this.state.errors.email}
                 required
               />
-              <button className="btn btn-primary btn-block" type="submit">
+              <button className="btn themeColorHoverBtn btn-block" type="submit">
                 Signup
               </button>
             </form>

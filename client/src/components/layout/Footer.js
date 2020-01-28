@@ -48,13 +48,13 @@ class Footer extends Component {
             <div className="col-12">
               <hr className="greyLine" />
             </div>
-            <div className="col-9 col-sm-6 col-lg-3 m-3 m-lg-0 order-lg-2">
+            {/* <div className="col-9 col-sm-6 col-lg-3 m-3 m-lg-0 order-lg-2">
               <img
                 id="paymentIcon"
                 src="/assets/images/paymentIcon.webp"
                 alt="Payment Methods"
               />
-            </div>
+            </div> */}
             <div className="col-12 col-lg-9 order-lg-1">
               <p>Swasthify Corporation &copy; 2019. All Rights Reserved</p>
             </div>
