@@ -102,7 +102,7 @@ class MyProfile extends Component {
       <div className="container p-3">
         <div className="row justify-content-center mb-5">
           <div className="col-12 text-center">
-            <h1>My Profile</h1>
+            <h1 className="themeHeadingLg">My Profile</h1>
           </div>
           <div className="col-12 col-md-8 mt-4">
             <form>

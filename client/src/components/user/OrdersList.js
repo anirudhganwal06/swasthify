@@ -38,7 +38,7 @@ class OrdersList extends Component {
 
     return (
       <div className="container p-3">
-        <h1 className="text-center">My Orders</h1>
+        <h1 className="text-center themeHeadingLg">My Orders</h1>
         {isLoaded(this.props.orders) ? orderCards.reverse() : loading()}
       </div>
     );

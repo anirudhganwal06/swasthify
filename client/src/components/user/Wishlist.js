@@ -87,7 +87,7 @@ class Wishlist extends Component {
       <div className="container p-3">
         <div className="row justify-content-center mb-5">
           <div className="col-12 text-center">
-            <h1>My Wishlist</h1>
+            <h1 className="themeHeadingLg">My Wishlist</h1>
           </div>
           <div className="col-12 col-md-8 mt-3">{productsList}</div>
         </div>

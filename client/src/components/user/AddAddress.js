@@ -55,7 +55,7 @@ class AddAddress extends Component {
       <div className="container p-3">
         <div className="row justify-content-center">
           <div className="col-12 text-center">
-            {this.state.editMode ? <h1>Edit Address</h1> : <h1>Add Address</h1>}
+            {this.state.editMode ? <h1 className="themeHeadingLg">Edit Address</h1> : <h1 className="themeHeadingLg">Add Address</h1>}
           </div>
           <div className="col-12 col-md-8 col-xl-6">
             <form noValidate onSubmit={this.onSubmit}>

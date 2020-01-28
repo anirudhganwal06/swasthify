@@ -17,7 +17,7 @@ class AboutUs extends Component {
 
     return (
       <div className="container p-3 pb-3">
-        <h1 className="text-center mb-4">About Us</h1>
+        <h1 className="text-center mb-4 themeHeadingLg">About Us</h1>
         {this.state.loadingVideo ? loading() : ""}
         <div className={classnames("embed-responsive embed-responsive-16by9", { "d-none": this.state.loadingVideo })}>
           <iframe className="embeded-responsive-item" onLoad={this.onVideoLoad} title="Swasthify - About Us" src="https://www.youtube.com/embed/FcBb8FICL6A" allowFullScreen></iframe>

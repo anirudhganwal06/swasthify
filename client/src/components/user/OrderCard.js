@@ -16,14 +16,14 @@ const OrderCard = props => {
           <div className="row">
             {(props.products && props.products[i]) ? (
               <React.Fragment>
-                <div className="col-2 colInRow">
+                <div className="col-4 col-sm-3 col-md-2 colInRow">
                   <Link to={"/product/" + i}>
                     <div className="imageContainer">
                       <img src={props.products[i].image} alt="Product " />
                     </div>
                   </Link>
                 </div>
-                <div className="col-10 colInRow">
+                <div className="col-8 col-sm-9 col-md-10 colInRow">
                   <p>{props.products[i] && props.products[i].name}</p>
                   <small className="text-muted">
                     {props.products[i].variants[v].size + " " + props.products[i].unit}
