@@ -27,7 +27,7 @@ class Header extends Component {
 
   closeSideNav = () => {
     console.log("closeSideNav");
-    this.setState({ sideNavOpen: false })
+    this.setState({ sideNavOpen: false });
   };
 
   openCart = () => {
@@ -110,6 +110,7 @@ class Header extends Component {
       <header className="text-center">
         {this.state.sideNavOpen === true ? (
           <SideNav
+            username={this.props.name || this.props.mobileNo}
             closeSideNav={this.closeSideNav}
             isSignedIn={this.props.isSignedIn}
             misc={this.props.misc}
@@ -127,10 +128,10 @@ class Header extends Component {
             onClick={this.openSideNav}
             className="navbar-toggler mr-0 ml-0 p-1"
           > */}
-            <span
-              className="fas fa-bars navbar-toggler text-white"
-              onClick={this.openSideNav}
-            ></span>
+          <span
+            className="fas fa-bars navbar-toggler text-white"
+            onClick={this.openSideNav}
+          ></span>
           {/* </button> */}
           <Link className="navbar-brand" to="/">
             <img
