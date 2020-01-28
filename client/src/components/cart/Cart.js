@@ -5,19 +5,19 @@ import { connect } from "react-redux";
 import { withFirestore } from "react-redux-firebase";
 
 import CartProductCard from "./CartProductCard";
+import loading from "../common/Loading";
 
 class Cart extends Component {
   constructor() {
     super();
     this.state = {
-      products: {}
+      products: {},
+      loading: true
     };
   }
 
   decUnits = (productId, variant) => {
-    console.log("dec unit")
-    // if (this.state.products[productId].selectedVariants[variant] > 0) {
-
+    if (this.state.products[productId].selectedVariants[variant] > 1) {
       this.props.firestore.update(
         {
           collection: "users",
@@ -25,14 +25,22 @@ class Cart extends Component {
         },
         {
           ["cart.products." + productId + "." + variant]:
-            this.state.products[productId].selectedVariants[variant] > 1
-              ? // this.props.firestore.FieldValue.increment(-1)
-                this.state.products[productId].selectedVariants[variant] - 1
-              : this.props.firestore.FieldValue.delete()
+            this.state.products[productId].selectedVariants[variant] - 1
         }
       );
-      // };
+    } else {
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." +
+          productId]: this.props.firestore.FieldValue.delete()
+        }
+      );
     }
+  };
 
   incUnits = (productId, variant) => {
     console.log("inc working");
@@ -51,6 +59,8 @@ class Cart extends Component {
   };
 
   fetchProducts = () => {
+    // if (this.state.products)
+    // this.setState({ loading: true });
     const promises = [];
 
     for (const product in this.props.cart.products)
@@ -66,7 +76,7 @@ class Cart extends Component {
               ...product.data()
             })
         );
-        this.setState({ products });
+        this.setState({ products, loading: false });
       })
       .catch(error => console.log("Error getting document:", error));
   };
@@ -97,7 +107,7 @@ class Cart extends Component {
         );
       }
     }
-
+    // console.log(this.state.products);
     return (
       <div className="cartContainer">
         <div className="cartEmptySpace" onClick={this.props.closeCart}></div>
@@ -117,18 +127,18 @@ class Cart extends Component {
               <div className="float-right">₹ {this.props.cart.subTotal}</div>
               <br />
               <div className="float-left">Discount</div>
-              <div className="float-right">
-                ₹ {this.props.cart.discount}
-              </div>
+              <div className="float-right">₹ {this.props.cart.discount}</div>
               <br />
               <hr />
               <div className="float-left">Total</div>
-              <div className="float-right">
-                ₹ {this.props.cart.total}
-              </div>
+              <div className="float-right">₹ {this.props.cart.total}</div>
               <br />
             </div>
-            <div className="productsInCartContainer">{productsInCart}</div>
+            {this.state.loading ? (
+              loading()
+            ) : (
+              <div className="productsInCartContainer">{productsInCart}</div>
+            )}
           </div>
           <div className="cartFooter">
             <Link to="/checkout">

@@ -79,18 +79,32 @@ class ProductCard extends Component {
   };
 
   decreaseQty = () => {
-    this.props.firestore.update(
-      {
-        collection: "users",
-        doc: this.props.uid
-      },
-      {
-        ["cart.products." + this.props.productId + "." + this.state.variant]:
-          this.props.cart.products[this.props.productId][this.state.variant] > 1
-            ? this.props.firestore.FieldValue.increment(-1)
-            : this.props.firestore.FieldValue.delete()
-      }
-    );
+    if (
+      this.props.cart.products[this.props.productId][this.state.variant] > 1
+    ) {
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." + this.props.productId + "." + this.state.variant]:
+            this.props.cart.products[this.props.productId][this.state.variant] -
+            1
+        }
+      );
+    } else {
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." +
+          this.props.productId]: this.props.firestore.FieldValue.delete()
+        }
+      );
+    }
   };
 
   handleLoadedImage = () => {
