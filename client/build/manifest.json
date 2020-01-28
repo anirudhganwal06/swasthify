@@ -1,15 +1,9 @@
 {
-  "short_name": "Swasthify",
-  "name": "Swasthify - Best Quality Free Grocery Delivery in Faridabad",
-  "icons": [
-    {
-      "src": "/assets/images/swasthifyFavicon.webp",
-      "type": "image/webp",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": "/",
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "icons": [],
+  "start_url": ".",
   "display": "standalone",
-  "theme_color": "#122",
-  "background_color": "#122"
+  "theme_color": "#000000",
+  "background_color": "#995555"
 }
