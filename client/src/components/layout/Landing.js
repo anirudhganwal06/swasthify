@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 // import ProductCarousel from "../products/ProductCarousel";
-// import BannersCarousel from "../common/BannersCarousel";
+import BannersCarousel from "../common/BannersCarousel";
 // import ShowcaseFeatures from "../common/ShowcaseFeatures";
 // import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
 import ProductsCarousel from "../products/ProductCarousel";
@@ -50,9 +50,9 @@ class Landing extends Component {
 
     return (
       <section id="landingSec">
+        <BannersCarousel />
         {this.state.loading ? loading("80px") : <div>{categoryProductCarousel}</div>}
         {/* <ShowcaseBanneredFeatures /> */}
-        {/* <BannersCarousel /> */}
         {/* <ShowcaseFeatures /> */}
       </section>
     );

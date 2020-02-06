@@ -109,7 +109,7 @@ class Checkout extends Component {
       <div className="container p-3">
         <div className="row justify-content-center">
           <div className="col-12 text-center">
-            <h1>Checkout</h1>
+            <h1 className="themeHeadingLg">Checkout</h1>
           </div>
           <div className="col-12 col-md-7 col-xl-6">
             <form

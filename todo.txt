@@ -1,0 +1,4 @@
+login / signup page opening on logged in user
+going to checkout page on no items in cart
+all form validations
+online payment leads to error: could not handle the request

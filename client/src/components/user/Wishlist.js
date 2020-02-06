@@ -3,23 +3,28 @@ import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { withFirestore } from "react-redux-firebase";
+import loading from "../common/Loading";
 
 class Wishlist extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      products: []
+      products: [],
+      loading: true
     };
   }
 
   removeFromWishlist = id => {
-    this.props.firestore.update({
-      collection: "users",
-      doc: this.props.uid
-    }, {
-      wishlist: this.props.firestore.FieldValue.arrayRemove(id)
-    });
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        wishlist: this.props.firestore.FieldValue.arrayRemove(id)
+      }
+    );
   };
 
   fetchProducts = () => {
@@ -34,7 +39,8 @@ class Wishlist extends Component {
           products: products.map(product => ({
             id: product.id,
             ...product.data()
-          }))
+          })),
+          loading: false
         })
       )
       .catch(error => console.log("Error getting document:", error));
@@ -85,11 +91,20 @@ class Wishlist extends Component {
 
     return (
       <div className="container p-3">
-        <div className="row justify-content-center mb-5">
+        <div className="row justify-content-center">
           <div className="col-12 text-center">
             <h1 className="themeHeadingLg">My Wishlist</h1>
           </div>
-          <div className="col-12 col-md-8 mt-3">{productsList}</div>
+          {this.state.loading ? (
+            loading("80px")
+          ) : this.state.products.length === 0 ? (
+            <div className="text-center">
+              <span className="far fa-frown fa-5x pt-3"></span>
+              <h5 className="text-center mt-3">No product in wishlist!</h5>
+            </div>
+          ) : (
+            <div className="col-12 col-md-8 mt-3">{productsList}</div>
+          )}
         </div>
       </div>
     );

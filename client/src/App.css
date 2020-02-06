@@ -114,6 +114,15 @@ a:hover {
   margin: 10px 0;
 }
 
+@media screen and (max-width: 575px) {
+  .themeHeadingLg {
+    font-size: 25px;
+  }
+  p {
+    font-size: 14px;
+  }
+}
+
 /********************* header ***********************/
 
 header {
