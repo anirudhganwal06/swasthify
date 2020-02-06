@@ -886,7 +886,7 @@ footer a:hover {
 .productCarouselContainer {
   margin: 10px 0;
   background-color: #fff;
-  box-shadow: 0 0 2px -1px #000;
+  box-shadow: 0 0 2px -1px #122;
   padding: 0 10px;
   overflow: hidden;
 }

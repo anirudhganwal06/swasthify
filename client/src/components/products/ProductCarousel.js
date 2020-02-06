@@ -35,7 +35,7 @@ const ProductCarousel = props => {
     <div className={classnames("container", { "d-none": !productsPresent })}>
       <div className="productCarouselContainer">
         <div className="clearfix">
-          <h3 className="text-capitalize mb-1 float-left">
+          <h3 className="text-capitalize mb-1 float-left themeHeadingLg ml-2">
             {props.category + "s" || props.tag}
           </h3>
           <Link
