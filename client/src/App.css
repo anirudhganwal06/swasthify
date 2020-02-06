@@ -882,14 +882,27 @@ footer a:hover {
   overflow: hidden;
 }
 
+.productCarouselMain {
+  overflow-x: auto;
+}
+
+.productCarouselMain::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.productCarouselMain {
+  -ms-overflow-style: none;
+}
+
 .productCarouselContainerInner {
   width: 10000%;
 }
 
 .carouselProductCard {
   display: inline-block;
-  margin: 12px;
-  width: 250px;
+  margin: 5px;
+  width: 263px;
 }
 
 #productCarouselSec .carouselName {
