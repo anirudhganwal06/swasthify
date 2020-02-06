@@ -45,7 +45,7 @@ const ProductList = ({ products, location }) => {
         {isLoaded(products) ? (
           <div className="row justify-content-center">{productList}</div>
         ) : (
-          loading()
+          loading("80px")
         )}
       </div>
     </section>

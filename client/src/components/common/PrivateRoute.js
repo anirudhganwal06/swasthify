@@ -12,7 +12,7 @@ const PrivateRoute = ({ component: Component, auth, isLoaded, ...rest }) => (
         ? (auth === true
           ? <Component {...props} />
           : <Redirect to="/login" />)
-        : loading()
+        : loading("80px")
     }
   />
 );

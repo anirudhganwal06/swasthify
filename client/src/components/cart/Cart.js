@@ -17,15 +17,22 @@ class Cart extends Component {
   }
 
   decUnits = (productId, variant) => {
-    if (this.state.products[productId].selectedVariants[variant] > 1) {
+    let toDelete = true;
+    for (let variant in this.state.products[productId].selectedVariants) {
+      if (this.state.products[productId].selectedVariants[variant] > 1) {
+        toDelete = false;
+        break;
+      }
+    }
+    if (toDelete) {
       this.props.firestore.update(
         {
           collection: "users",
           doc: this.props.uid
         },
         {
-          ["cart.products." + productId + "." + variant]:
-            this.state.products[productId].selectedVariants[variant] - 1
+          ["cart.products." +
+          productId]: this.props.firestore.FieldValue.delete()
         }
       );
     } else {
@@ -35,8 +42,8 @@ class Cart extends Component {
           doc: this.props.uid
         },
         {
-          ["cart.products." +
-          productId]: this.props.firestore.FieldValue.delete()
+          ["cart.products." + productId + "." + variant]:
+            this.state.products[productId].selectedVariants[variant] - 1
         }
       );
     }
@@ -119,7 +126,7 @@ class Cart extends Component {
             >
               <span className="fas fa-arrow-left"></span>
             </div>
-            <h1>My Cart</h1>
+            <h3>My Cart</h3>
           </div>
           <div className="cartMain text-left">
             <div className="billContainer">
@@ -135,7 +142,7 @@ class Cart extends Component {
               <br />
             </div>
             {this.state.loading ? (
-              loading()
+              loading("80px")
             ) : (
               <div className="productsInCartContainer">{productsInCart}</div>
             )}

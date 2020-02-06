@@ -201,7 +201,7 @@ class Header extends Component {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdown"
                 >
-                  {isLoaded(this.props.misc) ? categoriesComponent : loading()}
+                  {isLoaded(this.props.misc) ? categoriesComponent : loading("80px")}
                 </div>
               </li>
               <li className="nav-item mx-1">

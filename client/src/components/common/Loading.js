@@ -1,9 +1,9 @@
 import React from "react";
 
-const loading = () => {
+const loading = size => {
   return (
     <div className="loadingPage text-center">
-      <img src="/assets/spinners/eclipse.svg" alt="Loading ..." />
+      <img width={size} height={size} src="/assets/spinners/pulse.svg" alt="Loading ..." />
     </div>
   );
 };

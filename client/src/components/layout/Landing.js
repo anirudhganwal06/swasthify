@@ -50,7 +50,7 @@ class Landing extends Component {
 
     return (
       <section id="landingSec">
-        {this.state.loading ? loading() : <div>{categoryProductCarousel}</div>}
+        {this.state.loading ? loading("80px") : <div>{categoryProductCarousel}</div>}
         {/* <ShowcaseBanneredFeatures /> */}
         {/* <BannersCarousel /> */}
         {/* <ShowcaseFeatures /> */}

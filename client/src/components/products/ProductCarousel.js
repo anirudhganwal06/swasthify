@@ -73,7 +73,7 @@ const ProductCarousel = props => {
           >
             {productCardContainers}
           </Carousel>
-          {isLoaded(props.products) ? "" : loading()}
+          {isLoaded(props.products) ? "" : loading("80px")}
         </div>
     </div>
   );

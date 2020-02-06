@@ -94,7 +94,7 @@ class ProductDetails extends Component {
   render() {
     const qtyBtns = [];
     if (!isLoaded(this.props.product)) {
-      return loading();
+      return loading("80px");
     }
 
     for (const i in this.props.product.variants)
@@ -116,7 +116,7 @@ class ProductDetails extends Component {
         <div className="container productDetailsContainer">
           <div className="row">
             <div className="col-12 col-md-6 text-center">
-              {this.state.imageLoading ? loading() : ""}
+              {this.state.imageLoading ? loading("80px") : ""}
               <img
                 className={classnames("productImage", {
                   "d-none": this.state.imageLoading

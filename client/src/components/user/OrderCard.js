@@ -34,7 +34,7 @@ const OrderCard = props => {
                     {" " + order.products[i][v].quantity}
                   </p>
                 </div>
-              </React.Fragment>) : loading()}
+              </React.Fragment>) : loading("80px")}
           </div>
         </div>
       );
