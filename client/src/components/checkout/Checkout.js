@@ -117,6 +117,7 @@ class Checkout extends Component {
               method="POST"
             >
               <input type="hidden" name="uid" value={this.props.uid} />
+              <input type="hidden" name="reciever" value={this.state.recieverName} />
               <InputGroup
                 id="recieverName"
                 label="Reciever's Name"

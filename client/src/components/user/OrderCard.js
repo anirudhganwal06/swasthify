@@ -48,7 +48,7 @@ const OrderCard = props => {
           {order.deliveryStatus === "delivered" ? (
             <span>
               <span className="text-muted">Delivered on </span>
-              {order.deliveryDate}
+              {order.deliveryDate.toDate().toDateString()}
             </span>
           ) : (
             <span>
