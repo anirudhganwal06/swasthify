@@ -6,7 +6,7 @@ const { createOrder } = require('../orders');
 
 module.exports = async (req, res) => {
   if(!(req.body.uid && req.body.address && req.body.paymentMode))
-    return res.status(400).send('Parameters not passes');
+    return res.status(400).send('Parameters missing');
 
   const { user, order } = await createOrder(req.body);
 

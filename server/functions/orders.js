@@ -2,12 +2,15 @@ const admin = require('./firebase');
 
 const fs = admin.firestore();
 
-exports.createOrder = async ({ uid, address, paymentMode }) => {
+exports.createOrder = async ({ uid, reciever, address, paymentMode }) => {
   const userDoc = await fs.doc('users/' + uid).get();
   const orderMetadataDoc = await fs.doc('orders/config').get();
 
   const user = userDoc.data();
   const orderMetadata = orderMetadataDoc.data();
+
+  if (!reciever)
+    reciever = user.displayName;
 
   const order = {
     id: orderMetadata.prefix + ("00000000" + (Number(orderMetadata.lastOrder) + 1)).slice(-8),
@@ -22,6 +25,7 @@ exports.createOrder = async ({ uid, address, paymentMode }) => {
       subTotal: user.cart.subTotal,
       total: user.cart.total,
       products: {},
+      reciever: reciever,
       user: userDoc.id
     }
   };
