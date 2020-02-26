@@ -31,19 +31,20 @@ class Header extends Component {
   };
 
   openCart = () => {
-    if (this.props.isSignedIn) {
-      if (this.props.cart) {
-        this.setState({ cartOpen: true });
-      } else {
+    if (this.props.isSignedIn)
+      if (this.props.cart)
+        if(Object.keys(this.props.cart).length !== 0)
+          this.setState({ cartOpen: true });
+        else
+          this.props.setFlashMessage(true, "No Products in Cart!", 3000);
+      else
         this.props.setFlashMessage(
           true,
           "Please wait for the login process to succeed!",
           3000
         );
-      }
-    } else {
+    else
       this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
-    }
   };
 
   closeCart = () => this.setState({ cartOpen: false });
