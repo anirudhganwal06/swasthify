@@ -26,7 +26,7 @@ const OrderCard = props => {
                 <div className="col-8 col-sm-9 col-md-10 colInRow">
                   <p>{props.products[i] && props.products[i].name}</p>
                   <small className="text-muted">
-                    {props.products[i].variants[v].size + " " + props.products[i].unit}
+                    {props.products[i].variants[v].size}
                   </small>
                   <p className="bold">
                     {"₹ " + order.products[i][v].price + " "}

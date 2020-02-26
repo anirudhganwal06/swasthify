@@ -117,7 +117,7 @@ class ProductCard extends Component {
     for (const v in this.props.variants) {
       variants.push(
         <option value={v} key={v}>
-          {this.props.variants[v].size + " " + this.props.unit}
+          {this.props.variants[v].size}
         </option>
       );
     }

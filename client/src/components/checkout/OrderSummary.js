@@ -15,8 +15,7 @@ const orderSummary = ({ order }) => {
             <div className="col-9">
               <p>{order.products[i].name}</p>
               <p>
-                {order.products[i].variants[v].size + 
-                " " + order.products[i].unit}
+                {order.products[i].variants[v].size}
               </p>
               <span>
                 {"₹ " + order.products[i].variants[v].discountedPrice}

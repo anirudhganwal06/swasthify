@@ -78,7 +78,7 @@ class Wishlist extends Component {
               <span className="badge badge-success">{product.tag}</span>
               <p className="productName">{product.name}</p>
               <p className="productName">
-                {product.variants[0].size + " " + product.unit}
+                {product.variants[0].size}
               </p>
               <p className="productPrice">
                 {"₹ " + product.variants[0].discountedPrice}

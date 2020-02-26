@@ -108,7 +108,7 @@ class ProductDetails extends Component {
           onClick={this.selectVariant}
           value={i}
         >
-          {this.props.product.variants[i].size + " " + this.props.product.unit}
+          {this.props.product.variants[i].size}
         </button>
       );
     return (

@@ -17,8 +17,7 @@ const cartProductCard = props => (
         <span className="badge badge-success">{props.product.tag}</span>
         <p className="productName">{props.product.name}</p>
         <p>
-          {props.product.variants[props.variant].size +
-              props.product.unit}
+          {props.product.variants[props.variant].size}
         </p>
         <p className="productPrice">
             ₹ {props.product.variants[props.variant].discountedPrice}
