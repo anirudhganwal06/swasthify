@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
   if(paytmChecksum.verifychecksum(paytmParams, paytmConfig.MERCHANT_KEY, checksumhash)) {
     const orderParams = {
       BANKTXNID: paytmParams.BANKTXNID,
-      paymentStatus: paytmParams.STATUS,
+      paymentStatus: paytmParams.STATUS.substr(4),
     };
     
     if(paytmParams.STATUS === "TXN_SUCCESS") {
