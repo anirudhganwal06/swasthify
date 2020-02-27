@@ -18,7 +18,6 @@ module.exports = async (req, res) => {
     const orderParams = {
       BANKTXNID: paytmParams.BANKTXNID,
       paymentStatus: paytmParams.STATUS,
-      TXNDATE: paytmParams.TXNDATE
     };
     
     if(paytmParams.STATUS === "TXN_SUCCESS") {
@@ -26,6 +25,7 @@ module.exports = async (req, res) => {
       orderParams["BANKNAME"] = paytmParams.BANKNAME;
       orderParams["TXNID"] = paytmParams.TXNID;
       orderParams["PAYMENTMODE"] = paytmParams.PAYMENTMODE;
+      orderParams["TXNDATE"] = paytmParams.TXNDATE;
     }
 
     await updateOrder(paytmParams.ORDERID, orderParams);
