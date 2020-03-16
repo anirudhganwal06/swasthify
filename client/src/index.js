@@ -19,7 +19,7 @@ const rrfProps = {
       cart: {},
       wishlist: [],
       addresses: [],
-      orders: {},
+      orders: [],
       coupons: []
     }),
     useFirestoreForProfile: true
