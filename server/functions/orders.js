@@ -39,13 +39,19 @@ exports.createOrder = async ({ uid, reciever, address, paymentMode }) => {
 
   products.forEach(product => {
     for(const variant in user.cart.products[product.id]) {
+      const productData = product.data();
       if(!order.data.products[product.id])
-        order.data.products[product.id] = {};
+        order.data.products[product.id] = {
+          name: productData.name,
+          image: productData.image,
+          category: productData.category,
+          variants: []
+        };
 
-      order.data.products[product.id][variant] = {
-        price: product.data().variants[variant].discountedPrice,
+      order.data.products[product.id].variants.push({
+        ...productData.variants[variant],
         quantity: user.cart.products[product.id][variant]
-      }
+      });
     }
   });
   
