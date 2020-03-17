@@ -140,7 +140,8 @@ class ProductDetails extends Component {
                 ></span>
               </p>
               <p className="productPrice">
-                ₹ {this.props.product.variants[this.state.variant].discountedPrice}
+                ₹ {this.props.product.variants[this.state.variant] ? 
+                  this.props.product.variants[this.state.variant].discountedPrice : 0}
               </p>
               <p>Available in:</p>
               <span>{qtyBtns}</span>
