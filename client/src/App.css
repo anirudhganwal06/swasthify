@@ -192,6 +192,22 @@ nav {
   color: #fff;
 }
 
+.shoppingBadge {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  padding: 3px;
+  background-color: #122;
+}
+
+.shoppingBadgeSm {
+  position: absolute;
+  right: 13px;
+  top: 15px;
+  padding: 3px;
+  background-color: #122;
+}
+
 .cartBtnSmall {
   display: none;
 }

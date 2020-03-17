@@ -33,18 +33,16 @@ class Header extends Component {
   openCart = () => {
     if (this.props.isSignedIn)
       if (this.props.cart)
-        if(Object.keys(this.props.cart).length !== 0)
+        if (Object.keys(this.props.cart).length !== 0)
           this.setState({ cartOpen: true });
-        else
-          this.props.setFlashMessage(true, "No Products in Cart!", 3000);
+        else this.props.setFlashMessage(true, "No Products in Cart!", 3000);
       else
         this.props.setFlashMessage(
           true,
           "Please wait for the login process to succeed!",
           3000
         );
-    else
-      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+    else this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
   };
 
   closeCart = () => this.setState({ cartOpen: false });
@@ -146,6 +144,13 @@ class Header extends Component {
               className="fas fa-search mr-4"
               onClick={this.toggleSearch}
             ></span>
+            {this.props.cart ? (
+              <span className="badge badge-pill shoppingBadgeSm">
+                {Object.keys(this.props.cart.products).length}
+              </span>
+            ) : (
+              ""
+            )}
             <span
               className="fas fa-shopping-cart"
               onClick={this.openCart}
@@ -202,7 +207,9 @@ class Header extends Component {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdown"
                 >
-                  {isLoaded(this.props.misc) ? categoriesComponent : loading("80px")}
+                  {isLoaded(this.props.misc)
+                    ? categoriesComponent
+                    : loading("80px")}
                 </div>
               </li>
               <li className="nav-item mx-1">
@@ -263,6 +270,13 @@ class Header extends Component {
               </li>
               <li className="nav-item active mx-2">
                 <div className="nav-link cPointer" onClick={this.openCart}>
+                  {this.props.cart ? (
+                    <span className="badge badge-pill shoppingBadge">
+                      {Object.keys(this.props.cart.products).length}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                   <span className="fas fa-shopping-cart"></span>
                 </div>
               </li>
