@@ -14,7 +14,7 @@ class ProductCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      variant: Object.keys(props.variants)[0],
+      variant: Object.keys(props.product.variants)[0],
       units: 0,
       wishlisted: false,
       imageLoading: true
@@ -24,13 +24,14 @@ class ProductCard extends Component {
   static getDerivedStateFromProps(props, state) {
     return isLoaded(props.cart, props.wishlist)
       ? {
-        ...state,
-        units:
-          (props.cart.products && props.cart.products[props.productId] &&
-            props.cart.products[props.productId][state.variant]) ||
-          0,
-        wishlisted: props.wishlist.indexOf(props.productId) !== -1
-      }
+          ...state,
+          units:
+            (props.cart.products &&
+              props.cart.products[props.product.id] &&
+              props.cart.products[props.product.id][state.variant]) ||
+            0,
+          wishlisted: props.wishlist.indexOf(props.product.id) !== -1
+        }
       : state;
   }
 
@@ -50,8 +51,8 @@ class ProductCard extends Component {
         },
         {
           wishlist: this.state.wishlisted
-            ? firestore.FieldValue.arrayRemove(this.props.productId)
-            : firestore.FieldValue.arrayUnion(this.props.productId)
+            ? firestore.FieldValue.arrayRemove(this.props.product.id)
+            : firestore.FieldValue.arrayUnion(this.props.product.id)
         }
       );
     } else {
@@ -68,7 +69,7 @@ class ProductCard extends Component {
         },
         {
           ["cart.products." +
-          this.props.productId +
+          this.props.product.id +
           "." +
           this.state.variant]: this.props.firestore.FieldValue.increment(1)
         }
@@ -80,7 +81,7 @@ class ProductCard extends Component {
 
   decreaseQty = () => {
     if (
-      this.props.cart.products[this.props.productId][this.state.variant] > 1
+      this.props.cart.products[this.props.product.id][this.state.variant] > 1
     ) {
       this.props.firestore.update(
         {
@@ -88,9 +89,25 @@ class ProductCard extends Component {
           doc: this.props.uid
         },
         {
-          ["cart.products." + this.props.productId + "." + this.state.variant]:
-            this.props.cart.products[this.props.productId][this.state.variant] -
-            1
+          ["cart.products." + this.props.product.id + "." + this.state.variant]:
+            this.props.cart.products[this.props.product.id][
+              this.state.variant
+            ] - 1
+        }
+      );
+    } else if (
+      Object.keys(this.props.cart.products[this.props.product.id]).length > 1
+    ) {
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." +
+          this.props.product.id +
+          "." +
+          this.state.variant]: this.props.firestore.FieldValue.delete()
         }
       );
     } else {
@@ -101,7 +118,7 @@ class ProductCard extends Component {
         },
         {
           ["cart.products." +
-          this.props.productId]: this.props.firestore.FieldValue.delete()
+          this.props.product.id]: this.props.firestore.FieldValue.delete()
         }
       );
     }
@@ -114,31 +131,32 @@ class ProductCard extends Component {
   render() {
     const variants = [];
 
-    for (const v in this.props.variants) {
+    for (const v in this.props.product.variants) {
       variants.push(
         <option value={v} key={v}>
-          {this.props.variants[v].size}
+          {this.props.product.variants[v].size}
         </option>
       );
     }
 
     return (
       <div className="productCard">
-        {/* <span className="badge badge-success">{this.props.tag}</span> */}
+        {/* <span className="badge badge-success">{this.props.product.tag}</span> */}
         <div className="imageContainer">
           {this.state.imageLoading ? loading("80px") : ""}
           <img
-            className={classnames({"d-none": this.state.imageLoading})}
-            src={this.props.image}
-            alt={this.props.image_alt}
+            className={classnames({ "d-none": this.state.imageLoading })}
+            src={this.props.product.image}
+            alt={this.props.product.image_alt}
             onLoad={this.handleLoadedImage}
           />
         </div>
-        <p className="productName">{this.props.name}</p>
+        <p className="productName">{this.props.product.name}</p>
         <div className="row mt-1">
           <div className="col-6">
             <p className="productPrice">
-              ₹ {this.props.variants[this.state.variant].discountedPrice}
+              ₹{" "}
+              {this.props.product.variants[this.state.variant].discountedPrice}
             </p>
           </div>
           <div className="col-6 align-items-center float-right">
@@ -156,7 +174,7 @@ class ProductCard extends Component {
             ></span>
           </div>
           <div className="col-3 p-1 pt-2">
-            <Link to={"/product/" + this.props.productId}>
+            <Link to={"/product/" + this.props.product.id}>
               <button className="btn themeColorHoverBtn btn-block">VIEW</button>
             </Link>
           </div>
@@ -183,12 +201,13 @@ class ProductCard extends Component {
   }
 }
 
-const mapStateToProps = (state, { collection, productId }) => ({
-  uid: state.firebase.auth.uid,
-  cart: state.firebase.profile.cart,
-  wishlist: state.firebase.profile.wishlist,
-  ...state.firestore.data[collection][productId]
-});
+const mapStateToProps = state => {
+  return {
+    uid: state.firebase.auth.uid,
+    cart: state.firebase.profile.cart,
+    wishlist: state.firebase.profile.wishlist
+  };
+};
 
 export default compose(
   withFirestore,

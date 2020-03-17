@@ -3,7 +3,6 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 import queryString from "query-string";
-import classnames from "classnames";
 
 import ProductCard from "./ProductCard";
 import loading from "../common/Loading";
@@ -11,16 +10,56 @@ import punctuationMarks from "../common/punctuationMarks";
 
 const ProductList = ({ products, location }) => {
   const queryParams = queryString.parse(location.search);
-  const productList = isLoaded(products)
-    ? products.map(product => (
-        <div
-          key={product.id}
-          className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
-        >
-          <ProductCard collection="products" productId={product.id} />
-        </div>
-      ))
-    : [];
+  const productListJSX = [];
+  if (isLoaded(products)) {
+    for (let product of products) {
+      if (product.id !== "miscellaneous") {
+        if (
+          queryParams.category &&
+          product.categories.includes(queryParams.category)
+        ) {
+          productListJSX.push(
+            <div
+              key={product.id}
+              className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
+            >
+              <ProductCard product={product} />
+            </div>
+          );
+        } else if (queryParams.search) {
+          let search = queryParams.search.trim();
+          let nameWithoutPunc = "";
+          for (let i in search) {
+            if (punctuationMarks.includes(search[i])) {
+              nameWithoutPunc += " ";
+            } else {
+              nameWithoutPunc += search[i].toLowerCase();
+            }
+          }
+          let searchList = nameWithoutPunc.split(" ");
+          if (product.keywords.filter(value => searchList.includes(value))) {
+            productListJSX.push(
+              <div
+                key={product.id}
+                className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
+              >
+                <ProductCard product={product} />
+              </div>
+            );
+          }
+        } else {
+          productListJSX.push(
+            <div
+              key={product.id}
+              className="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3 mt-3 mb-3"
+            >
+              <ProductCard product={product} />
+            </div>
+          );
+        }
+      }
+    }
+  }
 
   let pageTitle = "";
   if (queryParams.category) {
@@ -34,16 +73,9 @@ const ProductList = ({ products, location }) => {
   return (
     <section id="productListSec">
       <div className="container productListContainer">
-        <b
-          className={classnames("categoryName", {
-            "text-capitalize": queryParams.category
-          })}
-        >
-          {pageTitle}
-        </b>
-
+        <b className="categoryName">{pageTitle}</b>
         {isLoaded(products) ? (
-          <div className="row justify-content-center">{productList}</div>
+          <div className="row justify-content-center">{productListJSX}</div>
         ) : (
           loading("80px")
         )}
@@ -62,7 +94,7 @@ const getQuery = ({ location }) => {
     return [
       {
         collection: "products",
-        where: [["category", "==", queryParams.category]]
+        where: [["categories", "array-contains", queryParams.category]]
       }
     ];
   } else if (queryParams.search) {
@@ -85,10 +117,9 @@ const getQuery = ({ location }) => {
     ];
   } else {
     return [
-      // {
-      //   collection: "products",
-      //   where: [["unit", ">", 0]]
-      // }
+      {
+        collection: "products"
+      }
     ];
   }
 };

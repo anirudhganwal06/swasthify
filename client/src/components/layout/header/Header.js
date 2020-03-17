@@ -33,18 +33,16 @@ class Header extends Component {
   openCart = () => {
     if (this.props.isSignedIn)
       if (this.props.cart)
-        if(Object.keys(this.props.cart).length !== 0)
+        if (Object.keys(this.props.cart.products).length !== 0)
           this.setState({ cartOpen: true });
-        else
-          this.props.setFlashMessage(true, "No Products in Cart!", 3000);
+        else this.props.setFlashMessage(true, "No Products in Cart!", 3000);
       else
         this.props.setFlashMessage(
           true,
           "Please wait for the login process to succeed!",
           3000
         );
-    else
-      this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+    else this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
   };
 
   closeCart = () => this.setState({ cartOpen: false });
@@ -63,14 +61,14 @@ class Header extends Component {
   };
 
   render() {
-    let signedInLinkComponent = [],
-      signedOutLinkComponent = [],
-      categoriesComponent = [];
+    let signedInLinkJSX = [],
+      signedOutLinkJSX = [],
+      categoriesJSX = [];
     let importedLinks = null;
     if (this.props.isSignedIn) {
       importedLinks = signedInLinks;
       for (let i in importedLinks) {
-        signedInLinkComponent.push(
+        signedInLinkJSX.push(
           <Link className="dropdown-item" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
@@ -79,7 +77,7 @@ class Header extends Component {
     } else {
       importedLinks = signedOutLinks;
       for (let i in importedLinks) {
-        signedOutLinkComponent.push(
+        signedOutLinkJSX.push(
           <Link className="nav-link" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
@@ -90,18 +88,23 @@ class Header extends Component {
     let categories = [];
     if (isLoaded(this.props.misc)) {
       categories = this.props.misc.categories;
-
-      for (let i in categories) {
-        let url = categories[i];
-        url = url.toLowerCase();
-        url = url.replace(/s$/, "");
-        categoriesComponent.push(
+      categoriesJSX.push(
+        <Link
+          className="dropdown-item"
+          to="/products"
+          key={"allProducts"}
+        >
+          All Products
+        </Link>
+      );
+      for (let category of categories) {
+        categoriesJSX.push(
           <Link
             className="dropdown-item"
-            to={"/products?category=" + url}
-            key={i}
+            to={"/products?category=" + category}
+            key={category}
           >
-            {categories[i]}
+            {category}
           </Link>
         );
       }
@@ -146,6 +149,13 @@ class Header extends Component {
               className="fas fa-search mr-4"
               onClick={this.toggleSearch}
             ></span>
+            {this.props.cart ? (
+              <span className="badge badge-pill shoppingBadgeSm">
+                {Object.keys(this.props.cart.products).length}
+              </span>
+            ) : (
+              ""
+            )}
             <span
               className="fas fa-shopping-cart"
               onClick={this.openCart}
@@ -202,7 +212,9 @@ class Header extends Component {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdown"
                 >
-                  {isLoaded(this.props.misc) ? categoriesComponent : loading("80px")}
+                  {isLoaded(this.props.misc)
+                    ? categoriesJSX
+                    : loading("80px")}
                 </div>
               </li>
               <li className="nav-item mx-1">
@@ -229,11 +241,11 @@ class Header extends Component {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    {signedInLinkComponent}
+                    {signedInLinkJSX}
                   </div>
                 </li>
               ) : (
-                <li className="nav-item mx-1">{signedOutLinkComponent}</li>
+                <li className="nav-item mx-1">{signedOutLinkJSX}</li>
               )}
 
               <li className="nav-item active">
@@ -263,6 +275,13 @@ class Header extends Component {
               </li>
               <li className="nav-item active mx-2">
                 <div className="nav-link cPointer" onClick={this.openCart}>
+                  {this.props.cart ? (
+                    <span className="badge badge-pill shoppingBadge">
+                      {Object.keys(this.props.cart.products).length}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                   <span className="fas fa-shopping-cart"></span>
                 </div>
               </li>

@@ -9,10 +9,11 @@ import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
 
 class Checkout extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      recieverName: "",
+      recieverName: props.displayName,
+      mobileNo: props.mobileNo,
       selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
@@ -59,7 +60,7 @@ class Checkout extends Component {
       .catch(error => console.log("Error getting document:", error));
   };
 
-  recieversNameChangeHandler = e => {
+  onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -117,7 +118,12 @@ class Checkout extends Component {
               method="POST"
             >
               <input type="hidden" name="uid" value={this.props.uid} />
-              <input type="hidden" name="reciever" value={this.state.recieverName} />
+              <input
+                type="hidden"
+                name="reciever"
+                value={this.state.recieverName}
+              />
+
               <InputGroup
                 id="recieverName"
                 label="Reciever's Name"
@@ -125,12 +131,27 @@ class Checkout extends Component {
                 name="recieverName"
                 placeholder="Enter reciever's name"
                 value={this.state.recieverName}
-                onChange={this.recieversNameChangeHandler}
+                onChange={this.onChange}
                 error={this.state.errors.recieverName}
                 required
               />
-
-              <input type="hidden" name="address" value={this.state.selectedAddress} required />
+              <InputGroup
+                id="mobileNo"
+                label="Reciever's Mobile Number"
+                type="text"
+                name="mobileNo"
+                placeholder="Enter reciever's mobile number"
+                value={this.state.mobileNo}
+                onChange={this.onChange}
+                error={this.state.errors.mobileNo}
+                required
+              />
+              <input
+                type="hidden"
+                name="address"
+                value={this.state.selectedAddress}
+                required
+              />
               <p>Delivery Address</p>
               <div className="row">{deliveryAddresses}</div>
               <small className="text-muted">
@@ -138,7 +159,12 @@ class Checkout extends Component {
                 order to be delivered.
               </small>
 
-              <input type="hidden" name="paymentMode" value={this.state.selectedPaymentOption} required />
+              <input
+                type="hidden"
+                name="paymentMode"
+                value={this.state.selectedPaymentOption}
+                required
+              />
               <p className="mt-3">Payment Options</p>
               <div className="row mb-2 justify-content-center">
                 {paymentOptions}
@@ -155,7 +181,9 @@ class Checkout extends Component {
             </form>
           </div>
           <div className="col-12 col-md-5 col-xl-4">
-            <OrderSummary order={{ ...this.props.order, products: this.state.products }} />
+            <OrderSummary
+              order={{ ...this.props.order, products: this.state.products }}
+            />
           </div>
         </div>
       </div>
@@ -165,11 +193,10 @@ class Checkout extends Component {
 
 const mapStateToProps = state => ({
   uid: state.firebase.auth.uid,
+  displayName: state.firebase.profile.displayName,
+  mobileNo: state.firebase.profile.mobileNo,
   addresses: state.firebase.profile.addresses,
   order: state.firebase.profile.cart
 });
 
-export default compose(
-  withFirestore,
-  connect(mapStateToProps),
-)(Checkout);
+export default compose(withFirestore, connect(mapStateToProps))(Checkout);
