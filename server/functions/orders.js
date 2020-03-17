@@ -2,7 +2,7 @@ const admin = require('./firebase');
 
 const fs = admin.firestore();
 
-exports.createOrder = async ({ uid, reciever, address, paymentMode }) => {
+exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) => {
   const userDoc = await fs.doc('users/' + uid).get();
   const orderMetadataDoc = await fs.doc('orders/config').get();
 
@@ -17,7 +17,7 @@ exports.createOrder = async ({ uid, reciever, address, paymentMode }) => {
     data: {
       address: user.addresses[address],
       discount: user.cart.discount,
-      mobileNo: "+911234567890",
+      mobileNo: mobileNo,
       orderDate: admin.firestore.Timestamp.fromDate(new Date()),
       deliveryStatus: "NOT REVIEWED",
       paymentMethod: paymentMode,
