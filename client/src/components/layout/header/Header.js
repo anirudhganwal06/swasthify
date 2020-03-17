@@ -33,7 +33,7 @@ class Header extends Component {
   openCart = () => {
     if (this.props.isSignedIn)
       if (this.props.cart)
-        if (Object.keys(this.props.cart).length !== 0)
+        if (Object.keys(this.props.cart.products).length !== 0)
           this.setState({ cartOpen: true });
         else this.props.setFlashMessage(true, "No Products in Cart!", 3000);
       else
