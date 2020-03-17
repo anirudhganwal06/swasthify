@@ -44,7 +44,6 @@ exports.createOrder = async ({ uid, reciever, address, paymentMode }) => {
         order.data.products[product.id] = {
           name: productData.name,
           image: productData.image,
-          category: productData.category,
           variants: []
         };
 
