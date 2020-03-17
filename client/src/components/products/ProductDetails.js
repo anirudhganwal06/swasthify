@@ -12,7 +12,7 @@ class ProductDetails extends Component {
   constructor() {
     super();
     this.state = {
-      variant: 0,
+      variant: null,
       wishlisted: false,
       inCart: false,
       imageLoading: true
@@ -22,12 +22,12 @@ class ProductDetails extends Component {
   static getDerivedStateFromProps(props, state) {
     return isLoaded(props.wishlist, props.cart)
       ? {
-          ...state,
-          wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
-          inCart:
-            !!props.cart.products[props.match.params.prodId] &&
-            !!props.cart.products[props.match.params.prodId][state.variant]
-        }
+        ...state,
+        wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
+        inCart:
+          !!props.cart.products[props.match.params.prodId] &&
+          !!props.cart.products[props.match.params.prodId][state.variant]
+      }
       : state;
   }
 
@@ -96,6 +96,9 @@ class ProductDetails extends Component {
     if (!isLoaded(this.props.product)) {
       return loading("80px");
     }
+
+    if(this.state.variant === null)
+      this.setState({variant: Object.keys(this.props.product.variants)[0]});
 
     for (const i in this.props.product.variants)
       qtyBtns.push(
@@ -168,7 +171,6 @@ const getQuery = ({ match }) => [
   {
     collection: "products",
     doc: match.params.prodId,
-    storeAs: match.params.prodId
   }
 ];
 
@@ -176,7 +178,7 @@ const mapStateToProps = (state, { match }) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart,
   wishlist: state.firebase.profile.wishlist,
-  product: state.firestore.data[match.params.prodId]
+  product: state.firestore.data.products && state.firestore.data.products[match.params.prodId]
 });
 
 export default compose(

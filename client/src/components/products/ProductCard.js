@@ -14,7 +14,7 @@ class ProductCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      variant: 0,
+      variant: Object.keys(props.variants)[0],
       units: 0,
       wishlisted: false,
       imageLoading: true
