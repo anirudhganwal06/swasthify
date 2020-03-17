@@ -61,14 +61,14 @@ class Header extends Component {
   };
 
   render() {
-    let signedInLinkComponent = [],
-      signedOutLinkComponent = [],
-      categoriesComponent = [];
+    let signedInLinkJSX = [],
+      signedOutLinkJSX = [],
+      categoriesJSX = [];
     let importedLinks = null;
     if (this.props.isSignedIn) {
       importedLinks = signedInLinks;
       for (let i in importedLinks) {
-        signedInLinkComponent.push(
+        signedInLinkJSX.push(
           <Link className="dropdown-item" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
@@ -77,7 +77,7 @@ class Header extends Component {
     } else {
       importedLinks = signedOutLinks;
       for (let i in importedLinks) {
-        signedOutLinkComponent.push(
+        signedOutLinkJSX.push(
           <Link className="nav-link" to={importedLinks[i].url} key={i}>
             {importedLinks[i].name}
           </Link>
@@ -88,18 +88,23 @@ class Header extends Component {
     let categories = [];
     if (isLoaded(this.props.misc)) {
       categories = this.props.misc.categories;
-
-      for (let i in categories) {
-        let url = categories[i];
-        url = url.toLowerCase();
-        url = url.replace(/s$/, "");
-        categoriesComponent.push(
+      categoriesJSX.push(
+        <Link
+          className="dropdown-item"
+          to="/products"
+          key={"allProducts"}
+        >
+          All Products
+        </Link>
+      );
+      for (let category of categories) {
+        categoriesJSX.push(
           <Link
             className="dropdown-item"
-            to={"/products?category=" + url}
-            key={i}
+            to={"/products?category=" + category}
+            key={category}
           >
-            {categories[i]}
+            {category}
           </Link>
         );
       }
@@ -208,7 +213,7 @@ class Header extends Component {
                   aria-labelledby="navbarDropdown"
                 >
                   {isLoaded(this.props.misc)
-                    ? categoriesComponent
+                    ? categoriesJSX
                     : loading("80px")}
                 </div>
               </li>
@@ -236,11 +241,11 @@ class Header extends Component {
                     className="dropdown-menu"
                     aria-labelledby="navbarDropdown"
                   >
-                    {signedInLinkComponent}
+                    {signedInLinkJSX}
                   </div>
                 </li>
               ) : (
-                <li className="nav-item mx-1">{signedOutLinkComponent}</li>
+                <li className="nav-item mx-1">{signedOutLinkJSX}</li>
               )}
 
               <li className="nav-item active">
