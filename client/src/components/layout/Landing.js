@@ -24,7 +24,6 @@ class Landing extends Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps !== this.props) {
-
       if (isLoaded(this.props.misc)) {
         this.setState({ loading: false });
       } else {
@@ -51,7 +50,11 @@ class Landing extends Component {
     return (
       <section id="landingSec">
         <BannersCarousel />
-        {this.state.loading ? loading("80px") : <div>{categoryProductCarousel}</div>}
+        {this.state.loading ? (
+          loading("80px")
+        ) : (
+          <div>{categoryProductCarousel}</div>
+        )}
         {/* <ShowcaseBanneredFeatures /> */}
         {/* <ShowcaseFeatures /> */}
       </section>
@@ -60,7 +63,9 @@ class Landing extends Component {
 }
 
 const mapStateToProps = state => ({
-  misc: state.firestore.data.misc
+  misc:
+    state.firestore.data.products &&
+    state.firestore.data.products.miscellaneous
 });
 
 export default connect(mapStateToProps)(Landing);

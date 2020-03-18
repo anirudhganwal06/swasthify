@@ -13,15 +13,16 @@ const ProductCarousel = props => {
   let productsPresent = false;
   if (isLoaded(props.products)) {
     for (let prodId in props.products) {
-      if (props.products[prodId].categories.includes(props.category) && prodId !== "miscellaneous") {
+      if (
+        prodId !== "miscellaneous" &&
+        props.products[prodId].categories.includes(props.category)
+      ) {
         productCardsJSX.push(
           <div
             className="p-1 h-100 float-left carouselProductCard"
             key={prodId}
           >
-            <ProductCard
-              product={props.products[prodId]}
-            />
+            <ProductCard product={{ id: prodId, ...props.products[prodId] }} />
           </div>
         );
       }

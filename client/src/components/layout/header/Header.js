@@ -314,8 +314,7 @@ class Header extends Component {
 const getQuery = () => [
   {
     collection: "products",
-    doc: "miscellaneous",
-    storeAs: "misc"
+    doc: "miscellaneous"
   }
 ];
 
@@ -324,7 +323,9 @@ const mapStateToProps = state => {
     name: state.firebase.profile.displayName,
     mobileNo: state.firebase.profile.mobileNo,
     isSignedIn: !state.firebase.auth.isEmpty,
-    misc: state.firestore.data.misc,
+    misc:
+      state.firestore.data.products &&
+      state.firestore.data.products.miscellaneous,
     cart: state.firebase.profile.cart
   };
 };

@@ -26,15 +26,9 @@ class ProductDetails extends Component {
           wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
           inCart:
             !!props.cart.products[props.match.params.prodId] &&
-            !!props.cart.products[props.match.params.prodId][state.variant],
+            !!props.cart.products[props.match.params.prodId][state.variant]
         }
       : state;
-  }
-
-  componentDidMount() {
-    if (isLoaded(this.props.product)) {
-      this.setState({ variant: Object.keys(this.props.product.variants)[0] });
-    }
   }
 
   selectVariant = e => {
@@ -62,53 +56,55 @@ class ProductDetails extends Component {
   };
 
   addToCart = () => {
-    if (this.props.uid)
-      if (this.state.inCart) {
-        console.log(this.props);
-        if (
-          Object.keys(this.props.cart.products[this.props.match.params.prodId])
-            .length > 1
-        ) {
-          this.props.firestore.update(
-            {
-              collection: "users",
-              doc: this.props.uid
-            },
-            {
-              ["cart.products." +
-              this.props.match.params.prodId +
-              "." +
-              this.state.variant]: this.props.firestore.FieldValue.delete()
-            }
-          );
-        } else {
-          this.props.firestore.update(
-            {
-              collection: "users",
-              doc: this.props.uid
-            },
-            {
-              ["cart.products." +
-              this.props.match.params
-                .prodId]: this.props.firestore.FieldValue.delete()
-            }
-          );
-        }
-      } else {
-        this.props.firestore.update(
-          {
-            collection: "users",
-            doc: this.props.uid
-          },
-          {
-            ["cart.products." +
-            this.props.match.params.prodId +
-            "." +
-            this.state.variant]: this.props.firestore.FieldValue.increment(1)
-          }
-        );
+    if (!this.props.uid) {
+      this.props.setFlashMessage(true, "Please Login to use Cart!", 3000);
+      return;
+    }
+
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid
+      },
+      {
+        ["cart.products." +
+        this.props.match.params.prodId +
+        "." +
+        this.state.variant]: this.props.firestore.FieldValue.increment(1)
       }
-    else this.props.setFlashMessage(true, "Please, login to use cart!", 3000);
+    );
+  };
+
+  removeFromCart = () => {
+    if (!this.props.uid) {
+      this.props.setFlashMessage(true, "Please Login to use Cart!", 3000);
+      return;
+    }
+
+    const prodId = this.props.match.params.prodId;
+    if (Object.keys(this.props.cart.products[prodId]).length > 1)
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." +
+          prodId +
+          "." +
+          this.state.variant]: this.props.firestore.FieldValue.delete()
+        }
+      );
+    else
+      this.props.firestore.update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        {
+          ["cart.products." + prodId]: this.props.firestore.FieldValue.delete()
+        }
+      );
   };
 
   handleLoadedImage = () => {
@@ -120,6 +116,9 @@ class ProductDetails extends Component {
     if (!isLoaded(this.props.product)) {
       return loading("80px");
     }
+
+    if (this.state.variant === null)
+      this.setState({ variant: Object.keys(this.props.product.variants)[0] });
 
     for (const i in this.props.product.variants)
       qtyBtns.push(
@@ -172,7 +171,9 @@ class ProductDetails extends Component {
               <br />
               <button
                 className="btn themeColorHoverBtn"
-                onClick={this.addToCart}
+                onClick={
+                  this.state.inCart ? this.removeFromCart : this.addToCart
+                }
               >
                 {this.state.inCart ? "REMOVE FROM CART" : "ADD TO CART"}
               </button>

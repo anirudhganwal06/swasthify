@@ -65,27 +65,30 @@ class Cart extends Component {
     );
   };
 
-  fetchProducts = () => {
+  fetchProducts = async () => {
     // if (this.state.products)
     // this.setState({ loading: true });
-    const promises = [];
-
-    for (const product in this.props.cart.products)
+    try {
+      const promises = [];
+      
+      for (const product in this.props.cart.products)
       promises.push(this.props.firestore.doc("products/" + product).get());
-
-    Promise.all(promises)
-      .then(fetchedProducts => {
-        const products = {};
-        fetchedProducts.forEach(
-          product =>
-            (products[product.id] = {
-              selectedVariants: this.props.cart.products[product.id],
-              ...product.data()
-            })
-        );
-        this.setState({ products, loading: false });
-      })
-      .catch(error => console.log("Error getting document:", error));
+      
+      const fetchedProducts = await Promise.all(promises);
+      const products = {};
+      fetchedProducts.forEach(
+        product => {
+          products[product.id] = {
+            selectedVariants: this.props.cart.products[product.id],
+            ...product.data()
+          };
+        }
+      );
+        
+      this.setState({ products, loading: false });
+    } catch(error) {
+      console.log("Error getting document:", error);
+    }
   };
 
   componentDidMount() {
