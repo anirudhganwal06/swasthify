@@ -12,15 +12,15 @@ const ProductCarousel = props => {
   let productCardsJSX = [];
   let productsPresent = false;
   if (isLoaded(props.products)) {
-    for (let product of props.products) {
-      if (product.categories.includes(props.category) && product.id !== "miscellaneous") {
+    for (let prodId in props.products) {
+      if (props.products[prodId].categories.includes(props.category) && prodId !== "miscellaneous") {
         productCardsJSX.push(
           <div
             className="p-1 h-100 float-left carouselProductCard"
-            key={product.id}
+            key={prodId}
           >
             <ProductCard
-              product={product}
+              product={props.products[prodId]}
             />
           </div>
         );
@@ -49,7 +49,7 @@ const ProductCarousel = props => {
           >
             <div
               className="productCarouselMainScroll"
-              style={{ width: props.products.length * 274 + "px" }}
+              style={{ width: productCardsJSX.length * 274 + "px" }}
             >
               {productCardsJSX}
             </div>
@@ -63,7 +63,7 @@ const ProductCarousel = props => {
 };
 
 const mapStateToProps = state => ({
-  products: state.firestore.ordered.products
+  products: state.firestore.data.products
 });
 
 const getQuery = ({ category }) => {
