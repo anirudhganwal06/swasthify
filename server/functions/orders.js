@@ -60,7 +60,8 @@ exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) 
   batch.set(fs.doc("orders/" + order.id), order.data);
   batch.update(fs.doc("users/" + uid), {
     "cart.products": {},
-    "orders": admin.firestore.FieldValue.arrayUnion(order.id)
+    "orders": admin.firestore.FieldValue.arrayUnion(order.id),
+    "totalOrderAmount": admin.firestore.FieldValue.increment(order.data.total)
   });
 
   await batch.commit();
