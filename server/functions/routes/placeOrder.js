@@ -22,8 +22,8 @@ module.exports = async (req, res) => {
     TXN_AMOUNT: String(user.cart.total),
     WEBSITE: paytmConfig.WEBSITE,
     CALLBACK_URL: 'https://us-central1-swasthify-6d5c2.cloudfunctions.net/verifyOrder',
-    EMAIL: user.email,
-    MOBILE_NO: user.mobileNo
+    EMAIL: user.email || "",
+    MOBILE_NO: user.mobileNo || ""
   };
 
   return paytmChecksum.genchecksum(paytmParams, paytmConfig.MERCHANT_KEY, (err, checksum) => {

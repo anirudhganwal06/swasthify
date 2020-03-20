@@ -16,7 +16,12 @@ const rrfProps = {
       displayName: userData.displayName,
       email: userData.email,
       mobileNo: userData.phoneNumber,
-      cart: {},
+      cart: {
+        products: {},
+        discount: 0,
+        subTotal: 0,
+        total: 0
+      },
       wishlist: [],
       addresses: [],
       orders: [],
