@@ -126,7 +126,7 @@ class ProductDetails extends Component {
           key={i}
           className={
             "btn qtySelectionBtn" +
-            (+this.state.variant === +i ? " qtySelectedBtn" : "")
+            (this.state.variant === i ? " qtySelectedBtn" : "")
           }
           onClick={this.selectVariant}
           value={i}
