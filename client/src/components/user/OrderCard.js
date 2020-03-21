@@ -7,9 +7,9 @@ const OrderCard = props => {
   const productsList = [];
 
   for (const i in order.products) {
-    for(const v of order.products[i].variants)
+    for(const v in order.products[i].variants)
       productsList.push(
-        <div key={i + v.size} className="cartProductCard">
+        <div key={i + order.products[i].variants[v].size} className="cartProductCard">
           <div className="row">
             <div className="col-4 col-sm-3 col-md-2 colInRow">
               <Link to={"/product/" + i}>
@@ -20,11 +20,11 @@ const OrderCard = props => {
             </div>
             <div className="col-8 col-sm-9 col-md-10 colInRow">
               <p>{order.products[i].name}</p>
-              <small className="text-muted">{v.size}</small>
+              <small className="text-muted">{order.products[i].variants[v].size}</small>
               <p className="bold">
-                {"₹ " + v.discountedPrice + " "}
+                {"₹ " + order.products[i].variants[v].discountedPrice + " "}
                 <span>&times;</span>
-                {" " + v.quantity}
+                {" " + order.products[i].variants[v].quantity}
               </p>
             </div>
           </div>
