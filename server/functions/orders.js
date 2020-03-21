@@ -38,19 +38,18 @@ exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) 
   const products = await Promise.all(promises)
 
   products.forEach(product => {
-    for(const variant in user.cart.products[product.id]) {
-      const productData = product.data();
-      if(!order.data.products[product.id])
-        order.data.products[product.id] = {
-          name: productData.name,
-          image: productData.image,
-          variants: []
-        };
+    const productData = product.data();
+    order.data.products[product.id] = {
+      name: productData.name,
+      image: productData.image,
+      variants: {}
+    };
 
-      order.data.products[product.id].variants.push({
+    for(const variant in user.cart.products[product.id]) {
+      order.data.products[product.id].variants[variant] = {
         ...productData.variants[variant],
         quantity: user.cart.products[product.id][variant]
-      });
+      };
     }
   });
   

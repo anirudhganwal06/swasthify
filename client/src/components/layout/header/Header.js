@@ -151,7 +151,7 @@ class Header extends Component {
             ></span>
             {this.props.cart ? (
               <span className="badge badge-pill shoppingBadgeSm">
-                {Object.keys(this.props.cart.products).length}
+                {Object.keys(this.props.cart.products || {}).length}
               </span>
             ) : (
               ""
@@ -277,7 +277,7 @@ class Header extends Component {
                 <div className="nav-link cPointer" onClick={this.openCart}>
                   {this.props.cart ? (
                     <span className="badge badge-pill shoppingBadge">
-                      {Object.keys(this.props.cart.products).length}
+                      {Object.keys(this.props.cart.products || {}).length}
                     </span>
                   ) : (
                     ""
