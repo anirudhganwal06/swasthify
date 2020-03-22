@@ -25,7 +25,8 @@ const rrfProps = {
       wishlist: [],
       addresses: [],
       orders: [],
-      coupons: []
+      coupons: [],
+      tags: []
     }),
     useFirestoreForProfile: true
   },
