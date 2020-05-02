@@ -94,7 +94,10 @@ const getQuery = ({ location }) => {
     return [
       {
         collection: "products",
-        where: [["categories", "array-contains", queryParams.category]]
+        where: [
+          ["categories", "array-contains", queryParams.category],
+          ["visible", "==", true]
+        ]
       }
     ];
   } else if (queryParams.search) {
@@ -112,13 +115,17 @@ const getQuery = ({ location }) => {
     return [
       {
         collection: "products",
-        where: [["keywords", "array-contains-any", searchList]]
+        where: [
+          ["keywords", "array-contains-any", searchList],
+          ["visible", "==", true]
+        ]
       }
     ];
   } else {
     return [
       {
-        collection: "products"
+        collection: "products",
+        where: [["visible", "==", true]]
       }
     ];
   }

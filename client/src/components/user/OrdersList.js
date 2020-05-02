@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import OrderCard from "../user/OrderCard";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 
 import loading from "../common/Loading";
+import OrderCard from "../user/OrderCard";
 
 class OrdersList extends Component {
   render() {

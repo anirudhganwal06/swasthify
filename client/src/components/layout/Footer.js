@@ -74,9 +74,7 @@ const Footer = props => {
 };
 
 const mapStateToProps = state => ({
-  misc:
-    state.firestore.data.products &&
-    state.firestore.data.products.miscellaneous
+  misc: state.firestore.data.misc
 });
 
 export default connect(mapStateToProps)(Footer);

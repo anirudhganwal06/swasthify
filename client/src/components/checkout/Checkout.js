@@ -17,6 +17,7 @@ class Checkout extends Component {
       selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
+      couponcode: "",
       paymentOptions: [
         {
           name: "COD",
