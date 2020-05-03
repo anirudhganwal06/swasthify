@@ -21,14 +21,14 @@ class Checkout extends Component {
       paymentOptions: [
         {
           name: "COD",
-          description: "Cash On Delivery"
+          description: "Cash On Delivery",
         },
         {
           name: "Pay Online",
-          description: "Pay Online"
-        }
+          description: "Pay Online",
+        },
       ],
-      errors: {}
+      errors: {},
     };
   }
 
@@ -47,29 +47,29 @@ class Checkout extends Component {
       promises.push(this.props.firestore.doc("products/" + product).get());
 
     Promise.all(promises)
-      .then(fetchedProducts => {
+      .then((fetchedProducts) => {
         const products = {};
         fetchedProducts.forEach(
-          product =>
+          (product) =>
             (products[product.id] = {
               selectedVariants: this.props.order.products[product.id],
-              ...product.data()
+              ...product.data(),
             })
         );
         this.setState({ products });
       })
-      .catch(error => console.log("Error getting document:", error));
+      .catch((error) => console.log("Error getting document:", error));
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  selectDeliveryAddress = index => {
+  selectDeliveryAddress = (index) => {
     this.setState({ selectedAddress: index });
   };
 
-  selectPaymentOption = name => {
+  selectPaymentOption = (name) => {
     this.setState({ selectedPaymentOption: name });
   };
 
@@ -109,15 +109,15 @@ class Checkout extends Component {
 
     return (
       <div className="container p-3">
-        <div className="row justify-content-center">
-          <div className="col-12 text-center">
-            <h1 className="themeHeadingLg">Checkout</h1>
-          </div>
-          <div className="col-12 col-md-7 col-xl-6">
-            <form
-              action="https://us-central1-swasthify-6d5c2.cloudfunctions.net/placeOrder"
-              method="POST"
-            >
+        <form
+          action="https://us-central1-swasthify-6d5c2.cloudfunctions.net/placeOrder"
+          method="POST"
+        >
+          <div className="row justify-content-center">
+            <div className="col-12 text-center">
+              <h1 className="themeHeadingLg">Checkout</h1>
+            </div>
+            <div className="col-12 col-md-7 col-xl-6">
               <input type="hidden" name="uid" value={this.props.uid} />
               <input
                 type="hidden"
@@ -170,34 +170,35 @@ class Checkout extends Component {
               <div className="row mb-2 justify-content-center">
                 {paymentOptions}
               </div>
-
+            </div>
+            <div className="col-12 col-md-5 col-xl-4">
+              <OrderSummary
+                order={{ ...this.props.order, products: this.state.products }}
+              />
+            </div>
+            <div className="col-12 col-xl-10 text-center py-2">
               <button
-                className="btn themeColorHoverBtn btn-block mb-5"
+                className="btn themeColorHoverBtn btn-block"
                 type="submit"
               >
                 {this.state.selectedPaymentOption === "COD"
                   ? "Place Order"
                   : "Proceed to Pay"}
               </button>
-            </form>
+            </div>
           </div>
-          <div className="col-12 col-md-5 col-xl-4">
-            <OrderSummary
-              order={{ ...this.props.order, products: this.state.products }}
-            />
-          </div>
-        </div>
+        </form>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   uid: state.firebase.auth.uid,
   displayName: state.firebase.profile.displayName,
   mobileNo: state.firebase.profile.mobileNo,
   addresses: state.firebase.profile.addresses,
-  order: state.firebase.profile.cart
+  order: state.firebase.profile.cart,
 });
 
 export default compose(withFirestore, connect(mapStateToProps))(Checkout);
