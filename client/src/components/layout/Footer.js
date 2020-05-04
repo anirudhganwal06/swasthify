@@ -1,15 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import { isLoaded } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 
-const Footer = props => {
+const Footer = (props) => {
   const categoriesList = [];
   if (isLoaded(props.misc)) {
     for (let i of props.misc.categories) {
       categoriesList.push(
-        <p key={i} className="text-capitalize">
-          <a href={"/products?category=" + i}>{i}</a>
-        </p>
+        <div className="col-6 col-sm-4 col-md-3" key={i}>
+          <Link to={"/products?category=" + i} className="text-capitalize">
+            {i}
+          </Link>
+        </div>
       );
     }
   }
@@ -31,25 +34,8 @@ const Footer = props => {
             <p>Mon - Sat / 9:00AM - 6:00PM</p>
           </div>
           <div className="col-12 col-lg-9">
-            <h1 className="heading">BE THE FIRST TO KNOW</h1>
-            <div className="row">
-              <div className="col-12 col-md-6">
-                <p>
-                  Get all the latest information on Events, Sales and Offers.
-                  <br />
-                  Sign up for newsletter today.
-                </p>
-              </div>
-              <div className="col-12 col-md-6"></div>
-            </div>
-            <hr className="greyLine" />
             <h1 className="heading">Categories</h1>
-            <div className="row justify-content-left">
-              <div className="col-12 col-sm-6 col-md-3">
-
-                {categoriesList}
-              </div>
-            </div>
+            <div className="row justify-content-left">{categoriesList}</div>
           </div>
         </div>
 
@@ -73,8 +59,8 @@ const Footer = props => {
   );
 };
 
-const mapStateToProps = state => ({
-  misc: state.firestore.data.misc
+const mapStateToProps = (state) => ({
+  misc: state.firestore.data.misc,
 });
 
 export default connect(mapStateToProps)(Footer);
