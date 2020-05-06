@@ -2,19 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withFirestore } from "react-redux-firebase";
+import { firestoreConnect } from "react-redux-firebase";
 import loading from "../common/Loading";
 
 class Wishlist extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      products: [],
-      loading: true
-    };
-  }
-
   removeFromWishlist = id => {
     this.props.firestore.update(
       {
@@ -27,62 +18,63 @@ class Wishlist extends Component {
     );
   };
 
-  fetchProducts = () => {
-    const promises = [];
-    this.props.wishlist.forEach(productId =>
-      promises.push(this.props.firestore.doc("products/" + productId).get())
-    );
+  // fetchProducts = () => {
+  //   const promises = [];
+  //   this.props.wishlist.forEach(productId =>
+  //     promises.push(this.props.firestore.doc("products/" + productId).get())
+  //   );
 
-    Promise.all(promises)
-      .then(products =>
-        this.setState({
-          products: products.map(product => ({
-            id: product.id,
-            ...product.data()
-          })),
-          loading: false
-        })
-      )
-      .catch(error => console.log("Error getting document:", error));
-  };
+  //   Promise.all(promises)
+  //     .then(products =>
+  //       this.setState({
+  //         products: products.map(product => ({
+  //           id: product.id,
+  //           ...product.data()
+  //         })),
+  //         loading: false
+  //       })
+  //     )
+  //     .catch(error => console.log("Error getting document:", error));
+  // };
 
-  componentDidMount() {
-    this.fetchProducts();
-  }
+  // componentDidMount() {
+  //   this.fetchProducts();
+  // }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.fetchProducts();
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps !== this.props) this.fetchProducts();
+  // }
 
   render() {
-    let productsList = [];
-    const products = this.state.products;
-    for (const product of products) {
+    const productsList = [];
+    const products = this.props.products;
+    console.log(products);
+    for (const pid in products) {
       productsList.push(
-        <div className="cartProductCard" key={product.id}>
+        <div className="cartProductCard" key={pid}>
           <button
             className="btn btn-outline-danger float-right"
-            onClick={() => this.removeFromWishlist(product.id)}
+            onClick={() => this.removeFromWishlist(pid)}
           >
             <span className="fas fa-trash"></span>
           </button>
           <div className="row">
             <div className="col-4 colInRow">
-              <Link to={"/product/" + product.id}>
+              <Link to={"/product/" + pid}>
                 <div className="imageContainer">
-                  <img src={product.images[0]} alt="Product " />
+                  <img src={products[pid].images[0]} alt="Product " />
                 </div>
               </Link>
             </div>
             <div className="col-8 colInRow">
-              <span className="badge badge-success">{product.tag}</span>
-              <p className="productName">{product.name}</p>
-              <p className="productName">
-                {product.variants[0].size}
+              <span className="badge badge-success">{products[pid].tag}</span>
+              <p className="productName">{products[pid].name}</p>
+              {/* <p className="productName">
+                {products[pid].variants.size}
               </p>
               <p className="productPrice">
-                {"₹ " + product.variants[0].discountedPrice}
-              </p>
+                {"₹ " + products[pid].variants[0].discountedPrice}
+              </p> */}
             </div>
           </div>
         </div>
@@ -95,9 +87,9 @@ class Wishlist extends Component {
           <div className="col-12 text-center">
             <h1 className="themeHeadingLg">My Wishlist</h1>
           </div>
-          {this.state.loading ? (
+          {this.props.loading ? (
             loading("80px")
-          ) : this.state.products.length === 0 ? (
+          ) : productsList.length === 0 ? (
             <div className="text-center">
               <span className="far fa-frown fa-5x pt-3"></span>
               <h5 className="text-center mt-3">No product in wishlist!</h5>
@@ -111,9 +103,33 @@ class Wishlist extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const addWishlistToProps = state => ({
   uid: state.firebase.auth.uid,
   wishlist: state.firebase.profile.wishlist
 });
 
-export default compose(connect(mapStateToProps), withFirestore)(Wishlist);
+const getQuery = props => props.wishlist.map(pid => ({
+  collection: "products",
+  doc: pid
+}));
+
+const addProductsToProps = (state, props) => {
+  const products = {};
+
+  if(!state.firestore.data.products)
+    return {loading: true};
+
+  for(const pid of props.wishlist) {
+    if(!state.firestore.data.products[pid])
+      return {loading: true};
+    products[pid] = state.firestore.data.products[pid];
+  }
+
+  return {products, loading: false};
+};
+
+export default compose(
+  connect(addWishlistToProps),
+  firestoreConnect(getQuery),
+  connect(addProductsToProps)
+)(Wishlist);
