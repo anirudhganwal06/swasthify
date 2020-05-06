@@ -20,6 +20,7 @@ export default class ProductImageCarousel extends Component {
     for (let i in this.props.images) {
       imageThumbnailsJSX.push(
         <img
+          key={i}
           src={this.props.images[i]}
           alt={this.props.image_alt}
           onClick={() => {
@@ -42,7 +43,10 @@ export default class ProductImageCarousel extends Component {
           className={classnames("productImage", {
             "d-none": this.state.imageLoading,
           })}
-          src={this.props.images[this.state.imageShowing]}
+          src={
+            this.props.images[this.state.imageShowing] ||
+            "/assets/images/dummyProduct.png"
+          }
           alt={this.props.image_alt}
           onLoad={this.handleLoadedImage}
         />

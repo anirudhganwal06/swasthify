@@ -70,7 +70,7 @@ class Wishlist extends Component {
             <div className="col-4 colInRow">
               <Link to={"/product/" + product.id}>
                 <div className="imageContainer">
-                  <img src={product.image} alt="Product " />
+                  <img src={product.images[0]} alt="Product " />
                 </div>
               </Link>
             </div>

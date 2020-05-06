@@ -136,7 +136,7 @@ class ProductDetails extends Component {
           <div className="row">
             <div className="col-12 col-md-6 text-center">
               <ProductImageCarousel
-                images={[this.props.product.image]}
+                images={this.props.product.images}
                 image_alt={this.props.product.image_alt}
               />
             </div>

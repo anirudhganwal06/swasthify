@@ -9,7 +9,7 @@ const orderSummary = ({ order }) => {
           <div className="row">
             <div className="col-3">
               <div className="imageContainer">
-                <img src={order.products[i].image} alt={order.products[i].image_alt} />
+                <img src={order.products[i].images[0]} alt={order.products[i].image_alt} />
               </div>
             </div>
             <div className="col-9">
