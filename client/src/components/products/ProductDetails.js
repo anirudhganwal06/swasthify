@@ -3,10 +3,10 @@ import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
-import classnames from "classnames";
 
 import loading from "../common/Loading";
 import { setFlashMessage } from "../../actions/flashActions";
+import ProductImageCarousel from "./ProductImageCarousel";
 
 class ProductDetails extends Component {
   constructor() {
@@ -15,7 +15,7 @@ class ProductDetails extends Component {
       variant: null,
       wishlisted: false,
       inCart: false,
-      imageLoading: true
+      imageLoading: true,
     };
   }
 
@@ -26,14 +26,14 @@ class ProductDetails extends Component {
           wishlisted: props.wishlist.indexOf(props.match.params.prodId) !== -1,
           inCart:
             !!props.cart.products[props.match.params.prodId] &&
-            !!props.cart.products[props.match.params.prodId][state.variant]
+            !!props.cart.products[props.match.params.prodId][state.variant],
         }
       : state;
   }
 
-  selectVariant = e => {
+  selectVariant = (e) => {
     this.setState({
-      variant: e.target.value
+      variant: e.target.value,
     });
   };
 
@@ -43,12 +43,12 @@ class ProductDetails extends Component {
       firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           wishlist: this.state.wishlisted
             ? firestore.FieldValue.arrayRemove(this.props.match.params.prodId)
-            : firestore.FieldValue.arrayUnion(this.props.match.params.prodId)
+            : firestore.FieldValue.arrayUnion(this.props.match.params.prodId),
         }
       );
     } else
@@ -64,13 +64,13 @@ class ProductDetails extends Component {
     this.props.firestore.update(
       {
         collection: "users",
-        doc: this.props.uid
+        doc: this.props.uid,
       },
       {
         ["cart.products." +
         this.props.match.params.prodId +
         "." +
-        this.state.variant]: this.props.firestore.FieldValue.increment(1)
+        this.state.variant]: this.props.firestore.FieldValue.increment(1),
       }
     );
   };
@@ -86,29 +86,25 @@ class ProductDetails extends Component {
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           ["cart.products." +
           prodId +
           "." +
-          this.state.variant]: this.props.firestore.FieldValue.delete()
+          this.state.variant]: this.props.firestore.FieldValue.delete(),
         }
       );
     else
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
-          ["cart.products." + prodId]: this.props.firestore.FieldValue.delete()
+          ["cart.products." + prodId]: this.props.firestore.FieldValue.delete(),
         }
       );
-  };
-
-  handleLoadedImage = () => {
-    this.setState({ imageLoading: false });
   };
 
   render() {
@@ -139,14 +135,9 @@ class ProductDetails extends Component {
         <div className="container productDetailsContainer">
           <div className="row">
             <div className="col-12 col-md-6 text-center">
-              {this.state.imageLoading ? loading("80px") : ""}
-              <img
-                className={classnames("productImage", {
-                  "d-none": this.state.imageLoading
-                })}
-                src={this.props.product.image}
-                alt={this.props.product.image_alt}
-                onLoad={this.handleLoadedImage}
+              <ProductImageCarousel
+                images={this.props.product.images}
+                image_alt={this.props.product.image_alt}
               />
             </div>
             <div className="col-12 col-md-6">
@@ -196,8 +187,8 @@ class ProductDetails extends Component {
 const getQuery = ({ match }) => [
   {
     collection: "products",
-    doc: match.params.prodId
-  }
+    doc: match.params.prodId,
+  },
 ];
 
 const mapStateToProps = (state, { match }) => ({
@@ -206,7 +197,7 @@ const mapStateToProps = (state, { match }) => ({
   wishlist: state.firebase.profile.wishlist,
   product:
     state.firestore.data.products &&
-    state.firestore.data.products[match.params.prodId]
+    state.firestore.data.products[match.params.prodId],
 });
 
 export default compose(

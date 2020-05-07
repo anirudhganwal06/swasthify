@@ -825,6 +825,24 @@ footer a:hover {
   }
 }
 
+.productImageCarouselThumbnail {
+  position: absolute;
+  left: 0;
+}
+
+.productImageCarouselThumbnail img {
+  position: relative;
+  width: 60px;
+  border: 1px solid #1222;
+  display: block;
+  margin: 3px 0;
+  cursor: pointer;
+}
+
+.productImageCarouselThumbnail img:hover {
+  box-shadow: 0 0 4px -2px #122;
+}
+
 .productDetailsContainer .productImage {
   width: 60%;
 }

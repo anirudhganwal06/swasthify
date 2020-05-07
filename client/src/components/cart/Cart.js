@@ -17,40 +17,29 @@ class Cart extends Component {
   }
 
   decUnits = (productId, variant) => {
-    let toDelete = true;
-    for (let variant in this.state.products[productId].selectedVariants) {
-      if (this.state.products[productId].selectedVariants[variant] > 1) {
-        toDelete = false;
-        break;
-      }
-    }
-    if (toDelete) {
-      this.props.firestore.update(
-        {
-          collection: "users",
-          doc: this.props.uid
-        },
-        {
-          ["cart.products." +
-          productId]: this.props.firestore.FieldValue.delete()
-        }
-      );
+    const product = this.state.products[productId];
+    const updateQuery = {};
+    if(product.selectedVariants[variant] > 1) {
+      updateQuery["cart.products." + productId + "." + variant] =
+        product.selectedVariants[variant] - 1;
+    } else if(Object.keys(product.selectedVariants).length > 1) {
+      updateQuery["cart.products." + productId + "." + variant] =
+        this.props.firestore.FieldValue.delete();
     } else {
-      this.props.firestore.update(
-        {
-          collection: "users",
-          doc: this.props.uid
-        },
-        {
-          ["cart.products." + productId + "." + variant]:
-            this.state.products[productId].selectedVariants[variant] - 1
-        }
-      );
+      updateQuery["cart.products." + productId] =
+        this.props.firestore.FieldValue.delete();
     }
+
+    this.props.firestore.update(
+      {
+        collection: "users",
+        doc: this.props.uid,
+      }, updateQuery
+    );
   };
 
   incUnits = (productId, variant) => {
-    console.log("inc working");
+    // console.log("inc working");
     this.props.firestore.update(
       {
         collection: "users",

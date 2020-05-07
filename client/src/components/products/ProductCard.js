@@ -17,7 +17,7 @@ class ProductCard extends Component {
       variant: Object.keys(props.product.variants)[0],
       units: 0,
       wishlisted: false,
-      imageLoading: true
+      imageLoading: true,
     };
   }
 
@@ -30,14 +30,14 @@ class ProductCard extends Component {
               props.cart.products[props.product.id] &&
               props.cart.products[props.product.id][state.variant]) ||
             0,
-          wishlisted: props.wishlist.indexOf(props.product.id) !== -1
+          wishlisted: props.wishlist.indexOf(props.product.id) !== -1,
         }
       : state;
   }
 
-  changeVariant = e => {
+  changeVariant = (e) => {
     this.setState({
-      variant: e.target.value
+      variant: e.target.value,
     });
   };
 
@@ -47,12 +47,12 @@ class ProductCard extends Component {
       firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           wishlist: this.state.wishlisted
             ? firestore.FieldValue.arrayRemove(this.props.product.id)
-            : firestore.FieldValue.arrayUnion(this.props.product.id)
+            : firestore.FieldValue.arrayUnion(this.props.product.id),
         }
       );
     } else {
@@ -65,13 +65,13 @@ class ProductCard extends Component {
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           ["cart.products." +
           this.props.product.id +
           "." +
-          this.state.variant]: this.props.firestore.FieldValue.increment(1)
+          this.state.variant]: this.props.firestore.FieldValue.increment(1),
         }
       );
     } else {
@@ -86,13 +86,13 @@ class ProductCard extends Component {
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           ["cart.products." + this.props.product.id + "." + this.state.variant]:
             this.props.cart.products[this.props.product.id][
               this.state.variant
-            ] - 1
+            ] - 1,
         }
       );
     } else if (
@@ -101,24 +101,24 @@ class ProductCard extends Component {
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           ["cart.products." +
           this.props.product.id +
           "." +
-          this.state.variant]: this.props.firestore.FieldValue.delete()
+          this.state.variant]: this.props.firestore.FieldValue.delete(),
         }
       );
     } else {
       this.props.firestore.update(
         {
           collection: "users",
-          doc: this.props.uid
+          doc: this.props.uid,
         },
         {
           ["cart.products." +
-          this.props.product.id]: this.props.firestore.FieldValue.delete()
+          this.props.product.id]: this.props.firestore.FieldValue.delete(),
         }
       );
     }
@@ -144,12 +144,21 @@ class ProductCard extends Component {
         {/* <span className="badge badge-success">{this.props.product.tag}</span> */}
         <div className="imageContainer">
           {this.state.imageLoading ? loading("80px") : ""}
-          <img
-            className={classnames({ "d-none": this.state.imageLoading })}
-            src={this.props.product.image}
-            alt={this.props.product.image_alt}
-            onLoad={this.handleLoadedImage}
-          />
+          {this.props.product.images[0] ? (
+            <img
+              className={classnames({ "d-none": this.state.imageLoading })}
+              src={this.props.product.images[0]}
+              alt={this.props.product.image_alt}
+              onLoad={this.handleLoadedImage}
+            />
+          ) : (
+            <img
+              className={classnames({ "d-none": this.state.imageLoading })}
+              src="/assets/images/dummyProduct.png"
+              alt="Product"
+              onLoad={this.handleLoadedImage}
+            />
+          )}
         </div>
         <p className="productName">{this.props.product.name}</p>
         <div className="row mt-1">
@@ -201,11 +210,11 @@ class ProductCard extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     uid: state.firebase.auth.uid,
     cart: state.firebase.profile.cart,
-    wishlist: state.firebase.profile.wishlist
+    wishlist: state.firebase.profile.wishlist,
   };
 };
 

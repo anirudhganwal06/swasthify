@@ -41,7 +41,7 @@ exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) 
     const productData = product.data();
     order.data.products[product.id] = {
       name: productData.name,
-      image: productData.image,
+      image: productData.images[0],
       variants: {}
     };
 

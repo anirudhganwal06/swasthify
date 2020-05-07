@@ -9,7 +9,7 @@ const cartProductCard = props => (
       <div className="col-4 colInRow">
         <Link to="/product/12345">
           <div className="imageContainer">
-            <img src={props.product.image} alt="Product " />
+            <img src={props.product.images[0]} alt="Product " />
           </div>
         </Link>
       </div>

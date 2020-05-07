@@ -1,12 +1,12 @@
 import React, { Component } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { isLoaded, firestoreConnect } from "react-redux-firebase";
 
-// import ProductCarousel from "../products/ProductCarousel";
 import BannersCarousel from "../common/BannersCarousel";
 // import ShowcaseFeatures from "../common/ShowcaseFeatures";
 // import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
 import ProductsCarousel from "../products/ProductCarousel";
-import { connect } from "react-redux";
-import { isLoaded } from "react-redux-firebase";
 import loading from "../common/Loading";
 
 class Landing extends Component {
@@ -62,10 +62,20 @@ class Landing extends Component {
   }
 }
 
+const getQuery = () => {
+  return [
+    {
+      collection: "products",
+      where: [["visible", "==", true]]
+    },
+  ];
+};
+
 const mapStateToProps = state => ({
-  misc:
-    state.firestore.data.products &&
-    state.firestore.data.products.miscellaneous
+  misc: state.firestore.data.misc
 });
 
-export default connect(mapStateToProps)(Landing);
+export default compose(
+  firestoreConnect(getQuery),
+  connect(mapStateToProps)
+  )(Landing);
