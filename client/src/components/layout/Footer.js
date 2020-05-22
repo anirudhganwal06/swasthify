@@ -8,7 +8,7 @@ const Footer = (props) => {
   if (isLoaded(props.misc)) {
     for (let i of props.misc.categories) {
       categoriesList.push(
-        <div className="col-6 col-sm-4 col-md-3" key={i}>
+        <div className="col-6 col-sm-4 col-lg-6" key={i}>
           <Link to={"/products?category=" + i} className="text-capitalize">
             {i}
           </Link>
@@ -33,9 +33,21 @@ const Footer = (props) => {
             <h1 className="headingSm">WORKING DAYS/HOURS</h1>
             <p>Mon - Sat / 9:00AM - 6:00PM</p>
           </div>
-          <div className="col-12 col-lg-9">
+          <div className="col-12 col-lg-3">
             <h1 className="heading">Categories</h1>
             <div className="row justify-content-left">{categoriesList}</div>
+          </div>
+          <div className="col-12 col-lg-6">
+            <h1 className="heading">Location</h1>
+            <iframe
+              id="locationIframe"
+              title="Location"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14036.430008638943!2d77.3114961!3d28.4160129!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdd97c322703b%3A0x5a66b6ec50ac952b!2sswanand%20vikriya%20kendra!5e0!3m2!1sen!2sin!4v1590166348794!5m2!1sen!2sin"
+              frameborder="0"
+              allowfullscreen=""
+              aria-hidden="false"
+              tabindex="0"
+            ></iframe>
           </div>
         </div>
 

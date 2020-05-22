@@ -487,6 +487,11 @@ footer a:hover {
   padding-left: 3px;
 }
 
+#locationIframe {
+  width: 100%;
+  height: 400px;
+}
+
 #paymentIcon {
   width: 100%;
 }
