@@ -43,10 +43,10 @@ const Footer = (props) => {
               id="locationIframe"
               title="Location"
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14036.430008638943!2d77.3114961!3d28.4160129!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdd97c322703b%3A0x5a66b6ec50ac952b!2sswanand%20vikriya%20kendra!5e0!3m2!1sen!2sin!4v1590166348794!5m2!1sen!2sin"
-              frameborder="0"
-              allowfullscreen=""
+              frameBorder="0"
+              allowFullScreen=""
               aria-hidden="false"
-              tabindex="0"
+              tabIndex="0"
             ></iframe>
           </div>
         </div>
@@ -55,13 +55,6 @@ const Footer = (props) => {
           <div className="col-12">
             <hr className="greyLine" />
           </div>
-          {/* <div className="col-9 col-sm-6 col-lg-3 m-3 m-lg-0 order-lg-2">
-              <img
-                id="paymentIcon"
-                src="/assets/images/paymentIcon.webp"
-                alt="Payment Methods"
-              />
-            </div> */}
           <div className="col-12 col-lg-9 order-lg-1">
             <p>Swasthify Corporation &copy; 2019. All Rights Reserved</p>
           </div>
