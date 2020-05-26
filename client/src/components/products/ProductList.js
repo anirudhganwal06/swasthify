@@ -12,6 +12,12 @@ const ProductList = ({ products, location }) => {
   const queryParams = queryString.parse(location.search);
   const productListJSX = [];
   if (isLoaded(products)) {
+    products.sort((a, b) => {
+      let aName = a.name.toLowerCase();
+      let bName = b.name.toLowerCase();
+      if (aName === bName) return 0;
+      return aName < bName ? -1 : 1;
+    });
     for (let product of products) {
       if (product.id !== "miscellaneous") {
         if (
@@ -37,7 +43,7 @@ const ProductList = ({ products, location }) => {
             }
           }
           let searchList = nameWithoutPunc.split(" ");
-          if (product.keywords.filter(value => searchList.includes(value))) {
+          if (product.keywords.filter((value) => searchList.includes(value))) {
             productListJSX.push(
               <div
                 key={product.id}
@@ -84,8 +90,8 @@ const ProductList = ({ products, location }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  products: state.firestore.ordered.products
+const mapStateToProps = (state) => ({
+  products: state.firestore.ordered.products,
 });
 
 const getQuery = ({ location }) => {
@@ -96,9 +102,9 @@ const getQuery = ({ location }) => {
         collection: "products",
         where: [
           ["categories", "array-contains", queryParams.category],
-          ["visible", "==", true]
-        ]
-      }
+          ["visible", "==", true],
+        ],
+      },
     ];
   } else if (queryParams.search) {
     let search = queryParams.search.trim();
@@ -117,16 +123,16 @@ const getQuery = ({ location }) => {
         collection: "products",
         where: [
           ["keywords", "array-contains-any", searchList],
-          ["visible", "==", true]
-        ]
-      }
+          ["visible", "==", true],
+        ],
+      },
     ];
   } else {
     return [
       {
         collection: "products",
-        where: [["visible", "==", true]]
-      }
+        where: [["visible", "==", true]],
+      },
     ];
   }
 };
