@@ -14,7 +14,7 @@ const OrderCard = props => {
             <div className="col-4 col-sm-3 col-md-2 colInRow">
               <Link to={"/product/" + i}>
                 <div className="imageContainer">
-                  <img src={order.products[i].images[0]} alt="Product " />
+                  <img src={order.products[i].image} alt="Product " />
                 </div>
               </Link>
             </div>
