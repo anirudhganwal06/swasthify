@@ -116,7 +116,7 @@ const getQuery = props => props.wishlist.map(pid => ({
 const addProductsToProps = (state, props) => {
   const products = {};
 
-  if(!state.firestore.data.products)
+  if(props.wishlist.length > 0 && !state.firestore.data.products)
     return {loading: true};
 
   for(const pid of props.wishlist) {
