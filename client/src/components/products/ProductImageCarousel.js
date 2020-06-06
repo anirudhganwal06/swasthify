@@ -45,7 +45,7 @@ export default class ProductImageCarousel extends Component {
           })}
           src={
             this.props.images[this.state.imageShowing] ||
-            "/assets/images/dummyProduct.png"
+            "/assets/images/noImageAvailable.jpg"
           }
           alt={this.props.image_alt}
           onLoad={this.handleLoadedImage}

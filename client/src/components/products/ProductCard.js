@@ -154,7 +154,7 @@ class ProductCard extends Component {
           ) : (
             <img
               className={classnames({ "d-none": this.state.imageLoading })}
-              src="/assets/images/dummyProduct.png"
+              src="/assets/images/noImageAvailable.jpg"
               alt="Product"
               onLoad={this.handleLoadedImage}
             />
