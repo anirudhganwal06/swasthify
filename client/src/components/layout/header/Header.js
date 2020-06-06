@@ -140,7 +140,7 @@ class Header extends Component {
           <Link className="navbar-brand" to="/">
             <img
               className="headerSwasthifyLogo mx-3"
-              src="/assets/images/swasthifyLogo.webp"
+              src="/assets/images/swasthifyLogo.png"
               alt="Swasthify"
             />
           </Link>
