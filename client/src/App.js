@@ -66,7 +66,6 @@ class App extends Component {
                 component={props => <AddAddress editMode={true} {...props} />}
               />
               <Route exact path="/about-us" component={AboutUs} />
-              <Route exact path="/orders" component={OrdersList} />
               <Route path="*" component={() => <Error statusCode="404" />} />
             </Switch>
           </main>
