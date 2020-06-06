@@ -5,7 +5,7 @@ import { isLoaded, firestoreConnect } from "react-redux-firebase";
 
 import BannersCarousel from "../common/BannersCarousel";
 // import ShowcaseFeatures from "../common/ShowcaseFeatures";
-// import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
+import ShowcaseBanneredFeatures from "../common/ShowcaseBanneredFeatures";
 import ProductsCarousel from "../products/ProductCarousel";
 import loading from "../common/Loading";
 
@@ -55,7 +55,7 @@ class Landing extends Component {
         ) : (
           <div>{categoryProductCarousel}</div>
         )}
-        {/* <ShowcaseBanneredFeatures /> */}
+        <ShowcaseBanneredFeatures />
         {/* <ShowcaseFeatures /> */}
       </section>
     );
