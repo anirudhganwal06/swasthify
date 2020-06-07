@@ -1,19 +1,26 @@
-const admin = require('./firebase');
+const admin = require("./firebase");
 
 const fs = admin.firestore();
 
-exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) => {
-  const userDoc = await fs.doc('users/' + uid).get();
-  const orderMetadataDoc = await fs.doc('orders/config').get();
+exports.createOrder = async ({
+  uid,
+  reciever,
+  mobileNo,
+  address,
+  paymentMode
+}) => {
+  const userDoc = await fs.doc("users/" + uid).get();
+  const orderMetadataDoc = await fs.doc("orders/config").get();
 
   const user = userDoc.data();
   const orderMetadata = orderMetadataDoc.data();
 
-  if (!reciever)
-    reciever = user.displayName;
+  if (!reciever) reciever = user.displayName;
 
   const order = {
-    id: orderMetadata.prefix + ("00000000" + (Number(orderMetadata.lastOrder) + 1)).slice(-8),
+    id:
+      orderMetadata.prefix +
+      ("00000000" + (Number(orderMetadata.lastOrder) + 1)).slice(-8),
     data: {
       address: user.addresses[address],
       discount: user.cart.discount,
@@ -32,12 +39,12 @@ exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) 
 
   const promises = [];
 
-  for(const pid in user.cart.products)
-  promises.push(fs.collection('products').doc(pid).get());
+  for (const pid in user.cart.products)
+    promises.push(fs.collection("products").doc(pid).get());
 
-  const products = await Promise.all(promises)
+  const products = await Promise.all(promises);
 
-  products.forEach(product => {
+  products.forEach((product) => {
     const productData = product.data();
     order.data.products[product.id] = {
       name: productData.name,
@@ -45,28 +52,30 @@ exports.createOrder = async ({ uid, reciever, mobileNo, address, paymentMode }) 
       variants: {}
     };
 
-    for(const variant in user.cart.products[product.id]) {
+    for (const variant in user.cart.products[product.id]) {
       order.data.products[product.id].variants[variant] = {
         ...productData.variants[variant],
         quantity: user.cart.products[product.id][variant]
       };
     }
   });
-  
+
   const batch = fs.batch();
 
-  batch.update(fs.doc('orders/config'), { lastOrder: admin.firestore.FieldValue.increment(1) });
+  batch.update(fs.doc("orders/config"), {
+    lastOrder: admin.firestore.FieldValue.increment(1)
+  });
   batch.set(fs.doc("orders/" + order.id), order.data);
   batch.update(fs.doc("users/" + uid), {
     "cart.products": {},
-    "orders": admin.firestore.FieldValue.arrayUnion(order.id),
-    "totalOrderAmount": admin.firestore.FieldValue.increment(order.data.total)
+    orders: admin.firestore.FieldValue.arrayUnion(order.id),
+    totalOrderAmount: admin.firestore.FieldValue.increment(order.data.total)
   });
 
   await batch.commit();
   return { user, order };
-}
+};
 
 exports.updateOrder = (id, orderDetails) => {
-  return fs.doc('orders/' + id).update(orderDetails);
-}
+  return fs.doc("orders/" + id).update(orderDetails);
+};
