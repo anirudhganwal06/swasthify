@@ -16,7 +16,7 @@ module.exports = async (data, context) => {
       wishlist: [],
       addresses: [],
       orders: [],
-      couponsUsed: [],
+      couponsUsed: {},
       tags: []
     });
 
