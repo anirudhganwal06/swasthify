@@ -7,6 +7,7 @@ import InputGroup from "../common/InputGroup";
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
 import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
+import ApplicableCoupons from "./ApplicableCoupons";
 
 class Checkout extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Checkout extends Component {
       selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
-      couponcode: "",
+      couponId: "",
       paymentOptions: [
         {
           name: "COD",
@@ -71,6 +72,10 @@ class Checkout extends Component {
 
   selectPaymentOption = (name) => {
     this.setState({ selectedPaymentOption: name });
+  };
+
+  selectCoupon = (couponId) => {
+    this.setState({ couponId });
   };
 
   render() {
@@ -170,6 +175,17 @@ class Checkout extends Component {
               <div className="row mb-2 justify-content-center">
                 {paymentOptions}
               </div>
+
+              <p>Applicable Coupons</p>
+              <input
+                type="hidden"
+                name="couponId"
+                value={this.state.couponId}
+              />
+              <ApplicableCoupons
+                selectCoupon={this.selectCoupon}
+                selectedCoupon={this.state.couponId}
+              />
             </div>
             <div className="col-12 col-md-5 col-xl-4">
               <OrderSummary

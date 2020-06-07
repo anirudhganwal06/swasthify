@@ -114,6 +114,22 @@ a:hover {
   margin: 10px 0;
 }
 
+#selectFromOptions .option {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  border: 2px solid #1122;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #fff;
+  overflow: hidden;
+  color: #344;
+}
+
+#selectFromOptions .selected {
+  border-color: #122a !important;
+}
+
 @media screen and (max-width: 575px) {
   .themeHeadingLg {
     font-size: 25px;
@@ -156,7 +172,6 @@ nav {
   color: white;
 }
 
-
 #navSearch {
   background-color: #233;
   border: none;
@@ -164,7 +179,6 @@ nav {
   /* border-top-left-radius: 20px;
   border-bottom-left-radius: 20px; */
 }
-
 
 #navSearch:focus {
   /* border-color: #aaa; */
@@ -1065,4 +1079,3 @@ footer a:hover {
   background-color: #122;
   right: 0;
 }
-
