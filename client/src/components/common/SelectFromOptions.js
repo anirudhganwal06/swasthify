@@ -8,19 +8,18 @@ const SelectFromOptions = (props) => {
         key={option.id}
         className={`option ${
           props.selectedOption === option.id ? "selected" : ""
-				}`}
-				onClick={() => props.selectOption(option.id)}
+        } ${option.disabled ? "disabled" : ""}`}
+        onClick={
+          option.disabled ? () => {} : () => props.selectOption(option.id)
+        }
       >
-				{option.name}
-			</div>
+        {option.name + " "}
+        <span title={option.info}>&#9432;</span>
+      </div>
     );
   }
 
-  return (
-    <div id="selectFromOptions">
-			{optionsJSX}
-    </div>
-  );
+  return <div id="selectFromOptions">{optionsJSX}</div>;
 };
 
 export default SelectFromOptions;
