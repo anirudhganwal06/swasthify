@@ -29,9 +29,10 @@ export const discountValue = (user, coupon) => {
   }
 
   // How many times user has used the coupon before
-  if (user.couponsUsed && coupon.id in Object.keys(user.couponsUsed)) {
+  if (user.couponsUsed && coupon.id in couponsUsed) {
     chancesLeft -= user.couponsUsed[coupon.id];
   }
+  console.log(chancesLeft);
 
   // If there are any left chances to use that coupon again
   if (chancesLeft > 0) {
