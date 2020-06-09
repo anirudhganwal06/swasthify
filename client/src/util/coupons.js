@@ -1,11 +1,4 @@
-exports.discountValue =  (user, coupon) => {
-  if (
-    coupon.minimumRequirementType === "Minimum Purchase Amount" &&
-    coupon.minimumRequirementValue > user.cart.subTotal
-  ) {
-    return 0;
-  }
-
+exports.discountValue = (user, coupon) => {
   let chancesLeft = 0;
 
   switch (coupon.customerEligibilityType) {
@@ -17,7 +10,7 @@ exports.discountValue =  (user, coupon) => {
     case "Specific Tags":
       // If specific tags are eligible for coupon
       for (let tag of user.tags) {
-        if (tag in coupon.customers) {
+        if (coupon.customers.includes(tag)) {
           chancesLeft = coupon.usageTimes;
           break;
         }
@@ -42,9 +35,16 @@ exports.discountValue =  (user, coupon) => {
 
   // If there are any left chances to use that coupon again
   if (chancesLeft > 0) {
-    return calcDiscount(user.cart.subTotal, coupon);
+    if (
+      coupon.minimumRequirementType === "Minimum Purchase Amount" &&
+      coupon.minimumRequirementValue > user.cart.subTotal
+    ) {
+      return [0, true];
+    }
+    return [calcDiscount(user.cart.subTotal, coupon), true];
   }
-  return 0;
+
+  return [0, false];
 };
 
 const calcDiscount = (cartSubTotal, coupon) => {
@@ -62,16 +62,16 @@ const calcDiscount = (cartSubTotal, coupon) => {
   }
 };
 
-exports.getCouponMessage = coupon => {
+exports.getCouponMessage = (coupon) => {
   let message = "Get ";
 
-  if(coupon.type === "Percentage")
-    message += coupon.value + "% discount";
-  else if(coupon.type === "Fixed Amount")
+  if (coupon.type === "Percentage") message += coupon.value + "% discount";
+  else if (coupon.type === "Fixed Amount")
     message += "₹ " + coupon.value + " off";
-  
-  if(coupon.minimumRequirementType === "Minimum Purchase Amount")
-    message += " on orders of ₹ " + coupon.minimumRequirementValue + " and above.";
-  
+
+  if (coupon.minimumRequirementType === "Minimum Purchase Amount")
+    message +=
+      " on orders of ₹ " + coupon.minimumRequirementValue + " and above.";
+
   return message;
 };
