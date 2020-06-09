@@ -1,4 +1,4 @@
-exports.discountValue = (user, coupon) => {
+const discountValue = (user, coupon) => {
   let chancesLeft = 0;
 
   switch (coupon.customerEligibilityType) {
@@ -62,7 +62,7 @@ const calcDiscount = (cartSubTotal, coupon) => {
   }
 };
 
-exports.getCouponMessage = (coupon) => {
+const getCouponMessage = (coupon) => {
   let message = "Get ";
 
   if (coupon.type === "Percentage") message += coupon.value + "% discount";
@@ -75,3 +75,5 @@ exports.getCouponMessage = (coupon) => {
 
   return message;
 };
+
+export { discountValue, getCouponMessage };
