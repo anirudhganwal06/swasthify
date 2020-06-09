@@ -1,7 +1,7 @@
-exports.discountValue =  (user, coupon) => {
+module.exports = (coupon, user, subTotal) => {
   if (
     coupon.minimumRequirementType === "Minimum Purchase Amount" &&
-    coupon.minimumRequirementValue > user.cart.subTotal
+    coupon.minimumRequirementValue > subTotal
   ) {
     return 0;
   }
@@ -42,7 +42,7 @@ exports.discountValue =  (user, coupon) => {
 
   // If there are any left chances to use that coupon again
   if (chancesLeft > 0) {
-    return calcDiscount(user.cart.subTotal, coupon);
+    return calcDiscount(subTotal, coupon);
   }
   return 0;
 };
@@ -60,18 +60,4 @@ const calcDiscount = (cartSubTotal, coupon) => {
     default:
       return 0;
   }
-};
-
-exports.getCouponMessage = coupon => {
-  let message = "Get ";
-
-  if(coupon.type === "Percentage")
-    message += coupon.value + "% discount";
-  else if(coupon.type === "Fixed Amount")
-    message += "₹ " + coupon.value + " off";
-  
-  if(coupon.minimumRequirementType === "Minimum Purchase Amount")
-    message += " on orders of ₹ " + coupon.minimumRequirementValue + " and above.";
-  
-  return message;
 };
