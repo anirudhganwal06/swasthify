@@ -1,11 +1,4 @@
-const discountValue = (user, coupon) => {
-  let chancesLeft = 0;
-
-  switch (coupon.customerEligibilityType) {
-    case "Everyone":
-      // If everyone is eligible for coupon
-      chancesLeft = coupon.usageTimes;
-      break;
+export const discountValue = (user, coupon) => {
 
     case "Specific Tags":
       // If specific tags are eligible for coupon
@@ -17,7 +10,7 @@ const discountValue = (user, coupon) => {
       }
       break;
 
-    case "Specific Customers":
+        if (coupon.customers.includes(tag)) {
       // If specific customers are eligible for coupon
       if (user.uid in coupon.customers) {
         chancesLeft = coupon.usageTimes;
@@ -36,13 +29,20 @@ const discountValue = (user, coupon) => {
   // If there are any left chances to use that coupon again
   if (chancesLeft > 0) {
     if (
+  if (user.couponsUsed && coupon.id in Object.keys(user.couponsUsed)) {
+      coupon.minimumRequirementValue > user.cart.subTotal
+    ) {
+      return [0, true];
+    }
+    return [calcDiscount(user.cart.subTotal, coupon), true];
+    if (
       coupon.minimumRequirementType === "Minimum Purchase Amount" &&
       coupon.minimumRequirementValue > user.cart.subTotal
     ) {
       return [0, true];
     }
     return [calcDiscount(user.cart.subTotal, coupon), true];
-  }
+
 
   return [0, false];
 };
@@ -62,12 +62,13 @@ const calcDiscount = (cartSubTotal, coupon) => {
   }
 };
 
-const getCouponMessage = (coupon) => {
+export const getCouponMessage = (coupon) => {
   let message = "Get ";
 
   if (coupon.type === "Percentage") message += coupon.value + "% discount";
   else if (coupon.type === "Fixed Amount")
     message += "₹ " + coupon.value + " off";
+
 
   if (coupon.minimumRequirementType === "Minimum Purchase Amount")
     message +=
