@@ -6,36 +6,40 @@ import { withFirestore } from "react-redux-firebase";
 
 import CartProductCard from "./CartProductCard";
 import loading from "../common/Loading";
+import calcTotal from "../../util/calcTotal";
 
 class Cart extends Component {
-  constructor() {
-    super();
-    this.state = {
-      products: {},
-      loading: true
-    };
-  }
+  state = {
+    products: {},
+    subTotal: 0,
+    discount: 0,
+    total: 0,
+    loading: true
+  };
 
-  decUnits = (productId, variant) => {
-    const product = this.state.products[productId];
+  decUnits = (pid, vid) => {
+    const qty = this.props.cart.products[pid][vid];
     const updateQuery = {};
-    if(product.selectedVariants[variant] > 1) {
-      updateQuery["cart.products." + productId + "." + variant] =
-        product.selectedVariants[variant] - 1;
-    } else if(Object.keys(product.selectedVariants).length > 1) {
-      updateQuery["cart.products." + productId + "." + variant] =
-        this.props.firestore.FieldValue.delete();
+    if (qty > 1) {
+      updateQuery["cart.products." + pid + "." + vid] = qty - 1;
+    } else if (Object.keys(this.props.cart.products[pid]).length > 1) {
+      updateQuery[
+        "cart.products." + pid + "." + vid
+      ] = this.props.firestore.FieldValue.delete();
     } else {
-      updateQuery["cart.products." + productId] =
-        this.props.firestore.FieldValue.delete();
+      updateQuery[
+        "cart.products." + pid
+      ] = this.props.firestore.FieldValue.delete();
     }
 
-    this.props.firestore.update(
-      {
-        collection: "users",
-        doc: this.props.uid,
-      }, updateQuery
-    );
+    this.props.firestore
+      .update(
+        {
+          collection: "users",
+          doc: this.props.uid
+        },
+        updateQuery
+      );
   };
 
   incUnits = (productId, variant) => {
@@ -59,23 +63,24 @@ class Cart extends Component {
     // this.setState({ loading: true });
     try {
       const promises = [];
-      
+
       for (const product in this.props.cart.products)
-      promises.push(this.props.firestore.doc("products/" + product).get());
-      
+        promises.push(this.props.firestore.doc("products/" + product).get());
+
       const fetchedProducts = await Promise.all(promises);
       const products = {};
-      fetchedProducts.forEach(
-        product => {
-          products[product.id] = {
-            selectedVariants: this.props.cart.products[product.id],
-            ...product.data()
-          };
-        }
-      );
-        
-      this.setState({ products, loading: false });
-    } catch(error) {
+      fetchedProducts.forEach((product) => {
+        products[product.id] = {
+          ...product.data()
+        };
+      });
+
+      this.setState({
+        products,
+        ...calcTotal(products, this.props.cart),
+        loading: false
+      });
+    } catch (error) {
       console.log("Error getting document:", error);
     }
   };
@@ -85,7 +90,8 @@ class Cart extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.fetchProducts();
+    if (prevProps !== this.props && this.state.products)
+      this.setState(calcTotal(this.state.products, this.props.cart));
   }
 
   render() {
@@ -93,7 +99,9 @@ class Cart extends Component {
 
     for (const id in this.state.products) {
       const product = this.state.products[id];
-      for (const variant in product.selectedVariants) {
+      const variants = this.props.cart.products[id];
+      for (const v in variants) {
+        const variant = { id: v, ...product.variants[v], qty: variants[v] };
         productsInCart.push(
           <CartProductCard
             key={id + "." + variant}
@@ -123,14 +131,14 @@ class Cart extends Component {
           <div className="cartMain text-left">
             <div className="billContainer">
               <div className="float-left">Sub Total</div>
-              <div className="float-right">₹ {this.props.cart.subTotal}</div>
+              <div className="float-right">₹ {this.state.subTotal}</div>
               <br />
               <div className="float-left">Discount</div>
-              <div className="float-right">₹ {this.props.cart.discount}</div>
+              <div className="float-right">₹ {this.state.discount}</div>
               <br />
               <hr />
               <div className="float-left">Total</div>
-              <div className="float-right">₹ {this.props.cart.total}</div>
+              <div className="float-right">₹ {this.state.total}</div>
               <br />
             </div>
             {this.state.loading ? (
@@ -155,7 +163,7 @@ class Cart extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   uid: state.firebase.auth.uid,
   cart: state.firebase.profile.cart
 });

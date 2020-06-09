@@ -17,21 +17,21 @@ const cartProductCard = props => (
         <span className="badge badge-success">{props.product.tag}</span>
         <p className="productName">{props.product.name}</p>
         <p>
-          {props.product.variants[props.variant].size}
+          {props.variant.size}
         </p>
         <p className="productPrice">
-            ₹ {props.product.variants[props.variant].discountedPrice}
+            ₹ {props.variant.discountedPrice}
         </p>
         <span className="fas fa-times"></span>
         <InputStepper
-          value={props.product.selectedVariants[props.variant]}
-          incrementHandler={() => props.incUnits(props.index, props.variant)}
-          decrementHandler={() => props.decUnits(props.index, props.variant)}
+          value={props.variant.qty}
+          incrementHandler={() => props.incUnits(props.index, props.variant.id)}
+          decrementHandler={() => props.decUnits(props.index, props.variant.id)}
         />
         <div className="cartFinalProductPrice">
           {"₹ " +
-            (props.product.variants[props.variant].discountedPrice *
-              props.product.selectedVariants[props.variant])}
+            (props.variant.discountedPrice *
+              props.variant.qty)}
         </div>
       </div>
     </div>
