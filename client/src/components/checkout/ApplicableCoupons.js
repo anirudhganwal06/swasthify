@@ -1,18 +1,24 @@
 import React from "react";
 import SelectFromOptions from "../common/SelectFromOptions";
 import { compose } from "redux";
-import { firestoreConnect, isLoaded } from "react-redux-firebase";
+import { isLoaded } from "react-redux-firebase";
 import { connect } from "react-redux";
-import {discountValue} from "../../util/coupons";
+import { discountValue, getCouponMessage } from "../../util/coupons";
 
 const ApplicableCoupons = (props) => {
   const applicableCoupons = [];
   if (isLoaded(props.coupons, props.user)) {
     for (let coupon of props.coupons) {
-      if (discountValue({ ...props.user, uid: props.uid }, coupon) !== 0) {
+      const [discount, show] = discountValue(
+        { ...props.user, uid: props.uid },
+        coupon
+      );
+      if (show) {
         applicableCoupons.push({
           name: coupon.code,
           id: coupon.id,
+          disabled: discount === 0,
+          info: getCouponMessage(coupon),
         });
       }
     }
@@ -33,19 +39,11 @@ const ApplicableCoupons = (props) => {
   );
 };
 
-const getQuery = () => [
-  {
-    collection: "coupons",
-  },
-];
-
 const mapStateToProps = (state) => ({
-  coupons: state.firestore.ordered.coupons,
   user: state.firebase.profile,
   uid: state.firebase.auth.uid,
 });
 
 export default compose(
-  firestoreConnect(getQuery),
   connect(mapStateToProps)
 )(ApplicableCoupons);

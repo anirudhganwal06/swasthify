@@ -130,6 +130,11 @@ a:hover {
   border-color: #122a !important;
 }
 
+#selectFromOptions .disabled {
+  border-color: #eee;
+  color: #aaa;
+}
+
 @media screen and (max-width: 575px) {
   .themeHeadingLg {
     font-size: 25px;

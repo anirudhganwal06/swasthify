@@ -11,7 +11,7 @@ import loading from "../common/Loading";
 
 class Landing extends Component {
   state = {
-    loading: false
+    loading: false,
   };
 
   componentDidMount = () => {
@@ -22,7 +22,7 @@ class Landing extends Component {
     }
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     if (prevProps !== this.props) {
       if (isLoaded(this.props.misc)) {
         this.setState({ loading: false });
@@ -35,9 +35,8 @@ class Landing extends Component {
   render() {
     const categoryProductCarousel = [];
 
-    if (isLoaded(this.props.misc)) {
+    if (this.props.misc && this.props.misc.categories) {
       for (let i in this.props.misc.categories) {
-        // console.log(this.props.misc.categories[i]);
         categoryProductCarousel.push(
           <ProductsCarousel
             category={this.props.misc.categories[i]}
@@ -66,16 +65,16 @@ const getQuery = () => {
   return [
     {
       collection: "products",
-      where: [["visible", "==", true]]
+      where: [["visible", "==", true]],
     },
   ];
 };
 
-const mapStateToProps = state => ({
-  misc: state.firestore.data.misc
+const mapStateToProps = (state) => ({
+  misc: state.firestore.data.misc,
 });
 
 export default compose(
   firestoreConnect(getQuery),
   connect(mapStateToProps)
-  )(Landing);
+)(Landing);
