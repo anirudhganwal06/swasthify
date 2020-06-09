@@ -1,7 +1,7 @@
 exports.discountValue =  (user, coupon) => {
   if (
     coupon.minimumRequirementType === "Minimum Purchase Amount" &&
-    coupon.minimumRequirementValue < user.cart.subTotal
+    coupon.minimumRequirementValue > user.cart.subTotal
   ) {
     return 0;
   }
@@ -36,7 +36,7 @@ exports.discountValue =  (user, coupon) => {
   }
 
   // How many times user has used the coupon before
-  if (user.couponsUsed && coupon.id in user.couponsUsed) {
+  if (user.couponsUsed && coupon.id in Object.keys(user.couponsUsed)) {
     chancesLeft -= user.couponsUsed[coupon.id];
   }
 
