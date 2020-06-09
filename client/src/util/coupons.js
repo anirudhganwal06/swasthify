@@ -1,4 +1,4 @@
-export default (user, coupon) => {
+exports.discountValue =  (user, coupon) => {
   if (
     coupon.minimumRequirementType === "Minimum Purchase Amount" &&
     coupon.minimumRequirementValue < user.cart.subTotal
@@ -36,7 +36,7 @@ export default (user, coupon) => {
   }
 
   // How many times user has used the coupon before
-  if (coupon.id in user.couponsUsed) {
+  if (user.couponsUsed && coupon.id in user.couponsUsed) {
     chancesLeft -= user.couponsUsed[coupon.id];
   }
 
@@ -57,11 +57,21 @@ const calcDiscount = (cartSubTotal, coupon) => {
       // Returning the fixed value
       return coupon.value;
 
-    case "Free Shipping":
-      // Do what you need [REKHANSH]
-      break;
-
     default:
       return 0;
   }
+};
+
+exports.getCouponMessage = coupon => {
+  let message = "Get ";
+
+  if(coupon.type === "Percentage")
+    message += coupon.value + "% discount";
+  else if(coupon.type === "Fixed Amount")
+    message += "₹ " + coupon.value + " off";
+  
+  if(coupon.minimumRequirementType === "Minimum Purchase Amount")
+    message += " on orders of ₹ " + coupon.minimumRequirementValue + " and above.";
+  
+  return message;
 };

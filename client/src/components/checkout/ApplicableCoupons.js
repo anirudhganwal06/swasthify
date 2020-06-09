@@ -3,7 +3,7 @@ import SelectFromOptions from "../common/SelectFromOptions";
 import { compose } from "redux";
 import { firestoreConnect, isLoaded } from "react-redux-firebase";
 import { connect } from "react-redux";
-import discountValue from "./discountValue";
+import {discountValue} from "../../util/coupons";
 
 const ApplicableCoupons = (props) => {
   const applicableCoupons = [];
