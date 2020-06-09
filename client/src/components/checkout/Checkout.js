@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withFirestore } from "react-redux-firebase";
+import { firestoreConnect } from "react-redux-firebase";
 
 import InputGroup from "../common/InputGroup";
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
 import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
 import ApplicableCoupons from "./ApplicableCoupons";
+import { discountValue } from "../../util/coupons";
 
 class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recieverName: props.displayName,
-      mobileNo: props.mobileNo,
+      recieverName: props.user ? props.user.displayName : "",
+      mobileNo: props.user ? props.user.mobileNo : "",
       selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
@@ -38,28 +39,54 @@ class Checkout extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.fetchProducts();
+    if (discountValue) if (prevProps !== this.props) this.fetchProducts();
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.coupons) {
+      if (prevState.couponId !== "") {
+        let selectedCoupon = {};
+        for (let i in nextProps.coupons) {
+          if (nextProps.coupons[i].id === prevState.couponId) {
+            selectedCoupon = nextProps.coupons[i];
+            break;
+          }
+        }
+        const [discount, show] = discountValue(
+          { uid: nextProps.uid, ...nextProps.user },
+          selectedCoupon
+        );
+        if (discount === 0 || !show) {
+          return {
+            ...prevState,
+            couponId: ""
+          };
+        }
+      }
+    }
+    return prevState;
   }
 
   fetchProducts = () => {
     const promises = [];
 
-    for (const product in this.props.order.products)
-      promises.push(this.props.firestore.doc("products/" + product).get());
-
-    Promise.all(promises)
-      .then((fetchedProducts) => {
-        const products = {};
-        fetchedProducts.forEach(
-          (product) =>
-            (products[product.id] = {
-              selectedVariants: this.props.order.products[product.id],
-              ...product.data(),
-            })
-        );
-        this.setState({ products });
-      })
-      .catch((error) => console.log("Error getting document:", error));
+    if (this.props.order && this.props.order.products) {
+      for (const product in this.props.order.products)
+        promises.push(this.props.firestore.doc("products/" + product).get());
+      Promise.all(promises)
+        .then((fetchedProducts) => {
+          const products = {};
+          fetchedProducts.forEach(
+            (product) =>
+              (products[product.id] = {
+                selectedVariants: this.props.order.products[product.id],
+                ...product.data(),
+              })
+          );
+          this.setState({ products });
+        })
+        .catch((error) => console.log("Error getting document:", error));
+    }
   };
 
   onChange = (e) => {
@@ -82,7 +109,7 @@ class Checkout extends Component {
     const deliveryAddresses = [];
     const paymentOptions = [];
 
-    const addresses = this.props.addresses;
+    const addresses = this.props.user ? this.props.user.addresses : [];
     for (const address in addresses) {
       deliveryAddresses.push(
         <DeliveryAddressCard
@@ -185,6 +212,7 @@ class Checkout extends Component {
               <ApplicableCoupons
                 selectCoupon={this.selectCoupon}
                 selectedCoupon={this.state.couponId}
+                coupons={this.props.coupons}
               />
             </div>
             <div className="col-12 col-md-5 col-xl-4">
@@ -209,12 +237,20 @@ class Checkout extends Component {
   }
 }
 
+const getQuery = () => [
+  {
+    collection: "coupons",
+  },
+];
+
 const mapStateToProps = (state) => ({
   uid: state.firebase.auth.uid,
-  displayName: state.firebase.profile.displayName,
-  mobileNo: state.firebase.profile.mobileNo,
-  addresses: state.firebase.profile.addresses,
+  user: state.firebase.profile,
   order: state.firebase.profile.cart,
+  coupons: state.firestore.ordered.coupons,
 });
 
-export default compose(withFirestore, connect(mapStateToProps))(Checkout);
+export default compose(
+  firestoreConnect(getQuery),
+  connect(mapStateToProps)
+)(Checkout);
