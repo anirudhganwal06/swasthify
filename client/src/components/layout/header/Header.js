@@ -7,7 +7,6 @@ import { firestoreConnect } from "react-redux-firebase";
 import SideNav from "./SideNav";
 import Cart from "../../cart/Cart";
 import { signedInLinks, signedOutLinks } from "./links";
-import { isLoaded } from "react-redux-firebase";
 import loading from "../../common/Loading";
 
 import { setFlashMessage } from "../../../actions/flashActions";
@@ -86,7 +85,7 @@ class Header extends Component {
     }
 
     let categories = [];
-    if (isLoaded(this.props.misc)) {
+    if (this.props.misc && this.props.misc.categories) {
       categories = this.props.misc.categories;
       categoriesJSX.push(
         <Link
@@ -212,7 +211,7 @@ class Header extends Component {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdown"
                 >
-                  {isLoaded(this.props.misc)
+                  {this.props.misc
                     ? categoriesJSX
                     : loading("80px")}
                 </div>

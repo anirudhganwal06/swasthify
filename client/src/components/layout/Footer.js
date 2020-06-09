@@ -1,11 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { isLoaded } from "react-redux-firebase";
 import { Link } from "react-router-dom";
 
 const Footer = (props) => {
   const categoriesList = [];
-  if (isLoaded(props.misc)) {
+  if (props.misc && props.misc.categories) {
     for (let i of props.misc.categories) {
       categoriesList.push(
         <div className="col-6 col-sm-4 col-lg-6" key={i}>
