@@ -8,7 +8,8 @@ import { discountValue, getCouponMessage } from "../../util/coupons";
 const ApplicableCoupons = (props) => {
   const applicableCoupons = [];
   if (isLoaded(props.coupons, props.user)) {
-    for (let coupon of props.coupons) {
+    for (let couponId in props.coupons) {
+      const coupon = props.coupons[couponId];
       const [discount, show] = discountValue(
         { ...props.user, uid: props.uid },
         coupon
@@ -16,7 +17,7 @@ const ApplicableCoupons = (props) => {
       if (show) {
         applicableCoupons.push({
           name: coupon.code,
-          id: coupon.id,
+          id: couponId,
           disabled: discount === 0,
           info: getCouponMessage(coupon),
         });

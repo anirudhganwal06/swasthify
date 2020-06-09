@@ -38,7 +38,7 @@ exports.createOrder = async ({
   if (couponId) {
     const couponDoc = await fs.doc("coupons/" + couponId).get();
     const coupon = { ...couponDoc.data(), id: couponDoc.id };
-    discount = applyCoupon(coupon, user, subtotal);
+    discount = applyCoupon(coupon, user, subTotal);
   }
 
   const orderProducts = {};

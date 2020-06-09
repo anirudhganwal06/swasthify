@@ -9,6 +9,7 @@ import PaymentOptionCard from "./PaymentOptionCard";
 import OrderSummary from "./OrderSummary";
 import ApplicableCoupons from "./ApplicableCoupons";
 import { discountValue } from "../../util/coupons";
+import calcTotal from "../../util/calcTotal";
 
 class Checkout extends Component {
   constructor(props) {
@@ -19,6 +20,9 @@ class Checkout extends Component {
       selectedAddress: {},
       selectedPaymentOption: "",
       products: [],
+      subTotal: 0,
+      discount: 0,
+      total: 0,
       couponId: "",
       paymentOptions: [
         {
@@ -38,34 +42,34 @@ class Checkout extends Component {
     this.fetchProducts();
   }
 
-  componentDidUpdate(prevProps) {
-    if (discountValue) if (prevProps !== this.props) this.fetchProducts();
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (discountValue) if (prevProps !== this.props) this.fetchProducts();
+  // }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.coupons) {
-      if (prevState.couponId !== "") {
-        let selectedCoupon = {};
-        for (let i in nextProps.coupons) {
-          if (nextProps.coupons[i].id === prevState.couponId) {
-            selectedCoupon = nextProps.coupons[i];
-            break;
-          }
-        }
-        const [discount, show] = discountValue(
-          { uid: nextProps.uid, ...nextProps.user },
-          selectedCoupon
-        );
-        if (discount === 0 || !show) {
-          return {
-            ...prevState,
-            couponId: ""
-          };
-        }
-      }
-    }
-    return prevState;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if (nextProps.coupons) {
+  //     if (prevState.couponId !== "") {
+  //       let selectedCoupon = {};
+  //       for (let i in nextProps.coupons) {
+  //         if (nextProps.coupons[i].id === prevState.couponId) {
+  //           selectedCoupon = nextProps.coupons[i];
+  //           break;
+  //         }
+  //       }
+  //       const [discount, show] = discountValue(
+  //         { uid: nextProps.uid, ...nextProps.user },
+  //         selectedCoupon
+  //       );
+  //       if (discount === 0 || !show) {
+  //         return {
+  //           ...prevState,
+  //           couponId: ""
+  //         };
+  //       }
+  //     }
+  //   }
+  //   return prevState;
+  // }
 
   fetchProducts = () => {
     const promises = [];
@@ -83,7 +87,9 @@ class Checkout extends Component {
                 ...product.data(),
               })
           );
-          this.setState({ products });
+
+          const subTotal = calcTotal(products, this.props.order);
+          this.setState({ products, subTotal, total: subTotal });
         })
         .catch((error) => console.log("Error getting document:", error));
     }
@@ -102,7 +108,12 @@ class Checkout extends Component {
   };
 
   selectCoupon = (couponId) => {
-    this.setState({ couponId });
+    const subTotal = calcTotal(this.state.products, this.props.order);
+    const [discount, show] = discountValue({uid: this.props.uid, ...this.props.user}, this.props.coupons[couponId]);
+    const total = subTotal - discount;
+    if(discount === 0 || !show)
+      couponId = "";
+    this.setState({ couponId, subTotal, discount, total });
   };
 
   render() {
@@ -217,7 +228,10 @@ class Checkout extends Component {
             </div>
             <div className="col-12 col-md-5 col-xl-4">
               <OrderSummary
-                order={{ ...this.props.order, products: this.state.products }}
+                products={this.state.products}
+                subTotal={this.state.subTotal}
+                discount={this.state.discount}
+                total={this.state.total}
               />
             </div>
             <div className="col-12 col-xl-10 text-center py-2">
@@ -247,7 +261,7 @@ const mapStateToProps = (state) => ({
   uid: state.firebase.auth.uid,
   user: state.firebase.profile,
   order: state.firebase.profile.cart,
-  coupons: state.firestore.ordered.coupons,
+  coupons: state.firestore.data.coupons,
 });
 
 export default compose(

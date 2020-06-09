@@ -77,7 +77,7 @@ class Cart extends Component {
 
       this.setState({
         products,
-        ...calcTotal(products, this.props.cart),
+        subTotal: calcTotal(products, this.props.cart),
         loading: false
       });
     } catch (error) {
@@ -91,7 +91,7 @@ class Cart extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props && this.state.products)
-      this.setState(calcTotal(this.state.products, this.props.cart));
+      this.setState({ subTotal: calcTotal(this.state.products, this.props.cart) });
   }
 
   render() {
@@ -138,7 +138,7 @@ class Cart extends Component {
               <br />
               <hr />
               <div className="float-left">Total</div>
-              <div className="float-right">₹ {this.state.total}</div>
+              <div className="float-right">₹ {this.state.subTotal}</div>
               <br />
             </div>
             {this.state.loading ? (
