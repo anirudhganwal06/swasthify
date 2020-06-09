@@ -18,7 +18,7 @@ class Header extends Component {
       sideNavOpen: false,
       cartOpen: false,
       searchOpen: false,
-      search: ""
+      search: "",
     };
   }
 
@@ -51,7 +51,7 @@ class Header extends Component {
     this.setState({ searchOpen: !this.state.searchOpen });
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -88,11 +88,7 @@ class Header extends Component {
     if (this.props.misc && this.props.misc.categories) {
       categories = this.props.misc.categories;
       categoriesJSX.push(
-        <Link
-          className="dropdown-item"
-          to="/products"
-          key={"allProducts"}
-        >
+        <Link className="dropdown-item" to="/products" key={"allProducts"}>
           All Products
         </Link>
       );
@@ -148,17 +144,23 @@ class Header extends Component {
               className="fas fa-search mr-4"
               onClick={this.toggleSearch}
             ></span>
-            {this.props.cart ? (
-              <span className="badge badge-pill shoppingBadgeSm">
-                {Object.keys(this.props.cart.products || {}).length}
-              </span>
-            ) : (
+            {this.props.location.pathname === "/checkout" ? (
               ""
+            ) : (
+              <React.Fragment>
+                {this.props.cart ? (
+                  <span className="badge badge-pill shoppingBadgeSm">
+                    {Object.keys(this.props.cart.products || {}).length}
+                  </span>
+                ) : (
+                  ""
+                )}
+                <span
+                  className="fas fa-shopping-cart"
+                  onClick={this.openCart}
+                ></span>
+              </React.Fragment>
             )}
-            <span
-              className="fas fa-shopping-cart"
-              onClick={this.openCart}
-            ></span>
           </div>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
@@ -211,9 +213,7 @@ class Header extends Component {
                   className="dropdown-menu text-capitalize"
                   aria-labelledby="navbarDropdown"
                 >
-                  {this.props.misc
-                    ? categoriesJSX
-                    : loading("80px")}
+                  {this.props.misc ? categoriesJSX : loading("80px")}
                 </div>
               </li>
               <li className="nav-item mx-1">
@@ -272,18 +272,22 @@ class Header extends Component {
                   </div>
                 </form>
               </li>
-              <li className="nav-item active mx-2">
-                <div className="nav-link cPointer" onClick={this.openCart}>
-                  {this.props.cart ? (
-                    <span className="badge badge-pill shoppingBadge">
-                      {Object.keys(this.props.cart.products || {}).length}
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                  <span className="fas fa-shopping-cart"></span>
-                </div>
-              </li>
+              {this.props.location.pathname === "/checkout" ? (
+                ""
+              ) : (
+                <li className="nav-item active mx-2">
+                  <div className="nav-link cPointer" onClick={this.openCart}>
+                    {this.props.cart ? (
+                      <span className="badge badge-pill shoppingBadge">
+                        {Object.keys(this.props.cart.products || {}).length}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                    <span className="fas fa-shopping-cart"></span>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -314,17 +318,17 @@ const getQuery = () => [
   {
     collection: "products",
     doc: "miscellaneous",
-    storeAs: "misc"
-  }
+    storeAs: "misc",
+  },
 ];
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     name: state.firebase.profile.displayName,
     mobileNo: state.firebase.profile.mobileNo,
     isSignedIn: !state.firebase.auth.isEmpty,
     misc: state.firestore.data.misc,
-    cart: state.firebase.profile.cart
+    cart: state.firebase.profile.cart,
   };
 };
 

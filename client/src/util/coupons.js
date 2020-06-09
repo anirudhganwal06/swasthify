@@ -1,4 +1,11 @@
 export const discountValue = (user, coupon) => {
+  let chancesLeft = 0;
+
+  switch (coupon.customerEligibilityType) {
+    case "Everyone":
+      // If everyone is eligible for coupon
+      chancesLeft = coupon.usageTimes;
+      break;
 
     case "Specific Tags":
       // If specific tags are eligible for coupon
@@ -10,7 +17,7 @@ export const discountValue = (user, coupon) => {
       }
       break;
 
-        if (coupon.customers.includes(tag)) {
+    case "Specific Customers":
       // If specific customers are eligible for coupon
       if (user.uid in coupon.customers) {
         chancesLeft = coupon.usageTimes;
@@ -29,20 +36,13 @@ export const discountValue = (user, coupon) => {
   // If there are any left chances to use that coupon again
   if (chancesLeft > 0) {
     if (
-  if (user.couponsUsed && coupon.id in Object.keys(user.couponsUsed)) {
-      coupon.minimumRequirementValue > user.cart.subTotal
-    ) {
-      return [0, true];
-    }
-    return [calcDiscount(user.cart.subTotal, coupon), true];
-    if (
       coupon.minimumRequirementType === "Minimum Purchase Amount" &&
       coupon.minimumRequirementValue > user.cart.subTotal
     ) {
       return [0, true];
     }
     return [calcDiscount(user.cart.subTotal, coupon), true];
-
+  }
 
   return [0, false];
 };
@@ -69,12 +69,9 @@ export const getCouponMessage = (coupon) => {
   else if (coupon.type === "Fixed Amount")
     message += "₹ " + coupon.value + " off";
 
-
   if (coupon.minimumRequirementType === "Minimum Purchase Amount")
     message +=
       " on orders of ₹ " + coupon.minimumRequirementValue + " and above.";
 
   return message;
 };
-
-export { discountValue, getCouponMessage };
