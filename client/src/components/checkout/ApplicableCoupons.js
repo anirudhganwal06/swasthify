@@ -12,7 +12,7 @@ const ApplicableCoupons = (props) => {
       const coupon = props.coupons[couponId];
       const [discount, show] = discountValue(
         { ...props.user, uid: props.uid },
-        coupon
+        { id: couponId, ...coupon }
       );
       if (show) {
         applicableCoupons.push({

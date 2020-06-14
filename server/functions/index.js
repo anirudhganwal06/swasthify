@@ -7,5 +7,4 @@ exports.verifyOrder = functions.https.onRequest(
 exports.sendMessage = functions.https.onRequest(
   require("./routes/sendMessage")
 );
-exports.calcCartTotal = require("./routes/calcCartTotal");
 exports.addCustomer = functions.https.onCall(require("./routes/addCustomer"));
