@@ -131,7 +131,6 @@ const func = async () => {
   }
 
   await batch.commit();
-  console.log("Done");
 };
 
 try {

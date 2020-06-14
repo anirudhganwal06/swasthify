@@ -43,7 +43,6 @@ class Cart extends Component {
   };
 
   incUnits = (productId, variant) => {
-    // console.log("inc working");
     this.props.firestore.update(
       {
         collection: "users",
@@ -114,7 +113,6 @@ class Cart extends Component {
         );
       }
     }
-    // console.log(this.state.products);
     return (
       <div className="cartContainer">
         <div className="cartEmptySpace" onClick={this.props.closeCart}></div>

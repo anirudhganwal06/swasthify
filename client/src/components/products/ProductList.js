@@ -117,7 +117,6 @@ const getQuery = ({ location }) => {
       }
     }
     let searchList = nameWithoutPunc.split(" ");
-    console.log(searchList);
     return [
       {
         collection: "products",
