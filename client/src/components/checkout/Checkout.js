@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
+import validator from "validator";
 
 import InputGroup from "../common/InputGroup";
 import DeliveryAddressCard from "../common/DeliveryAddressCard";
@@ -35,41 +36,13 @@ class Checkout extends Component {
         },
       ],
       errors: {},
+      btnDisabled: true,
     };
   }
 
   componentDidMount() {
     this.fetchProducts();
   }
-
-  // componentDidUpdate(prevProps) {
-  //   if (discountValue) if (prevProps !== this.props) this.fetchProducts();
-  // }
-
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (nextProps.coupons) {
-  //     if (prevState.couponId !== "") {
-  //       let selectedCoupon = {};
-  //       for (let i in nextProps.coupons) {
-  //         if (nextProps.coupons[i].id === prevState.couponId) {
-  //           selectedCoupon = nextProps.coupons[i];
-  //           break;
-  //         }
-  //       }
-  //       const [discount, show] = discountValue(
-  //         { uid: nextProps.uid, ...nextProps.user },
-  //         selectedCoupon
-  //       );
-  //       if (discount === 0 || !show) {
-  //         return {
-  //           ...prevState,
-  //           couponId: ""
-  //         };
-  //       }
-  //     }
-  //   }
-  //   return prevState;
-  // }
 
   fetchProducts = () => {
     const promises = [];
@@ -95,24 +68,45 @@ class Checkout extends Component {
     }
   };
 
+  validateCheckout = () => {
+    let isValid = true;
+    if (
+      !validator.isLength(this.state.recieverName, { min: 3, max: 64 }) ||
+      !validator.isMobilePhone(this.state.mobileNo) ||
+      this.state.selectedAddress === {} ||
+      this.state.selectedPaymentOption === "" ||
+      this.state.total <= 0
+    )
+      this.setState({
+        btnDisabled: true,
+      });
+    else {
+      this.setState({
+        btnDisabled: false,
+      });
+    }
+  };
+
   onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value }, this.validateCheckout);
   };
 
   selectDeliveryAddress = (index) => {
-    this.setState({ selectedAddress: index });
+    this.setState({ selectedAddress: index }, this.validateCheckout);
   };
 
   selectPaymentOption = (name) => {
-    this.setState({ selectedPaymentOption: name });
+    this.setState({ selectedPaymentOption: name }, this.validateCheckout);
   };
 
   selectCoupon = (couponId) => {
     const subTotal = calcTotal(this.state.products, this.props.order);
-    const [discount, show] = discountValue({uid: this.props.uid, ...this.props.user}, this.props.coupons[couponId]);
+    const [discount, show] = discountValue(
+      { uid: this.props.uid, ...this.props.user },
+      this.props.coupons[couponId]
+    );
     const total = subTotal - discount;
-    if(discount === 0 || !show)
-      couponId = "";
+    if (discount === 0 || !show) couponId = "";
     this.setState({ couponId, subTotal, discount, total });
   };
 
@@ -238,6 +232,7 @@ class Checkout extends Component {
               <button
                 className="btn themeColorHoverBtn btn-block"
                 type="submit"
+                disabled={this.state.btnDisabled}
               >
                 {this.state.selectedPaymentOption === "COD"
                   ? "Place Order"
