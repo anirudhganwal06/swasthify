@@ -6,7 +6,7 @@ import queryString from "query-string";
 
 import ProductCard from "./ProductCard";
 import loading from "../common/Loading";
-import punctuationMarks from "../common/punctuationMarks";
+import getKeywords from "../../util/getKeywords";
 
 const ProductList = ({ products, location }) => {
   const queryParams = queryString.parse(location.search);
@@ -33,16 +33,7 @@ const ProductList = ({ products, location }) => {
             </div>
           );
         } else if (queryParams.search) {
-          let search = queryParams.search.trim();
-          let nameWithoutPunc = "";
-          for (let i in search) {
-            if (punctuationMarks.includes(search[i])) {
-              nameWithoutPunc += " ";
-            } else {
-              nameWithoutPunc += search[i].toLowerCase();
-            }
-          }
-          let searchList = nameWithoutPunc.split(" ");
+          let searchList = getKeywords(queryParams.search);
           if (product.keywords.filter((value) => searchList.includes(value))) {
             productListJSX.push(
               <div
@@ -107,16 +98,7 @@ const getQuery = ({ location }) => {
       },
     ];
   } else if (queryParams.search) {
-    let search = queryParams.search.trim();
-    let nameWithoutPunc = "";
-    for (let i in search) {
-      if (punctuationMarks.includes(search[i])) {
-        nameWithoutPunc += " ";
-      } else {
-        nameWithoutPunc += search[i].toLowerCase();
-      }
-    }
-    let searchList = nameWithoutPunc.split(" ");
+    let searchList = getKeywords(queryParams.search);
     console.log(searchList);
     return [
       {
