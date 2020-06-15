@@ -49,7 +49,6 @@ class Signup extends Component {
               break;
 
             default:
-              console.log(err);
           }
         });
   };

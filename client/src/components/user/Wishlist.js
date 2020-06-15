@@ -48,7 +48,6 @@ class Wishlist extends Component {
   render() {
     const productsList = [];
     const products = this.props.products;
-    console.log(products);
     for (const pid in products) {
       productsList.push(
         <div className="cartProductCard" key={pid}>

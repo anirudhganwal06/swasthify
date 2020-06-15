@@ -27,7 +27,6 @@ class AddAddress extends Component {
     e.preventDefault();
 
     const firebase = this.props.firebase;
-    console.log(firebase);
     let newAddresses = [ ...this.props.addresses ];
     let newAddress = {
       line1: this.state.line1,
@@ -50,7 +49,6 @@ class AddAddress extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <div className="container p-3">
         <div className="row justify-content-center">

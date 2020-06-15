@@ -25,7 +25,6 @@ class Header extends Component {
   openSideNav = () => this.setState({ sideNavOpen: true });
 
   closeSideNav = () => {
-    console.log("closeSideNav");
     this.setState({ sideNavOpen: false });
   };
 
