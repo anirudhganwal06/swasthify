@@ -69,7 +69,6 @@ class Checkout extends Component {
   };
 
   validateCheckout = () => {
-    let isValid = true;
     if (
       !validator.isLength(this.state.recieverName, { min: 3, max: 64 }) ||
       !validator.isMobilePhone(this.state.mobileNo) ||
