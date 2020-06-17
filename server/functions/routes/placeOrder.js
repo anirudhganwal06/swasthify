@@ -19,9 +19,9 @@ module.exports = async (req, res) => {
     CUST_ID: req.body.uid,
     INDUSTRY_TYPE_ID: paytmConfig.INDUSTRY_TYPE_ID,
     CHANNEL_ID: paytmConfig.CHANNEL_ID,
-    TXN_AMOUNT: String(user.cart.total),
+    TXN_AMOUNT: String(order.data.total),
     WEBSITE: paytmConfig.WEBSITE,
-    CALLBACK_URL: 'https://us-central1-swasthify-6d5c2.cloudfunctions.net/verifyOrder',
+    CALLBACK_URL: 'https://us-central1-swanand-1958d.cloudfunctions.net/verifyOrder',
     EMAIL: user.email || "",
     MOBILE_NO: user.mobileNo || ""
   };

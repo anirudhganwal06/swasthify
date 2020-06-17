@@ -46,7 +46,7 @@ exports.createOrder = async ({
     const productData = product.data();
     orderProducts[product.id] = {
       name: productData.name,
-      image: productData.images[0],
+      image: productData.images[0] || "/assets/images/noImageAvailable.jpg",
       variants: {}
     };
     

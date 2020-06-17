@@ -146,7 +146,7 @@ class Checkout extends Component {
     return (
       <div className="container p-3">
         <form
-          action="https://us-central1-swasthify-6d5c2.cloudfunctions.net/placeOrder"
+          action="https://us-central1-swanand-1958d.cloudfunctions.net/placeOrder"
           method="POST"
         >
           <div className="row justify-content-center">
