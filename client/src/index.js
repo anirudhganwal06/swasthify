@@ -17,16 +17,25 @@ const rrfProps = {
       email: userData.email,
       mobileNo: userData.phoneNumber,
       cart: {
-        products: {},
-        discount: 0,
-        subTotal: 0,
-        total: 0
+        products: {}
       },
+      permissions: {
+        coupons: "READ",
+        customers: "NONE",
+        inventories: "READ",
+        orders: "NONE",
+        products: "READ",
+        purchase: "NONE",
+        staff: "NONE"
+      },
+      role: "customer",
       wishlist: [],
       addresses: [],
       orders: [],
       coupons: [],
-      tags: []
+      couponsUsed: [],
+      tags: [],
+      totalOrderAmount: 0
     }),
     useFirestoreForProfile: true
   },
