@@ -8,3 +8,4 @@ exports.sendMessage = functions.https.onRequest(
   require("./routes/sendMessage")
 );
 exports.addCustomer = functions.https.onCall(require("./routes/addCustomer"));
+exports.getInvoice = functions.https.onCall(require("./routes/getInvoice"));
