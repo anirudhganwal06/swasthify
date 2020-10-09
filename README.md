@@ -2,7 +2,7 @@
 Swasthify, now known as Swanandam is a grocery store in Faridabad that now delivers its products in the city using this web platform as an interface for the customers.
 
 ---
-Website: swanandam.com
+Website: [Swanandam](https://swanandam.com)
 
 ---
 
